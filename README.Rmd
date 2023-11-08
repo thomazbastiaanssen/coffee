@@ -9,6 +9,7 @@ output:
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r setup, include = F}
+library(patchwork)
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -18,7 +19,8 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ```{r, warning=FALSE}
-ex1pca
-ex1alpha
-ex1DA
+ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
+
+ex1DA_metab
 ```
+

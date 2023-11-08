@@ -65,19 +65,13 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
 
 ``` r
-ex1pca
+ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ex1alpha
+ex1DA_metab
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
-
-``` r
-ex1DA
-```
-
-![](README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->

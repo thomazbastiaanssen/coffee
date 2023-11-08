@@ -228,7 +228,7 @@ metab.glm_ex1 <- fw_glm(x = metabs.exp_exp1,
                         metadata = meta_ex1, 
                         order = "c")
 
-hist(metab.glm_ex1$`Legend_ex1CD Pr(>|t|)`)
+#hist(metab.glm_ex1$`Legend_ex1CD Pr(>|t|)`)
 
 metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`Legend_ex1CD Pr(>|t|).BH`< 0.2,"feature"],]
 
@@ -318,29 +318,32 @@ ex1DA_metab <- metab.glm_ex1 %>%
 #   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
 
 
-ex1pca    %>% 
-  ggsave(plot = ., filename = paste0("figures/ex1/", "pca_beta_div", ".png"), 
-         device = "png", width = 6.42, height = 4.52, bg ="white")
-
-ex1bar    %>% 
-  ggsave(plot = ., filename = paste0("figures/ex1/", "stck_barplot", ".png"), 
-         device = "png", width = 16, height = 12, units = "in", bg ="white")
-
-ex1DA     %>% 
-  ggsave(plot = ., filename = paste0("figures/ex1/", "diff_species", ".png"),
-         device = "png", width = 10, height = 4.52, bg ="white")
-
-ex1DA_GBM %>% 
-  ggsave(plot = ., filename = paste0("figures/ex1/", "diff_GBMs",    ".png"),
-         device = "png", width = 4, height = 4.52, bg ="white")
-
-ex1alpha %>% 
-  ggsave(plot = ., filename = paste0("figures/ex1/", "alpha_div",    ".png"),
-         device = "png", width = 12, height = 4, bg ="white")
 
 
-write.csv(species.glm_ex1,    file = "stats/ex1/species_glm.csv")
-write.csv(GMMs.glm_ex1,       file = "stats/ex1/GMMs_glm.csv")
-write.csv(GBMs.glm_ex1,       file = "stats/ex1/GBMs_glm.csv")
-capture.output(ex1_PERMANOVA, file = "stats/ex1/PERMANOVA.txt")
+# 
+# ex1pca    %>% 
+#   ggsave(plot = ., filename = paste0("figures/ex1/", "pca_beta_div", ".png"), 
+#          device = "png", width = 6.42, height = 4.52, bg ="white")
+# 
+# ex1bar    %>% 
+#   ggsave(plot = ., filename = paste0("figures/ex1/", "stck_barplot", ".png"), 
+#          device = "png", width = 16, height = 12, units = "in", bg ="white")
+# 
+# ex1DA     %>% 
+#   ggsave(plot = ., filename = paste0("figures/ex1/", "diff_species", ".png"),
+#          device = "png", width = 10, height = 4.52, bg ="white")
+# 
+# ex1DA_GBM %>% 
+#   ggsave(plot = ., filename = paste0("figures/ex1/", "diff_GBMs",    ".png"),
+#          device = "png", width = 4, height = 4.52, bg ="white")
+# 
+# ex1alpha %>% 
+#   ggsave(plot = ., filename = paste0("figures/ex1/", "alpha_div",    ".png"),
+#          device = "png", width = 12, height = 4, bg ="white")
+# 
+# 
+# write.csv(species.glm_ex1,    file = "stats/ex1/species_glm.csv")
+# write.csv(GMMs.glm_ex1,       file = "stats/ex1/GMMs_glm.csv")
+# write.csv(GBMs.glm_ex1,       file = "stats/ex1/GBMs_glm.csv")
+# capture.output(ex1_PERMANOVA, file = "stats/ex1/PERMANOVA.txt")
 
