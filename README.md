@@ -62,8 +62,6 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
     ## [1] "Using the following formula: x ~ Legend_ex1"
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
 
-![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
-
 ``` r
 ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ```
