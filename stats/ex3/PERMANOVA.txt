@@ -1,0 +1,13 @@
+Permutation test for adonis under reduced model
+Terms added sequentially (first to last)
+Blocks:  strata 
+Permutation: free
+Number of permutations: 10000
+
+adonis2(formula = dis_ait ~ visit * Treatment, data = meta_ex3, permutations = 10000, method = "euclidean", strata = meta_ex3$participant_ID)
+                Df SumOfSqs      R2      F Pr(>F)
+visit            1     1206 0.00598 0.3591 0.1217
+Treatment        1     4714 0.02338 1.4033 0.2970
+visit:Treatment  1      899 0.00446 0.2677 0.6716
+Residual        58   194848 0.96618              
+Total           61   201668 1.00000              

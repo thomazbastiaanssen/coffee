@@ -24,3 +24,39 @@ ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ex1DA_metab
 ```
 
+In Experiment 2, we're looking at differences in the microbiome between coffee drinkers and non-coffee drinkers. 
+```{r, warning=FALSE, cache = T}
+source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
+```
+
+```{r, warning=FALSE, fig.width = 16, fig.height = 8}
+ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
+
+ex1DA_metab
+```
+
+
+
+In Experiment 2B, we're looking at features that return to non-coffee drinker levels post washout (coffee abstinence). 
+```{r, warning=FALSE, cache = T}
+source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")
+```
+
+```{r, warning=FALSE, fig.width = 16, fig.height = 8}
+ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
+
+ex1DA_metab
+```
+
+
+In Experiment 3, we're looking at the effects of going back on either caffeinated or decaffeinated coffee post-washout (coffee abstinence). 
+```{r, warning=FALSE, cache = T}
+source("scripts/ex3_intervention_v3_vs_v4.R")
+```
+
+
+```{r, warning=FALSE, fig.width = 16, fig.height = 8}
+ex3pca + ex3alpha + plot_layout(guides = 'collect')
+
+ex3metab
+```
