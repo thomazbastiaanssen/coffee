@@ -125,7 +125,7 @@ ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
-ex1DA_metab
+ex_REST_DA_metab
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
@@ -145,8 +145,6 @@ source("scripts/ex3_intervention_v3_vs_v4.R")
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
     ## [1] "Using the following formula: x ~ visit + Treatment + (1 | participant_ID) + visit:Treatment"
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-7-3.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-7-4.png)<!-- -->
 
 ``` r
 ex3pca + ex3alpha + plot_layout(guides = 'collect')

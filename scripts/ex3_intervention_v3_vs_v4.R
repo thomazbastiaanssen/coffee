@@ -60,7 +60,7 @@ ex3pca <- ggplot(pca) +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
   theme_bw() 
-ex3pca
+#ex3pca
 
 
 dis_ait = dist(t(species.exp_ex3), method = "euclidean")
@@ -189,7 +189,7 @@ ex3alpha <- (alpha_div_ex3 %>%
   plot_layout(guides = "collect")
   
   
-ex3alpha
+#ex3alpha
 
 
 alpha_div_ex3 %>% 
@@ -233,10 +233,10 @@ metab.glmer_ex3 <- fw_glmer(x = metabs.exp_ex3,
                            metadata = meta_ex3, 
                            order = "ac") 
 
-hist(species.glmer_ex3$`anovas.visit:Treatment Pr(>F)`, breaks = 20)
-hist(GBMs.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
-hist(GMMs.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
-hist(metab.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
+# hist(species.glmer_ex3$`anovas.visit:Treatment Pr(>F)`, breaks = 20)
+# hist(GBMs.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
+# hist(GMMs.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
+# hist(metab.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)
 
 metab_BH_ex3 <- metabs.exp_ex3[metab.glmer_ex3[metab.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`< 0.2,"feature"],]
 

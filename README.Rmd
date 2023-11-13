@@ -45,7 +45,7 @@ source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")
 ```{r, warning=FALSE, fig.width = 16, fig.height = 8}
 ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 
-ex1DA_metab
+ex_REST_DA_metab
 ```
 
 

@@ -58,7 +58,7 @@ ex_RESTpca <- ggplot(pca) +
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
   theme_bw() 
-ex_RESTpca
+#ex_RESTpca
 
 
 dis_ait = dist(t(species.exp_ex_REST), method = "euclidean")
@@ -146,7 +146,7 @@ ex_RESTDA <- speBH_ex_REST %>%
   facet_wrap(~name, scales = "free_y", ncol = 3) +
   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
 
-ex_RESTDA
+#ex_RESTDA
 
 #hist(species.glmer_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`, breaks = 20)
 
@@ -183,9 +183,7 @@ metab_BH_REST <- metabs.exp_ex_REST[metab.glm_ex_REST[metab.glm_ex_REST$`anovas.
 
 
 
-#ex_REST_DA_metab <- 
-  
-  metab.glm_ex_REST %>%
+ex_REST_DA_metab <- metab.glm_ex_REST %>%
   as.data.frame() %>%
   # rownames_to_column("name") %>% 
   #
@@ -223,47 +221,49 @@ metab_BH_REST <- metabs.exp_ex_REST[metab.glm_ex_REST[metab.glm_ex_REST$`anovas.
   
   
   
+  # 
+  # metab.glm_ex_REST %>%
+  #   rename(`coefs.Legend_ex_RESTBaseline_(NCD) Estimate` = `coefs.Legend_ex_RESTBaseline (NCD) Estimate`) %>% 
+  #   rename(`coefs.Legend_ex_RESTPost-washout_(CD) Estimate` = `coefs.Legend_ex_RESTPost-washout (CD) Estimate`) %>% 
+  #   rename(`coefs.Legend_ex_RESTBaseline_(NCD) Pr(>|t|)` = `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)`) %>% 
+  #   rename(`coefs.Legend_ex_RESTPost-washout_(CD) Pr(>|t|)` = `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)`) %>% 
+  #   rename(`coefs.Legend_ex_RESTBaseline_(NCD) Pr(>|t|).BH` = `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|).BH`) %>% 
+  #   rename(`coefs.Legend_ex_RESTPost-washout_(CD) Pr(>|t|).BH` = `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|).BH`) %>% 
+  #   rename(`coefs.Legend_ex_RESTBaseline_(NCD) 97.5 %` = `coefs.Legend_ex_RESTBaseline (NCD) 97.5 %`) %>% 
+  #   rename(`coefs.Legend_ex_RESTPost-washout_(CD) 2.5 %` = `coefs.Legend_ex_RESTPost-washout (CD) 2.5 %`) %>% 
+  #   
+  #   pivot_longer(!"feature") %>%
+  #   separate(col = name, sep = " ", into = c("Effect", "Parameter") ) %>% 
+  #   filter(Effect != "coefs.(Intercept)") %>%  
+  #   
+  #   filter(feature %in% row.names(metab_BH_REST)) %>% 
+  #   
+  #   filter(Parameter %in% c("Estimate", "Pr(>|t|)", "2.5", "97.5")) %>% 
+  # 
+  #   
+  #   
+  #   mutate(feature = factor(feature), 
+  #          feature = factor(feature, levels = rev(levels(feature)))) %>%
+  #   
+  #   pivot_wider(names_from = Parameter, values_from = value) %>% 
+  #   
+  #   ggplot(aes(x = Estimate, y = rev(feature), fill = Effect)) + 
+  #   
+  #   geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
+  #   
+  #   geom_errorbar(aes(alpha = `Pr(>|t|)` < 0.1, 
+  #                     xmin = `2.5`, 
+  #                     xmax = `97.5`), 
+  #                 colour = "black", width = 1/2) +
+  #   geom_point(aes(alpha = `Pr(>|t|)` < 0.1), shape = 21) + 
+  #   scale_alpha_manual(values = c("TRUE"  = 1, 
+  #                                 "FALSE" = 1/8)) +
+  #   scale_y_discrete(position = "right")+
+  #   scale_x_continuous(limits = c(-9, 12))+
+  #   #facet_wrap(~microbe, ncol = 5) + 
+  #   theme_bw() + ylab("") + guides(alpha = "none", fill = "none")
   
-  metab.glm_ex_REST %>%
-    rename(`coefs.Legend_ex_RESTBaseline_(NCD) Estimate` = `coefs.Legend_ex_RESTBaseline (NCD) Estimate`) %>% 
-    rename(`coefs.Legend_ex_RESTPost-washout_(CD) Estimate` = `coefs.Legend_ex_RESTPost-washout (CD) Estimate`) %>% 
-    rename(`coefs.Legend_ex_RESTBaseline_(NCD) Pr(>|t|)` = `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)`) %>% 
-    rename(`coefs.Legend_ex_RESTPost-washout_(CD) Pr(>|t|)` = `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)`) %>% 
-    rename(`coefs.Legend_ex_RESTBaseline_(NCD) Pr(>|t|).BH` = `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|).BH`) %>% 
-    rename(`coefs.Legend_ex_RESTPost-washout_(CD) Pr(>|t|).BH` = `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|).BH`) %>% 
-    rename(`coefs.Legend_ex_RESTBaseline_(NCD) 97.5 %` = `coefs.Legend_ex_RESTBaseline (NCD) 97.5 %`) %>% 
-    rename(`coefs.Legend_ex_RESTPost-washout_(CD) 2.5 %` = `coefs.Legend_ex_RESTPost-washout (CD) 2.5 %`) %>% 
-    
-    pivot_longer(!"feature") %>%
-    separate(col = name, sep = " ", into = c("Effect", "Parameter") ) %>% 
-    filter(Effect != "coefs.(Intercept)") %>%  
-    
-    filter(feature %in% row.names(metab_BH_REST)) %>% 
-    
-    filter(Parameter %in% c("Estimate", "Pr(>|t|)", "2.5", "97.5")) %>% 
-
-    
-    
-    mutate(feature = factor(feature), 
-           feature = factor(feature, levels = rev(levels(feature)))) %>%
-    
-    pivot_wider(names_from = Parameter, values_from = value) %>% 
-    
-    ggplot(aes(x = Estimate, y = rev(feature), fill = Effect)) + 
-    
-    geom_vline(xintercept = 0, linetype = "dashed", colour = "red") +
-    
-    geom_errorbar(aes(alpha = `Pr(>|t|)` < 0.1, 
-                      xmin = `2.5`, 
-                      xmax = `97.5`), 
-                  colour = "black", width = 1/2) +
-    geom_point(aes(alpha = `Pr(>|t|)` < 0.1), shape = 21) + 
-    scale_alpha_manual(values = c("TRUE"  = 1, 
-                                  "FALSE" = 1/8)) +
-    scale_y_discrete(position = "right")+
-    scale_x_continuous(limits = c(-9, 12))+
-    #facet_wrap(~microbe, ncol = 5) + 
-    theme_bw() + ylab("") + guides(alpha = "none", fill = "none")
+  
 # hist(GMMs.glmer_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`, breaks = 20)
 # 
 # GMM_BH_ex_REST <- GMMs.exp_ex_REST[GMMs.glmer_ex_REST[GMMs.glmer_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`< 0.2,"feature"],]
