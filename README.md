@@ -8,51 +8,6 @@ coffee drinkers and non-coffee drinkers.
 source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
-    ## Loading required package: permute
-
-    ## Loading required package: lattice
-
-    ## This is vegan 2.6-4
-
-    ## Loading required package: Matrix
-
-    ## 
-    ## Attaching package: 'lmerTest'
-
-    ## The following object is masked from 'package:lme4':
-    ## 
-    ##     lmer
-
-    ## The following object is masked from 'package:stats':
-    ## 
-    ##     step
-
-    ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-    ## ✔ dplyr     1.1.3     ✔ readr     2.1.4
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.0
-    ## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-    ## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-    ## ✔ purrr     1.0.2     
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ tidyr::expand() masks Matrix::expand()
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ✖ tidyr::pack()   masks Matrix::pack()
-    ## ✖ tidyr::unpack() masks Matrix::unpack()
-    ## ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-    ## 
-    ## Attaching package: 'scales'
-    ## 
-    ## 
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     discard
-    ## 
-    ## 
-    ## The following object is masked from 'package:readr':
-    ## 
-    ##     col_factor
-
     ## [1] "Using the following formula: x ~ Legend_ex1"
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
     ## [1] "Using the following formula: x ~ Legend_ex1"
@@ -122,21 +77,11 @@ source("scripts/ex3_intervention_v3_vs_v4.R")
 ex3pca + ex3alpha + plot_layout(guides = 'collect')
 ```
 
-    ## Bin width defaults to 1/30 of the range of the data. Pick better value with
-    ## `binwidth`.
-    ## Bin width defaults to 1/30 of the range of the data. Pick better value with
-    ## `binwidth`.
-    ## Bin width defaults to 1/30 of the range of the data. Pick better value with
-    ## `binwidth`.
-
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 ex3metab
 ```
-
-    ## Bin width defaults to 1/30 of the range of the data. Pick better value with
-    ## `binwidth`.
 
 ![](README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
@@ -147,9 +92,6 @@ post-washout (coffee abstinence).
 ``` r
 source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 ```
-
-    ## `summarise()` has grouped output by 'name'. You can override using the
-    ## `.groups` argument.
 
     ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
     ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
