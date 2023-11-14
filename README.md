@@ -86,6 +86,26 @@ ex3metab
 ![](README_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
 
 In this additional microbiome experiment, we’re looking at the acute
+effects of coffee abstinence (coffee withdrawal).
+
+``` r
+source("scripts/ex_washout_acute_withdrawal.R")
+```
+
+    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
+    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
+    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
+    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
+    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
+    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
+
+``` r
+ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
+```
+
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+In this additional microbiome experiment, we’re looking at the acute
 effects of going back on either caffeinated or decaffeinated coffee
 post-washout (coffee abstinence).
 
@@ -107,4 +127,4 @@ source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
