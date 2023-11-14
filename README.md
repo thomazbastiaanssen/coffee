@@ -124,7 +124,7 @@ source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
 
 ``` r
-ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', widths = c(1,1,2,2))
+ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', heights = c(1,1,2,2))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->

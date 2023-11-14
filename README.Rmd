@@ -55,7 +55,7 @@ source("scripts/ex_washout_acute_withdrawal.R")
 ```
 
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 16}
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
 ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
 
 ```
@@ -68,6 +68,6 @@ source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 24}
-ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', widths = c(1,1,2,2))
+ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', heights = c(1,1,2,2))
 
 ```
