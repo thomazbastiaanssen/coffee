@@ -58,10 +58,16 @@ ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 ``` r
-ex_REST_DA_metab
+ex_REST_metab_forest
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
+``` r
+ex_REST_DA_metab
+```
+
+![](README_files/figure-gfm/unnamed-chunk-4-3.png)<!-- -->
 
 In Experiment 3, we’re looking at the effects of going back on either
 caffeinated or decaffeinated coffee post-washout (coffee abstinence).
