@@ -245,7 +245,7 @@ ex3metab <- metab_BH_ex3 %>%
   as.data.frame() %>%
   add_column(Legend = meta_ex3$Legend_ex3)  %>%
   pivot_longer(!c("Legend"))  %>%
-  left_join(., metab_trans, by = c("name" = "Compound.ID")) %>% 
+  left_join(., metab_trans, by = c("name" = "Compound_ID")) %>% 
   
   mutate(name = str_replace(name, ".*ales_", "")) %>% 
   ggplot(aes(x     = Legend, 

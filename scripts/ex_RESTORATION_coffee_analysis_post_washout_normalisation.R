@@ -187,7 +187,7 @@ ex_REST_DA_metab <- metab.glm_ex_REST %>%
   as.data.frame() %>%
   # rownames_to_column("name") %>% 
   #
-  left_join(., metab_trans, by = c("feature" = "Compound.ID")) %>% 
+  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
   mutate(`coefs.Legend_ex_RESTPost-washout (CD) Estimate` = (`coefs.Legend_ex_RESTPost-washout (CD) Estimate`/log(2))) %>% 
   mutate(`coefs.Legend_ex_RESTBaseline (NCD) Estimate` = (`coefs.Legend_ex_RESTBaseline (NCD) Estimate`/log(2))) %>% 
   

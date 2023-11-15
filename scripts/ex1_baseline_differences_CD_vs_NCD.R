@@ -226,11 +226,11 @@ GMMs.glm_ex1 <- fw_glm(x = GMMs.exp_ex1,
 metab.glm_ex1 <- fw_glm(x = metabs.exp_exp1, 
                         f = ~ Legend_ex1, 
                         metadata = meta_ex1, 
-                        order = "c")
+                        order = "ac")
 
 #hist(metab.glm_ex1$`Legend_ex1CD Pr(>|t|)`)
 
-metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`Legend_ex1CD Pr(>|t|).BH`< 0.2,"feature"],]
+metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`coefs.Legend_ex1CD Pr(>|t|).BH`< 0.2,"feature"],]
 
 
 #Too manyu metabolites to show as boxplots. 
@@ -242,7 +242,7 @@ metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`Legend_ex1CD Pr(>|t
 #   #
 #   
 #   pivot_longer(!c("Legend"))  %>%
-#   left_join(., metab_trans, by = c("name" = "Compound.ID")) %>% 
+#   left_join(., metab_trans, by = c("name" = "Compound_ID")) %>% 
 # 
 #   mutate(name = str_replace(name, ".*ales_", "")) %>% 
 #   ggplot(aes(x     = Legend, 
@@ -260,6 +260,29 @@ metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`Legend_ex1CD Pr(>|t
 #   facet_wrap(~Name, scales = "free_y", ncol = 4) +
 #   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
 
+ex1_metab_forest <- metab.glm_ex1 %>%
+  as.data.frame() %>%
+  # rownames_to_column("name") %>% 
+  #
+  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+  mutate(`log2(FoldChange)` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
+  filter(`coefs.Legend_ex1CD Pr(>|t|).BH` < 0.2) %>% 
+  
+  ggplot() +
+  aes(x = `log2(FoldChange)`, 
+      y = (Name)) +
+  
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
+  
+  geom_errorbar(aes(xmin = `coefs.Legend_ex1CD 2.5 %`/log(2), 
+                    xmax = `coefs.Legend_ex1CD 97.5 %`/log(2)), 
+                colour = "black", width = 1/2) +
+  geom_point(shape = 21, fill = "red") +
+  scale_y_discrete(position = "right", limits=rev) +
+  #facet_wrap(~Compound_class, ncol = 1, strip.position = "right", scales = "free_y") +
+  ylab(NULL) +
+  theme_bw() +
+  ggtitle("Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)")
 
 
 
@@ -267,19 +290,19 @@ ex1DA_metab <- metab.glm_ex1 %>%
   as.data.frame() %>%
   # rownames_to_column("name") %>% 
   #
-  left_join(., metab_trans, by = c("feature" = "Compound.ID")) %>% 
-  mutate(`Legend_ex1CD Estimate` = (`Legend_ex1CD Estimate`/log(2))) %>% 
+  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+  mutate(`Legend_ex1CD Estimate` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
   #mutate(direction = `GroupLithium Estimate` < 0) %>% 
-  mutate(direction = case_when(`Legend_ex1CD Pr(>|t|).BH` > 0.05 ~ "ns",
-                               (`Legend_ex1CD Estimate` < 0 & `Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Down",
-                               (`Legend_ex1CD Estimate` > 0 & `Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Up")) %>% 
+  mutate(direction = case_when(`coefs.Legend_ex1CD Pr(>|t|).BH` > 0.05 ~ "ns",
+                               (`coefs.Legend_ex1CD Estimate` < 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Down",
+                               (`coefs.Legend_ex1CD Estimate` > 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Up")) %>% 
   
   ggplot() + 
   
-  aes(x     = `Legend_ex1CD Estimate`, 
-      y     = `Legend_ex1CD Pr(>|t|)`, 
+  aes(x     = `coefs.Legend_ex1CD Estimate`, 
+      y     = `coefs.Legend_ex1CD Pr(>|t|)`, 
       #fill  = `Legend_ex1CD Pr(>|t|).BH` < 0.1,
-      alpha = `Legend_ex1CD Pr(>|t|).BH` < 0.05, 
+      alpha = `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05, 
       fill = direction) +
   
   geom_hline(yintercept = 0.05, color = "red", linetype = "dashed") +

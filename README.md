@@ -24,10 +24,16 @@ ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ex1DA_metab
+ex1_metab_forest
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-2.png)<!-- -->
+
+``` r
+ex1DA_metab
+```
+
+![](README_files/figure-gfm/unnamed-chunk-2-3.png)<!-- -->
 
 In Experiment 2B, we’re looking at features that return to non-coffee
 drinker levels post washout (coffee abstinence).
