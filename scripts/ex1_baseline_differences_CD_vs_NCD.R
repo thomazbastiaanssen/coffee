@@ -265,6 +265,7 @@ ex1_metab_forest <- metab.glm_ex1 %>%
   # rownames_to_column("name") %>% 
   #
   left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+  mutate(Plot_category = replace_na(Plot_category, "Other"))  %>% 
   mutate(`log2(FoldChange)` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
   filter(`coefs.Legend_ex1CD Pr(>|t|).BH` < 0.2) %>% 
   
@@ -279,11 +280,12 @@ ex1_metab_forest <- metab.glm_ex1 %>%
                 colour = "black", width = 1/2) +
   geom_point(shape = 21, fill = "red") +
   scale_y_discrete(position = "right", limits=rev) +
-  #facet_wrap(~Compound_class, ncol = 1, strip.position = "right", scales = "free_y") +
+  #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
+  ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   ylab(NULL) +
   theme_bw() +
   ggtitle("Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)")
-
+  ex1_metab_forest
 
 
 ex1DA_metab <- metab.glm_ex1 %>%
