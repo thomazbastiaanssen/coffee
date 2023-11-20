@@ -215,23 +215,23 @@ species.exp_ex3 <- genefilter::varFilter(species.exp_ex3, var.cutoff = 0.5)
 species.glmer_ex3 <- fw_glmer(x = species.exp_ex3, 
                               f = ~ visit * Treatment + (1|participant_ID), 
                               metadata = meta_ex3, 
-                              order = "ac") 
+                              order = "ac", verbose = FALSE) 
 
 GBMs.glmer_ex3 <- fw_glmer(x = GBMs.exp_ex3, 
                            f = ~ visit * Treatment+ (1|participant_ID), 
                            metadata = meta_ex3, 
-                           order = "ac") 
+                           order = "ac", verbose = FALSE) 
 
 
 GMMs.glmer_ex3 <- fw_glmer(x = GMMs.exp_ex3, 
                            f = ~ visit * Treatment + (1|participant_ID), 
                            metadata = meta_ex3, 
-                           order = "ac") 
+                           order = "ac", verbose = FALSE) 
 
 metab.glmer_ex3 <- fw_glmer(x = metabs.exp_ex3, 
                            f = ~ visit * Treatment + (1|participant_ID), 
                            metadata = meta_ex3, 
-                           order = "ac") 
+                           order = "ac", verbose = FALSE) 
 
 # hist(species.glmer_ex3$`anovas.visit:Treatment Pr(>F)`, breaks = 20)
 # hist(GBMs.glmer_ex3$`anovas.visit:Treatment Pr(>F).BH`, breaks = 20)

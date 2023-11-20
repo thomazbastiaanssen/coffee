@@ -153,7 +153,7 @@ species.exp_ex_withdraw <- genefilter::varFilter(species.exp_ex_withdraw, var.cu
 species.glmer_ex_withdraw <- fw_glmer(x = species.exp_ex_withdraw, 
                                   f = ~ Legend_ex_withdraw + (1|participant_ID), 
                                   metadata = meta_ex_withdraw, 
-                                  order = "ac") 
+                                  order = "ac", verbose = FALSE) 
 
 
 # speBH_ex_withdraw <- species.exp_ex_withdraw[species.glmer_ex_withdraw[species.glmer_ex_withdraw$`anovas.Legend_ex_withdraw Pr(>F).BH`< 0.2,"feature"],]
@@ -187,7 +187,7 @@ species.glmer_ex_withdraw <- fw_glmer(x = species.exp_ex_withdraw,
 GBMs.glmer_ex_withdraw <- fw_glmer(x = GBMs.exp_ex_withdraw, 
                                f = ~ Legend_ex_withdraw + (1|participant_ID), 
                                metadata = meta_ex_withdraw, 
-                               order = "ac") 
+                               order = "ac", verbose = FALSE) 
 
 #hist(GBMs.glmer_ex_withdraw$`anovas.Legend_ex_withdraw Pr(>F).BH`, breaks = 20)
 
@@ -198,7 +198,7 @@ GBMs_BH_ex_withdraw <- GBMs.exp_ex_withdraw[GBMs.glmer_ex_withdraw[GBMs.glmer_ex
 GMMs.glmer_ex_withdraw <- fw_glmer(x = GMMs.exp_ex_withdraw, 
                                f = ~ Legend_ex_withdraw + (1|participant_ID), 
                                metadata = meta_ex_withdraw, 
-                               order = "ac") 
+                               order = "ac", verbose = FALSE) 
 
 #hist(GMMs.glmer_ex_withdraw$`anovas.Legend_ex_withdraw Pr(>F).BH`, breaks = 20)
 

@@ -159,7 +159,7 @@ species.exp_ex1 <- genefilter::varFilter(species.exp_ex1, var.cutoff = 0.5)
 species.glm_ex1 <- fw_glm(x = species.exp_ex1, 
                           f = ~ Legend_ex1, 
                           metadata = meta_ex1, 
-                          order = "c") 
+                          order = "c", verbose = FALSE) 
 
 speBH_ex1 <- species.exp_ex1[species.glm_ex1[species.glm_ex1$`Legend_ex1CD Pr(>|t|).BH`< 0.2,"feature"],]
 
@@ -191,7 +191,7 @@ ex1DA <- speBH_ex1 %>%
 GBMs.glm_ex1 <- fw_glm(x = GBMs.exp_ex1, 
                           f = ~ Legend_ex1, 
                           metadata = meta_ex1, 
-                          order = "c") 
+                          order = "c", verbose = FALSE) 
 
 GBM_BH_ex1 <- GBMs.exp_ex1[GBMs.glm_ex1[GBMs.glm_ex1$`Legend_ex1CD Pr(>|t|).BH`< 0.2,"feature"],]
 
@@ -221,12 +221,12 @@ ex1DA_GBM <- GBM_BH_ex1 %>%
 GMMs.glm_ex1 <- fw_glm(x = GMMs.exp_ex1, 
                        f = ~ Legend_ex1, 
                        metadata = meta_ex1, 
-                       order = "c") 
+                       order = "c", verbose = FALSE) 
 
 metab.glm_ex1 <- fw_glm(x = metabs.exp_exp1, 
                         f = ~ Legend_ex1, 
                         metadata = meta_ex1, 
-                        order = "ac")
+                        order = "ac", verbose = FALSE)
 
 #hist(metab.glm_ex1$`Legend_ex1CD Pr(>|t|)`)
 
@@ -288,7 +288,7 @@ ex1_metab_forest <- metab.glm_ex1 %>%
   ylab(NULL) +
   theme_bw() +
   ggtitle("Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
-  ex1_metab_forest
+
 
 
 ex1DA_metab <- metab.glm_ex1 %>%

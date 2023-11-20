@@ -20,10 +20,10 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
 ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
-ex1_metab_forest
-ex1DA_metab
 ```
-
+```{r, warning=FALSE, message = FALSE, fig.width = 8, fig.height = 12}
+ex1_metab_forest
+```
 
 In Experiment 2B, we're looking at features that return to non-coffee drinker levels post washout (coffee abstinence). 
 ```{r, warning=FALSE, message = FALSE, cache = T}
@@ -32,8 +32,11 @@ source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
 ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
+```
+
+```{r, warning=FALSE, message = FALSE, fig.width = 8, fig.height = 12}
 ex_REST_metab_forest
-ex_REST_DA_metab
+
 ```
 
 

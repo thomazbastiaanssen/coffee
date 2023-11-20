@@ -119,7 +119,7 @@ species.exp_ex_REST <- genefilter::varFilter(species.exp_ex_REST, var.cutoff = 0
 species.glmer_ex_REST <- fw_glmer(x = species.exp_ex_REST, 
                               f = ~ Legend_ex_REST + (1|participant_ID), 
                               metadata = meta_ex_REST, 
-                              order = "ac") 
+                              order = "ac", verbose = FALSE) 
 
 
 speBH_ex_REST <- species.exp_ex_REST[species.glmer_ex_REST[species.glmer_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`< 0.2,"feature"],]
@@ -153,7 +153,7 @@ ex_RESTDA <- speBH_ex_REST %>%
 GBMs.glmer_ex_REST <- fw_glmer(x = GBMs.exp_ex_REST, 
                            f = ~ Legend_ex_REST + (1|participant_ID), 
                            metadata = meta_ex_REST, 
-                           order = "ac") 
+                           order = "ac", verbose = FALSE) 
 
 #hist(GBMs.glmer_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`, breaks = 20)
 
@@ -164,7 +164,7 @@ GBMs_BH_ex_REST <- GBMs.exp_ex_REST[GBMs.glmer_ex_REST[GBMs.glmer_ex_REST$`anova
 GMMs.glmer_ex_REST <- fw_glmer(x = GMMs.exp_ex_REST, 
                            f = ~ Legend_ex_REST + (1|participant_ID), 
                            metadata = meta_ex_REST, 
-                           order = "ac") 
+                           order = "ac", verbose = FALSE) 
 
 
 meta_ex_REST$Legend_ex_REST = factor(meta_ex_REST$Legend_ex_REST, levels = c("Baseline (CD)", "Baseline (NCD)", "Post-washout (CD)"))
@@ -173,7 +173,7 @@ meta_ex_REST$Legend_ex_REST = factor(meta_ex_REST$Legend_ex_REST, levels = c("Ba
 metab.glm_ex_REST <- fw_glmer(x = metabs.exp_ex_REST, 
                             f = ~ Legend_ex_REST + (1|participant_ID), 
                             metadata = meta_ex_REST, 
-                            order = "ac") 
+                            order = "ac", verbose = FALSE) 
 meta_ex_REST$Legend_ex_REST = factor(meta_ex_REST$Legend_ex_REST, levels = c("Baseline (NCD)", "Baseline (CD)", "Post-washout (CD)"))
 
 metab_BH_REST <- metabs.exp_ex_REST[metab.glm_ex_REST[metab.glm_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`< 0.2,"feature"],]
@@ -215,7 +215,7 @@ ex_REST_metab_forest <- metab.glm_ex_REST %>%
   scale_fill_manual(values = c("vs NCD baseline"  = "#ece6ca", 
                     "vs CD post-washout" = "#ffa0a0")) +
   scale_x_discrete(position = "top", limits=rev) +
-  #facet_wrap(~Compound_class, strip.position = "right", scales = "free_y", ncol = 5) +
+  ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
   ylab("log2(FoldChange) vs Baseline Coffee Drinkers") +
   theme_bw() +

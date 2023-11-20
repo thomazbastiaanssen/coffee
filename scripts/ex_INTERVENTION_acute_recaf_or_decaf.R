@@ -222,7 +222,7 @@ species.exp_ex_INTERVENTION <- genefilter::varFilter(species.exp_ex_INTERVENTION
 species.glmer_ex_INTERVENTION <- fw_glmer(x = species.exp_ex_INTERVENTION, 
                                       f = ~ Legend_ex_INTERVENTION * Treatment + (1|participant_ID), 
                                       metadata = meta_ex_INTERVENTION, 
-                                      order = "ac") 
+                                      order = "ac", verbose = FALSE) 
 
 
 speBH_ex_INTERVENTION <- species.exp_ex_INTERVENTION[species.glmer_ex_INTERVENTION[species.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION:Treatment Pr(>F).BH`< 0.2,"feature"],] %>% data.frame
@@ -258,7 +258,7 @@ speBH_ex_INTERVENTION <- species.exp_ex_INTERVENTION[species.glmer_ex_INTERVENTI
 GBMs.glmer_ex_INTERVENTION <- fw_glmer(x = GBMs.exp_ex_INTERVENTION, 
                                    f = ~ Legend_ex_INTERVENTION * Treatment + (1|participant_ID), 
                                    metadata = meta_ex_INTERVENTION, 
-                                   order = "ac") 
+                                   order = "ac", verbose = FALSE) 
 
 #hist(GBMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION Pr(>F).BH`, breaks = 20)
 
