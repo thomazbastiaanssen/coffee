@@ -15,7 +15,8 @@ ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
+ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + 
+  plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
@@ -34,7 +35,8 @@ ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
-ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect') + plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout vs baseline coffee drinker levels")
+ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect') + 
+  plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout (L) vs baseline coffee drinker levels (R)")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->

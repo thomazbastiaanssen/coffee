@@ -196,7 +196,7 @@ ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
          name = str_remove(name, pattern = "_.*")) %>% 
   
   pivot_wider(names_from = name, values_from = value) %>% 
-  
+  mutate(Estimate = Estimate * -1) %>% 
   arrange(Estimate)  %>% 
   mutate(Name = factor(Name, levels = unique(Name))) %>% 
   
@@ -245,6 +245,7 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
          name = str_remove(name, pattern = "_.*")) %>% 
   
   pivot_wider(names_from = name, values_from = value) %>% 
+  mutate(Estimate = Estimate * -1) %>% 
   
   arrange(Estimate)  %>% 
   mutate(Name = factor(Name, levels = unique(Name))) %>% 
