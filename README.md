@@ -8,15 +8,6 @@ coffee drinkers and non-coffee drinkers.
 source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
-    ## [1] "Using the following formula: x ~ Legend_ex1"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex1"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex1"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex1"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-
 ``` r
 ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ```
@@ -24,7 +15,7 @@ ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
 
 ``` r
-ex1_metab_forest
+ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
@@ -36,15 +27,6 @@ drinker levels post washout (coffee abstinence).
 source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")
 ```
 
-    ## [1] "Using the following formula: x ~ Legend_ex_REST + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_REST + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_REST + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_REST + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-
 ``` r
 ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ```
@@ -52,7 +34,7 @@ ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
-ex_REST_metab_forest
+ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect') + plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout vs baseline coffee drinker levels")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
@@ -63,15 +45,6 @@ caffeinated or decaffeinated coffee post-washout (coffee abstinence).
 ``` r
 source("scripts/ex3_intervention_v3_vs_v4.R")
 ```
-
-    ## [1] "Using the following formula: x ~ visit + Treatment + (1 | participant_ID) + visit:Treatment"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ visit + Treatment + (1 | participant_ID) + visit:Treatment"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ visit + Treatment + (1 | participant_ID) + visit:Treatment"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ visit + Treatment + (1 | participant_ID) + visit:Treatment"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
 
 ``` r
 ex3pca + ex3alpha + plot_layout(guides = 'collect')
@@ -92,13 +65,6 @@ effects of coffee abstinence (coffee withdrawal).
 source("scripts/ex_washout_acute_withdrawal.R")
 ```
 
-    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_withdraw + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-
 ``` r
 ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
 ```
@@ -113,12 +79,6 @@ post-washout (coffee abstinence).
 source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 ```
 
-    ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
-    ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
-    ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
     ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
     ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."

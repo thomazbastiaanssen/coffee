@@ -260,7 +260,7 @@ metab_BH_ex1 <- metabs.exp_exp1[metab.glm_ex1[metab.glm_ex1$`coefs.Legend_ex1CD 
 #   facet_wrap(~Name, scales = "free_y", ncol = 4) +
 #   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
 
-ex1_metab_forest <- metab.glm_ex1 %>%
+ex1_metab_forest_a <- metab.glm_ex1 %>%
   as.data.frame() %>%
   # rownames_to_column("name") %>% 
   #
@@ -271,6 +271,46 @@ ex1_metab_forest <- metab.glm_ex1 %>%
   
   arrange(`log2(FoldChange)`)  %>% 
   mutate(Name = factor(Name, levels = unique(Name))) %>% 
+  
+  filter(Plot_category %in% c("Bile acids", "Coffee-associated compounds", 
+                               "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
+  mutate(Plot_category = factor(Plot_category,  levels = c("Coffee-associated compounds", "Neuroactive compounds & derivatives",
+                                                           "Bile acids", "Phytochemical compounds"))) %>% 
+  ggplot() +
+  aes(x = `log2(FoldChange)`, 
+      y = (Name)) +
+  
+  geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
+  
+  geom_errorbar(aes(xmin = `coefs.Legend_ex1CD 2.5 %`/log(2), 
+                    xmax = `coefs.Legend_ex1CD 97.5 %`/log(2)), 
+                colour = "black", width = 1/2) +
+  geom_point(shape = 21, fill = "red") +
+  scale_y_discrete(position = "right", limits=rev) +
+  #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
+  ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
+  ylab(NULL) +
+  xlab(NULL) +
+  theme_bw() 
+
+ex1_metab_forest_b <- metab.glm_ex1 %>%
+  as.data.frame() %>%
+  # rownames_to_column("name") %>% 
+  #
+  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+  mutate(Plot_category = replace_na(Plot_category, "Other"))  %>% 
+  mutate(`log2(FoldChange)` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
+  filter(`coefs.Legend_ex1CD Pr(>|t|).BH` < 0.2) %>% 
+  
+  arrange(`log2(FoldChange)`)  %>% 
+  mutate(Name = factor(Name, levels = unique(Name))) %>% 
+  
+  
+  filter(!Plot_category %in% c("Bile acids", "Coffee-associated compounds", 
+                              "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
+  mutate(Plot_category = factor(Plot_category,  levels = c("Carbohydrates", "Lipids & organic acids",
+                                                           "Peptides, nucleic acids & nucleosides", 
+                                                           "Vitamins, nutrients and cofactors", "Other"))) %>% 
   
   ggplot() +
   aes(x = `log2(FoldChange)`, 
@@ -286,10 +326,8 @@ ex1_metab_forest <- metab.glm_ex1 %>%
   #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   ylab(NULL) +
-  theme_bw() +
-  ggtitle("Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
-
-
+  xlab(NULL) +
+  theme_bw() 
 
 ex1DA_metab <- metab.glm_ex1 %>%
   as.data.frame() %>%

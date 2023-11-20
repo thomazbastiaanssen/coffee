@@ -14,7 +14,7 @@ Uracil,SL00018,1,Pyrimidines and pyrimidine derivatives,HMDB0000300,C00106,Nucle
 N-Acetylornithine,X02373,1,"Amino acids, peptides, and analogues",HMDB0003357,C00437,NA,NA,NA,NA,NA,Other,N-Acetylornithine,,,,
 Thiamine,SL00232,1,Vitamin,HMDB0000235,C00378,Vitamins and Cofactors,Vitamins,Water-soluble vitamins,none,none,"Vitamins, nutrients and cofactors",Thiamine,,,,
 N-Acetylhistidine,X03133,1,Amino acid (alpha),HMDB0032055,C02997,NA,NA,NA,NA,NA,Other,N-Acetylhistidine,,,,
-Succinic acid,X00109,1,TCA intermediate,HMDB0000254,C00042,Organic acids,Carboxylic acids,Dicarboxylic acids,none,none,Organic acids,Succinic acid,,,,
+Succinic acid,X00109,1,TCA intermediate,HMDB0000254,C00042,Organic acids,Carboxylic acids,Dicarboxylic acids,none,none,Lipids & organic acids,Succinic acid,,,,
 Deoxycholic acid,SL00249,1,"Bile acids, alcohols and derivatives",HMDB0000626,C04483,Lipids,Sterol Lipids,Bile acids and derivatives,"C24 bile acids, alcohols, and derivatives",none,Bile acids,Deoxycholic acid,,,,
 Urocanic acid,X00332,1,Azoles,HMDB0000301,C00785,NA,NA,NA,NA,NA,Other,Urocanic acid,,,,
 Traumatic acid,X02467,1,Fatty acids and conjugates,HMDB0000933,C16308,NA,NA,NA,NA,NA,Phytochemical compounds,Traumatic acid,,,,
@@ -1058,15 +1058,15 @@ n-Propyl GalIate,X02034,3,,,,NA,NA,NA,NA,NA,NA,n-Propyl GalIate,,,,
 "4',5,7-TRIMETHOXYFLAVONE",X04518,3,,,,NA,NA,NA,NA,NA,NA,"4',5,7-TRIMETHOXYFLAVONE",,,,
 Coumarin,X05939,3,,,,NA,NA,NA,NA,NA,NA,Coumarin,,,,
 Quinic acid,SL00184,2a,Alcohols and polyols,HMDB0003072,C00296,Organic acids,Carboxylic acids,none,none,none,Coffee-associated compounds,Quinic acid,,,,Peptides & Nucleic acids
-Glucuronic acid,SL00185,2a,Carbohydrates and carbohydrate conjugates,HMDB0000127,C00191,Carbohydrates,Monosaccharides,Sugar acids,none,none,Organic acids,Glucuronic acid,,,,Peptides & Nucleic acids
+Glucuronic acid,SL00185,2a,Carbohydrates and carbohydrate conjugates,HMDB0000127,C00191,Carbohydrates,Monosaccharides,Sugar acids,none,none,Lipids & organic acids,Glucuronic acid,,,,Peptides & Nucleic acids
 2-Hydroxybutyric acid/ 3-Hydroxybutyric acid,SL00012,2a,Alpha hydroxy acids and derivatives,HMDB0000008,C05984,Lipids,Fatty acyls,Fatty Acids and Conjugates,Hydroxy fatty acids,none,Neuroactive compounds & derivatives,2-Hydroxybutyric acid/ 3-Hydroxybutyric acid,,,,Peptides & Nucleic acids
-Methanesulfonic acid,SL00008,2a,Organosulfonic acids and derivatives,HMDB0240280,C11145,NA,NA,NA,NA,NA,Organic acids,Methanesulfonic acid,,,,Carbohydrates
-4-Aminobenzoic acid,SL00064,2a,Benzoic acids and derivatives,HMDB0304171,NA,NA,NA,NA,NA,NA,Organic acids,4-Aminobenzoic acid,,,,Peptides & Nucleic acids
+Methanesulfonic acid,SL00008,2a,Organosulfonic acids and derivatives,HMDB0240280,C11145,NA,NA,NA,NA,NA,Lipids & organic acids,Methanesulfonic acid,,,,Carbohydrates
+4-Aminobenzoic acid,SL00064,2a,Benzoic acids and derivatives,HMDB0304171,NA,NA,NA,NA,NA,NA,Lipids & organic acids,4-Aminobenzoic acid,,,,Peptides & Nucleic acids
 Tryptamine,SL00106,2a,Tryptamines and derivatives,HMDB0000303,C00398,Phytochemical compounds,Alkaloids,Alkaloids derived from tryptophan and anthranilic acid,Indole alkaloids,none,Neuroactive compounds & derivatives,Tryptamine,,,,Other
 Sucralose,X00266,2a,Carbohydrates and carbohydrate conjugates,HMDB0031554,C12285,NA,NA,NA,NA,NA,Carbohydrates,Sucralose,,,,Vitamins and Cofactors
-Azelaic acid,SL00174,2a,Fatty acids and conjugates,HMDB0000784,C08261,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Organic acids,Azelaic acid,,,,Peptides & Nucleic acids
+Azelaic acid,SL00174,2a,Fatty acids and conjugates,HMDB0000784,C08261,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Lipids & organic acids,Azelaic acid,,,,Peptides & Nucleic acids
 Cholic acid,SL00254,2a,"Bile acids, alcohols and derivatives",HMDB0000619,C00695,Lipids,Sterol Lipids,Bile acids and derivatives,"C24 bile acids, alcohols, and derivatives",none,Bile acids,Cholic acid,,,,"Hormones, neurotransmitters & derivatives"
-Malic acid,SL00059,2a,TCA intermediate,HMDB0000156,C00149,Organic acids,Carboxylic acids,Hydroxycarboxylic acids,none,none,Organic acids,Malic acid,,,,Phytochemical compounds
+Malic acid,SL00059,2a,TCA intermediate,HMDB0000156,C00149,Organic acids,Carboxylic acids,Hydroxycarboxylic acids,none,none,Lipids & organic acids,Malic acid,,,,Phytochemical compounds
 Hexamethylene bisacetamide,SL00194,2a,Carboximidic acids,HMDB0041901,NA,NA,NA,NA,NA,NA,Other,Hexamethylene bisacetamide,,,,Peptides & Nucleic acids
 γ-Aminobutyric acid,SL00010,2a,Amino acid derivative,HMDB0000112,C00334,Lipids,Fatty acyls,Fatty Acids and Conjugates,Amino fatty acids,none,Neuroactive compounds & derivatives,γ-Aminobutyric acid (GABA),,,,Other
 N-Acetyltyrosine,SL00214,2a,Amino acid derivative,HMDB0000866,C01657,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",N-Acetyltyrosine,,,,Other
@@ -1078,7 +1078,7 @@ Aspartic acid,X01507,2a,Amino acid derivative,HMDB0000191,C00049,Peptides,Amino 
 Phenylalanine,SL00125,2a,Amino acid (essential),HMDB0000159,C00079,Peptides,Amino acids,Common amino acids,none,none,"Peptides, nucleic acids & nucleosides",Phenylalanine,,,,Phytochemical compounds
 Carnosine,SL00215,2a,Hybrid peptides,HMDB0000033,C00386,Peptides,Peptides,Dipeptides,none,none,"Peptides, nucleic acids & nucleosides",Carnosine,,,,"Vitamins, nutrients and cofactors"
 Creatine,SL00050,2a,"Amino acids, peptides, and analogues",HMDB0000064,C00300,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",Creatine,,,,Peptides & Nucleic acids
-Sebacic acid,SL00196,2a,Fatty acids and conjugates,HMDB0000792,C08277,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Organic acids,Sebacic acid,,,,Peptides & Nucleic acids
+Sebacic acid,SL00196,2a,Fatty acids and conjugates,HMDB0000792,C08277,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Lipids & organic acids,Sebacic acid,,,,Peptides & Nucleic acids
 Creatinine,SL00019,2a,"Amino acids, peptides, and analogues",HMDB0000562,C00791,Peptides,none,none,none,none,"Peptides, nucleic acids & nucleosides",Creatinine,,,,"Vitamins, nutrients and cofactors"
 Hyodeoxycholic acid,SL00250,2a,"Bile acids, alcohols and derivatives",HMDB0000733,C15517,NA,NA,NA,NA,NA,Other,Hyodeoxycholic acid,,,,"Hormones, neurotransmitters & derivatives"
 Glycine,SL00003,2a,Amino acid (alpha),HMDB0000123,C00037,Peptides,Amino acids,Common amino acids,none,none,"Peptides, nucleic acids & nucleosides",Glycine,,,,Peptides & Nucleic acids
@@ -1109,7 +1109,7 @@ Valine,SL00023,2a,Amino acid (essential),HMDB0000883,C00183,Peptides,Amino acids
 Uric acid,X01732,2a,Purines and purine derivatives,HMDB0000289,C00366,Nucleic acids,none,none,none,none,"Peptides, nucleic acids & nucleosides",Uric acid,,,,
 Xanthine,SL00087,2a,Purines and purine derivatives,HMDB0000292,C00385,Phytochemical compounds,Alkaloids,Others,Purine alkaloids,none,Coffee-associated compounds,Xanthine,,,,
 Pyridoxine,SL00137,2a,Vitamin,HMDB0000239,C00314,Vitamins and Cofactors,Vitamins,Water-soluble vitamins,none,none,"Vitamins, nutrients and cofactors",Pyridoxine,,,,
-Acetylmuramic acid,SL00238,2a,Carbohydrates and carbohydrate conjugates,HMDB0060493,C02713,Carbohydrates,Monosaccharides,Amino sugars,none,none,Organic acids,Acetylmuramic acid,,,,
+Acetylmuramic acid,SL00238,2a,Carbohydrates and carbohydrate conjugates,HMDB0060493,C02713,Carbohydrates,Monosaccharides,Amino sugars,none,none,Lipids & organic acids,Acetylmuramic acid,,,,
 Glucosamine,SL00156,2a,Carbohydrates and carbohydrate conjugates,HMDB0001514,C00329,Carbohydrates,Monosaccharides,Amino sugars,none,none,Carbohydrates,Glucosamine,,,,
 Deoxyuridine,SL00217,2a,Pyrimidine 2'-deoxyribonucleosides,HMDB0000012,C00526,Nucleic acids,Nucleosides,Deoxyribonucleosides,none,none,"Peptides, nucleic acids & nucleosides",Deoxyuridine,,,,
 Piperine,SL00237,2a,Alkaloids and derivatives,HMDB0029377,C03882,Phytochemical compounds,Alkaloids,Alkaloids derived from lysine,Piperidine alkaloids,none,Coffee-associated compounds,Piperine,,,,
@@ -1128,11 +1128,11 @@ Homoarginine,SL00177,2a,Amino acid (alpha),HMDB0000670,C01924,NA,NA,NA,NA,NA,"Pe
 Agmatine,SL00047,2a,Guanidines,HMDB0001432,C00179,Phytochemical compounds,Amino acid related compounds,Others,Amines,none,Neuroactive compounds & derivatives,Agmatine,,,,
 Serotonin,SL00152,2a,Tryptamines and derivatives,HMDB0000259,C00780,Peptides,Amines,Biogenic amines,none,none,Neuroactive compounds & derivatives,Serotonin,,,,
 Pyridoxal,SL00132,2a,Vitamin derivate,HMDB0001545,C00250,Vitamins and Cofactors,Vitamins,Water-soluble vitamins,none,none,"Vitamins, nutrients and cofactors",Pyridoxal,,,,
-Glyceric acid,SL00015,2a,Carbohydrates and carbohydrate conjugates,HMDB0000139,C00258,Carbohydrates,Monosaccharides,Sugar acids,none,none,Organic acids,Glyceric acid,,,,
+Glyceric acid,SL00015,2a,Carbohydrates and carbohydrate conjugates,HMDB0000139,C00258,Carbohydrates,Monosaccharides,Sugar acids,none,none,Lipids & organic acids,Glyceric acid,,,,
 Acetylcarnitine,SL00199,2a,Acyl carnitines,HMDB0000201,C02571,NA,NA,NA,NA,NA,"Vitamins, nutrients and cofactors",Acetylcarnitine,,,,
 N-Acetylglutamic acid,SL00180,2a,Amino acid derivative,HMDB0001138,C00624,Peptides,Amino acids,none,none,none,Coffee-associated compounds,N-Acetylglutamic acid,,,,
 4-Hydroxybenzaldehyde,SL00028,2a,Carbonyl compounds,HMDB0011718,C00633,NA,NA,NA,NA,NA,Coffee-associated compounds,4-Hydroxybenzaldehyde,,,,
-Gluconic acid,SL00189,2a,Carbohydrates and carbohydrate conjugates,HMDB0000625,C00257,Carbohydrates,Monosaccharides,Sugar acids,none,none,Organic acids,Gluconic acid,,,,
+Gluconic acid,SL00189,2a,Carbohydrates and carbohydrate conjugates,HMDB0000625,C00257,Carbohydrates,Monosaccharides,Sugar acids,none,none,Lipids & organic acids,Gluconic acid,,,,
 Leucine,SL00052,2a,Amino acid (essential),HMDB0000687,C00123,Peptides,Amino acids,Common amino acids,none,none,"Peptides, nucleic acids & nucleosides",Leucine,,,,
 Ursodeoxycholic acid,SL00251,2a,"Bile acids, alcohols and derivatives",HMDB0000946,C07880,Lipids,Sterol Lipids,Bile acids and derivatives,"C24 bile acids, alcohols, and derivatives",none,Bile acids,Ursodeoxycholic acid,,,,
 Thymine,SL00039,2a,Pyrimidines and pyrimidine derivatives,HMDB0000262,C00178,Nucleic acids,Bases,Pyrimidines,none,none,"Peptides, nucleic acids & nucleosides",Thymine,,,,
@@ -1144,20 +1144,20 @@ N-Acetylarginine,SL00206,2a,Amino acid (N-acyl),HMDB0004620,NA,NA,NA,NA,NA,NA,Ot
 N-Acetylneuraminic acid,SL00242,2a,Carbohydrates and carbohydrate conjugates,HMDB0000230,C19910,NA,NA,NA,NA,NA,Other,N-Acetylneuraminic acid,,,,
 Pentose,SL00083,2a,Carbohydrates and carbohydrate conjugates,HMDB0000098,C00181,Carbohydrates,Monosaccharides,Aldoses,none,none,Carbohydrates,Pentose,,,,
 Gulonic acid γ-lactone,SL00153,2a,Gamma butyrolactones,HMDB0003466,C01040,NA,NA,NA,NA,NA,Other,Glucuronolactone,,,,
-Dodecanedioic acid,SL00221,2a,Fatty acids and conjugates,HMDB0000623,C02678,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Lipids,Dodecanedioic acid,,,,
+Dodecanedioic acid,SL00221,2a,Fatty acids and conjugates,HMDB0000623,C02678,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Lipids & organic acids,Dodecanedioic acid,,,,
 Isonicotinic acid,SL00032,2a,Pyridinecarboxylic acids and derivatives,HMDB0060665,C07446,NA,NA,NA,NA,NA,Coffee-associated compounds,Isonicotinic acid,,,,
 Epinephrine,SL00171,2a,Benzenediols,HMDB0000068,C00788,Hormones and transmitters,Other hormones,Adrenalines,none,none,Neuroactive compounds & derivatives,Epinephrine,,,,
 Propionylcarnitine,SL00207,2a,Acyl carnitines,HMDB0000824,C03017,Lipids,Fatty acyls,Fatty esters,Fatty acyl carnitines,none,"Vitamins, nutrients and cofactors",Propionylcarnitine,,,,
 Cytidine,SL00226,2a,Pyrimidine nucleosides,HMDB0000089,C00475,Nucleic acids,Nucleosides,Ribonucleosides,none,none,"Peptides, nucleic acids & nucleosides",Cytidine,,,,
 Cotinine,SL00151,2a,Pyridines and derivatives,HMDB0001046,NA,NA,NA,NA,NA,NA,Other,Cotinine,,,,
-Ethylmalonic acid/ Glutaric acid,SL00053,2a,Fatty acids and conjugates,HMDB0000622,NA,NA,NA,NA,NA,NA,Organic acids,Ethylmalonic acid/ Glutaric acid,,,,
-Hexanoylglycine,SL00141,2a,Amino acid (N-acyl),HMDB0000701,NA,NA,NA,NA,NA,NA,Organic acids,Hexanoylglycine,,,,
+Ethylmalonic acid/ Glutaric acid,SL00053,2a,Fatty acids and conjugates,HMDB0000622,NA,NA,NA,NA,NA,NA,Lipids & organic acids,Ethylmalonic acid/ Glutaric acid,,,,
+Hexanoylglycine,SL00141,2a,Amino acid (N-acyl),HMDB0000701,NA,NA,NA,NA,NA,NA,Lipids & organic acids,Hexanoylglycine,,,,
 N2-Acetyllysine,SL00175,2a,"Amino acids, peptides, and analogues",HMDB0000446,C12989,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",N2-Acetyllysine,,,,
 Deoxyinosine,SL00229,2a,Purine 2'-deoxyribonucleosides,HMDB0000071,C05512,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",Deoxyinosine,,,,
 Dopamine,SL00094,2a,Benzenediols,HMDB0000073,C03758,Peptides,Amines,Biogenic amines,none,none,Neuroactive compounds & derivatives,Dopamine,,,,
 Fumaric acid,SL00021,2a,TCA intermediate,HMDB0000134,C00122,Organic acids,Carboxylic acids,Dicarboxylic acids,none,none,Coffee-associated compounds,Fumaric acid,,,,
 Pimelic acid,SL00105,2a,Fatty acids and conjugates,HMDB0000857,C02656,Lipids,Fatty acyls,Fatty Acids and Conjugates,Dicarboxylic acids,none,Coffee-associated compounds,Pimelic acid,,,,
-Adipic acid,SL00076,2a,Fatty acids and conjugates,HMDB0000448,C06104,Organic acids,Carboxylic acids,Dicarboxylic acids,none,none,Organic acids,Adipic acid,,,,
+Adipic acid,SL00076,2a,Fatty acids and conjugates,HMDB0000448,C06104,Organic acids,Carboxylic acids,Dicarboxylic acids,none,none,Lipids & organic acids,Adipic acid,,,,
 Hexose,SL00157,2a,Carbohydrates and carbohydrate conjugates,HMDB0001151,C01487,Carbohydrates,Monosaccharides,Aldoses,none,none,Carbohydrates,Hexose,,,,
 β-Pinene,SL00168,2a,Monoterpenoids,HMDB0036559,C06307,Lipids,Prenol Lipids,Isoprenoids,C10 isoprenoids (monoterpenes),Bicyclic monoterpenoids,Coffee-associated compounds,β-Pinene,,,,
 "3,4-Dimethoxyphenylacetic acid",X04231,2a,Methoxybenzenes,HMDB0000434,NA,NA,NA,NA,NA,NA,Neuroactive compounds & derivatives,"3,4-Dimethoxyphenylacetic acid",,,,

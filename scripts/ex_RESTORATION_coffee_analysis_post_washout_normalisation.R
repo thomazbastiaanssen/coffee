@@ -178,7 +178,7 @@ meta_ex_REST$Legend_ex_REST = factor(meta_ex_REST$Legend_ex_REST, levels = c("Ba
 
 metab_BH_REST <- metabs.exp_ex_REST[metab.glm_ex_REST[metab.glm_ex_REST$`anovas.Legend_ex_REST Pr(>F).BH`< 0.2,"feature"],]
 
-ex_REST_metab_forest <- metab.glm_ex_REST %>%
+ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
   as.data.frame() %>%
   # rownames_to_column("name") %>% 
   #
@@ -197,6 +197,13 @@ ex_REST_metab_forest <- metab.glm_ex_REST %>%
   
   pivot_wider(names_from = name, values_from = value) %>% 
   
+  arrange(Estimate)  %>% 
+  mutate(Name = factor(Name, levels = unique(Name))) %>% 
+  
+  filter(Plot_category %in% c("Bile acids", "Coffee-associated compounds", 
+                              "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
+  mutate(Plot_category = factor(Plot_category,  levels = c("Coffee-associated compounds", "Neuroactive compounds & derivatives",
+                                                           "Bile acids", "Phytochemical compounds"))) %>% 
   ggplot() +
   
   aes(y = Estimate/log(2), 
@@ -217,12 +224,58 @@ ex_REST_metab_forest <- metab.glm_ex_REST %>%
   scale_x_discrete(position = "top", limits=rev) +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
-  ylab("log2(FoldChange) vs Baseline Coffee Drinkers") +
-  theme_bw() +
-  ggtitle("Differentially abundant faecal metabolites between\nnon-coffee drinkers and coffee drinkers post-washout vs baseline coffee drinker levels")
+  ylab(NULL) +
+  theme_bw() 
 
-
-
+ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
+  as.data.frame() %>%
+  # rownames_to_column("name") %>% 
+  #
+  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+  
+  filter(`anovas.Legend_ex_REST Pr(>F).BH` < 0.2) %>% 
+  dplyr::select(!contains('anovas')) %>% 
+  dplyr::select(!contains('Intercept')) %>% 
+  pivot_longer(c(`coefs.Legend_ex_RESTPost-washout (CD) 97.5 %`, `coefs.Legend_ex_RESTBaseline (NCD) 97.5 %`,
+                 `coefs.Legend_ex_RESTPost-washout (CD) 2.5 %`, `coefs.Legend_ex_RESTBaseline (NCD) 2.5 %`,
+                 `coefs.Legend_ex_RESTPost-washout (CD) Estimate`,`coefs.Legend_ex_RESTBaseline (NCD) Estimate`)) %>% 
+  mutate(Legend = case_when(grepl("NCD",name) ~ "vs NCD baseline", 
+                            grepl("CD", name) ~ "vs CD post-washout")) %>% 
+  mutate(name = str_remove(name, pattern = ".*\\) "),
+         name = str_remove(name, pattern = "_.*")) %>% 
+  
+  pivot_wider(names_from = name, values_from = value) %>% 
+  
+  arrange(Estimate)  %>% 
+  mutate(Name = factor(Name, levels = unique(Name))) %>% 
+  
+  filter(!Plot_category %in% c("Bile acids", "Coffee-associated compounds", 
+                              "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
+  mutate(Plot_category = factor(Plot_category,  levels = c("Carbohydrates", "Lipids & organic acids",
+                                                           "Peptides, nucleic acids & nucleosides", 
+                                                           "Vitamins, nutrients and cofactors", "Other"))) %>% 
+  ggplot() +
+  
+  aes(y = Estimate/log(2), 
+      x = Name, 
+      group = Legend, 
+      fill = Legend) +
+  
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "red") +
+  
+  geom_errorbar(aes(ymin = `2.5 %`/log(2), 
+                    ymax = `97.5 %`/log(2)), 
+                colour = "black", width = 3/4 , position = position_dodge(1/3)) +
+  
+  geom_point(size = 3, shape = 21, position = position_dodge(1/3)) +
+  coord_flip() +
+  scale_fill_manual(values = c("vs NCD baseline"  = "#ece6ca", 
+                               "vs CD post-washout" = "#ffa0a0")) +
+  scale_x_discrete(position = "top", limits=rev) +
+  ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_bw() 
 
 ex_REST_DA_metab <- metab.glm_ex_REST %>%
   as.data.frame() %>%
