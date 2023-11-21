@@ -26,6 +26,7 @@ ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') +
   plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 ```
 
+
 In Experiment 2B, we're looking at features that return to non-coffee drinker levels post washout (coffee abstinence). 
 ```{r, warning=FALSE, message = FALSE}
 source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")

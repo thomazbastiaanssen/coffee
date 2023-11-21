@@ -1059,7 +1059,7 @@ n-Propyl GalIate,X02034,3,,,,NA,NA,NA,NA,NA,NA,n-Propyl GalIate,,,,
 Coumarin,X05939,3,,,,NA,NA,NA,NA,NA,NA,Coumarin,,,,
 Quinic acid,SL00184,2a,Alcohols and polyols,HMDB0003072,C00296,Organic acids,Carboxylic acids,none,none,none,Coffee-associated compounds,Quinic acid,,,,Peptides & Nucleic acids
 Glucuronic acid,SL00185,2a,Carbohydrates and carbohydrate conjugates,HMDB0000127,C00191,Carbohydrates,Monosaccharides,Sugar acids,none,none,Lipids & organic acids,Glucuronic acid,,,,Peptides & Nucleic acids
-2-Hydroxybutyric acid/ 3-Hydroxybutyric acid,SL00012,2a,Alpha hydroxy acids and derivatives,HMDB0000008,C05984,Lipids,Fatty acyls,Fatty Acids and Conjugates,Hydroxy fatty acids,none,Neuroactive compounds & derivatives,2-Hydroxybutyric acid/ 3-Hydroxybutyric acid,,,,Peptides & Nucleic acids
+2-’ or 3-Hydroxybutyric acid,SL00012,2a,Alpha hydroxy acids and derivatives,HMDB0000008,C05984,Lipids,Fatty acyls,Fatty Acids and Conjugates,Hydroxy fatty acids,none,Neuroactive compounds & derivatives,2’ or 3-Hydroxybutyric acid,,,,Peptides & Nucleic acids
 Methanesulfonic acid,SL00008,2a,Organosulfonic acids and derivatives,HMDB0240280,C11145,NA,NA,NA,NA,NA,Lipids & organic acids,Methanesulfonic acid,,,,Carbohydrates
 4-Aminobenzoic acid,SL00064,2a,Benzoic acids and derivatives,HMDB0304171,NA,NA,NA,NA,NA,NA,Lipids & organic acids,4-Aminobenzoic acid,,,,Peptides & Nucleic acids
 Tryptamine,SL00106,2a,Tryptamines and derivatives,HMDB0000303,C00398,Phytochemical compounds,Alkaloids,Alkaloids derived from tryptophan and anthranilic acid,Indole alkaloids,none,Neuroactive compounds & derivatives,Tryptamine,,,,Other
@@ -1150,7 +1150,7 @@ Epinephrine,SL00171,2a,Benzenediols,HMDB0000068,C00788,Hormones and transmitters
 Propionylcarnitine,SL00207,2a,Acyl carnitines,HMDB0000824,C03017,Lipids,Fatty acyls,Fatty esters,Fatty acyl carnitines,none,"Vitamins, nutrients and cofactors",Propionylcarnitine,,,,
 Cytidine,SL00226,2a,Pyrimidine nucleosides,HMDB0000089,C00475,Nucleic acids,Nucleosides,Ribonucleosides,none,none,"Peptides, nucleic acids & nucleosides",Cytidine,,,,
 Cotinine,SL00151,2a,Pyridines and derivatives,HMDB0001046,NA,NA,NA,NA,NA,NA,Other,Cotinine,,,,
-Ethylmalonic acid/ Glutaric acid,SL00053,2a,Fatty acids and conjugates,HMDB0000622,NA,NA,NA,NA,NA,NA,Lipids & organic acids,Ethylmalonic acid/ Glutaric acid,,,,
+Glutaric acid,SL00053,2a,Fatty acids and conjugates,HMDB0000622,NA,NA,NA,NA,NA,NA,Lipids & organic acids,Glutaric acid,,,,
 Hexanoylglycine,SL00141,2a,Amino acid (N-acyl),HMDB0000701,NA,NA,NA,NA,NA,NA,Lipids & organic acids,Hexanoylglycine,,,,
 N2-Acetyllysine,SL00175,2a,"Amino acids, peptides, and analogues",HMDB0000446,C12989,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",N2-Acetyllysine,,,,
 Deoxyinosine,SL00229,2a,Purine 2'-deoxyribonucleosides,HMDB0000071,C05512,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",Deoxyinosine,,,,
@@ -1161,7 +1161,7 @@ Adipic acid,SL00076,2a,Fatty acids and conjugates,HMDB0000448,C06104,Organic aci
 Hexose,SL00157,2a,Carbohydrates and carbohydrate conjugates,HMDB0001151,C01487,Carbohydrates,Monosaccharides,Aldoses,none,none,Carbohydrates,Hexose,,,,
 β-Pinene,SL00168,2a,Monoterpenoids,HMDB0036559,C06307,Lipids,Prenol Lipids,Isoprenoids,C10 isoprenoids (monoterpenes),Bicyclic monoterpenoids,Coffee-associated compounds,β-Pinene,,,,
 "3,4-Dimethoxyphenylacetic acid",X04231,2a,Methoxybenzenes,HMDB0000434,NA,NA,NA,NA,NA,NA,Neuroactive compounds & derivatives,"3,4-Dimethoxyphenylacetic acid",,,,
-"2,5-Dihydroxybenzoic acid/ 3,4-Dihydroxybenzoic acid",SL00095,2a,Benzoic acids and derivatives,HMDB0000152,C00628,NA,NA,NA,NA,NA,Phytochemical compounds,"2,5-Dihydroxybenzoic acid/ 3,4-Dihydroxybenzoic acid",,,,
+"2,5-’ or 3,4-Dihydroxybenzoic acid",SL00095,2a,Benzoic acids and derivatives,HMDB0000152,C00628,NA,NA,NA,NA,NA,Phytochemical compounds,"2,5-’ or 3,4-Dihydroxybenzoic acid",,,,
 Homocitrulline,SL00182,2a,Amino acid (alpha),HMDB0000679,C02427,NA,NA,NA,NA,NA,"Peptides, nucleic acids & nucleosides",Homocitrulline,,,,
 2-C-Methyl-erythritol-4-phosphoric acid,SL00205,2a,Phosphate esters,HMDB0304061,NA,NA,NA,NA,NA,NA,Other,2-C-Methyl-erythritol-4-phosphoric acid,,,,
 Taurine,SL00034,2a,Organosulfonic acids and derivatives,HMDB0000251,C00245,Organic acids,none,none,none,none,"Peptides, nucleic acids & nucleosides",Taurine,,,,
