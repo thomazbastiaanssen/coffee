@@ -4,7 +4,9 @@ source("subscripts/load_and_clean_data.R")
 #####Coffee vs non-coffee
 
 meta_ex_INTERVENTION <- metadata[metadata$Legend_ex1 != "NCD" & metadata$visit %in% c("V3", "T2I", "T4I", "T14I", "V4"),]
-meta_ex_INTERVENTION$Legend_ex_INTERVENTION = factor(meta_ex_INTERVENTION$Legend_ex_INTERVENTION, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", "Post-Intervention (V4)"))
+meta_ex_INTERVENTION$Legend_ex_INTERVENTION = factor(meta_ex_INTERVENTION$Legend_ex_INTERVENTION, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+                                                                                                             "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+                                                                                                             "Post-Intervention (V4)"))
 
 
 species.exp_ex_INTERVENTION <- species.exp[,meta_ex_INTERVENTION$R_ID]
@@ -260,11 +262,87 @@ GBMs.glmer_ex_INTERVENTION <- fw_glmer(x = GBMs.exp_ex_INTERVENTION,
                                    metadata = meta_ex_INTERVENTION, 
                                    order = "ac", verbose = FALSE) 
 
-#hist(GBMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION Pr(>F).BH`, breaks = 20)
+hist(GBMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION Pr(>F).BH`, breaks = 20)
+hist(GBMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION:Treatment Pr(>F).BH`, breaks = 20)
 
 GBMs_BH_ex_INTERVENTION <- GBMs.exp_ex_INTERVENTION[GBMs.glmer_ex_INTERVENTION[GBMs.glmer_ex_INTERVENTION$`coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF Pr(>|t|).BH`< 0.2,"feature"],]
 
+GBMs.glmer_ex_INTERVENTION %>%
+  as.data.frame() %>%
+  # rownames_to_column("name") %>% 
 
+  filter(`coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF Pr(>|t|).BH`< 0.2) %>% 
+  dplyr::select(!contains('anovas')) %>% 
+  dplyr::select(!contains('Intercept')) %>% #colnames()
+  pivot_longer(c(`coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF 97.5 %`,  `coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I):TreatmentDECAF 97.5 %`,  `coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I):TreatmentDECAF 97.5 %`,  `coefs.Legend_ex_INTERVENTIONPost-Intervention (V4):TreatmentDECAF 97.5 %`,
+                 `coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) 97.5 %`,                 `coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) 97.5 %`,                 `coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I) 97.5 %`,                 `coefs.Legend_ex_INTERVENTIONPost-Intervention (V4) 97.5 %`,
+                 `coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF 2.5 %`,   `coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I):TreatmentDECAF 2.5 %`,   `coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I):TreatmentDECAF 2.5 %`,   `coefs.Legend_ex_INTERVENTIONPost-Intervention (V4):TreatmentDECAF 2.5 %`,
+                 `coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) 2.5 %`,                  `coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) 2.5 %`,                  `coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I) 2.5 %`,                  `coefs.Legend_ex_INTERVENTIONPost-Intervention (V4) 2.5 %`,
+                 `coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF Estimate`,`coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I):TreatmentDECAF Estimate`,`coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I):TreatmentDECAF Estimate`,`coefs.Legend_ex_INTERVENTIONPost-Intervention (V4):TreatmentDECAF Estimate`, 
+                 `coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Estimate`,               `coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Estimate`,               `coefs.Legend_ex_INTERVENTIONDay 14 of intervention (T14I) Estimate`,               `coefs.Legend_ex_INTERVENTIONPost-Intervention (V4) Estimate`)) %>% 
+  mutate(Legend = case_when(grepl("T2I",  name) ~ "vs day 2", 
+                            grepl("T4I",  name) ~ "vs day 4",
+                            grepl("T14I", name) ~ "vs day 14",
+                            grepl("V4",   name) ~ "vs day 21")) %>%    
+
+  
+  mutate(name = str_replace(name, pattern = ".*\\) ", replacement = "CAFF@"),
+         name = str_replace(name, pattern = ".*TreatmentDECAF ", replacement = "DECAF@"),
+         name = str_remove(name, pattern = "_.*")) %>%  
+  
+  separate(name, sep = "@", into = c("Treatment", "name")) %>% 
+  
+  pivot_wider(names_from = name, values_from = value) %>% 
+    
+  mutate(`2.5 %`  = `2.5 %`  * -1) %>% 
+  mutate(`97.5 %` = `97.5 %` * -1) %>% 
+  mutate(Estimate = Estimate * -1) %>% 
+  arrange(Estimate)  %>% 
+  mutate(Legend = factor(Legend, levels = rev(c("vs day 2","vs day 4","vs day 14","vs day 21")))) %>%   #
+  
+  mutate(feature = factor(feature, levels = unique(feature))) %>% 
+  dplyr::select(!contains('coef')) %>%  
+  pivot_wider(names_from = Treatment, values_from = c(`2.5 %`, `97.5 %`, `Estimate`)) %>% 
+  #mutate(ci_CAFF =  `97.5 %_CAFF` - `2.5 %_CAFF` )
+  mutate(Estimate_DECAF = Estimate_CAFF + Estimate_DECAF) %>% 
+  
+  pivot_longer(!c(feature, Legend)) %>% 
+  separate(name, sep = "_", into = c("name", "Treatment")) %>% 
+  
+  pivot_wider(names_from = name, values_from = value) %>% 
+  
+
+    
+  
+  # filter(Plot_category %in% c("Bile acids", "Coffee-associated compounds", 
+  #                             "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
+  # mutate(Plot_category = factor(Plot_category,  levels = c("Coffee-associated compounds", "Neuroactive compounds & derivatives",
+  #                                                          "Bile acids", "Phytochemical compounds"))) %>% 
+  ggplot() +
+  
+  aes(y = Estimate/log(2), 
+      x = feature, 
+      group = Legend, 
+      fill = Legend) +
+  
+  geom_hline(yintercept = 0, linetype = "dashed", colour = "red") +
+  
+  geom_errorbar(aes(ymin = `2.5 %`/log(2), 
+                    ymax = `97.5 %`/log(2)), 
+                colour = "black", width = 3/4 , position = position_dodge(1/3)) +
+  
+  geom_point(size = 3, shape = 21, position = position_dodge(1/3)) +
+  coord_flip() +
+  scale_fill_manual(values = c("vs day 2"  = "#d9f0a3",
+                               "vs day 4"  = "#78c679",
+                               "vs day 14" = "#006837", 
+                               "vs day 21" = "#004529"), limits = rev) +
+  scale_x_discrete(position = "top", limits=rev) +
+  facet_wrap(~Treatment) +
+  #ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme_bw() 
 ex_INTERVENTIONDA_GBM <- GBMs_BH_ex_INTERVENTION %>%
   t() %>%
   as.data.frame() %>%
@@ -300,6 +378,7 @@ GMMs.glmer_ex_INTERVENTION <- fw_glmer(x = GMMs.exp_ex_INTERVENTION,
                                    order = "ac") 
 
 #hist(GMMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION Pr(>F).BH`, breaks = 20)
+hist(GMMs.glmer_ex_INTERVENTION$`anovas.Legend_ex_INTERVENTION:Treatment Pr(>F)`, breaks = 20)
 
 GMM_BH_ex_INTERVENTION <- GMMs.exp_ex_INTERVENTION[GMMs.glmer_ex_INTERVENTION[GMMs.glmer_ex_INTERVENTION$`coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I):TreatmentDECAF Pr(>|t|).BH`< 0.2,"feature"],]
 

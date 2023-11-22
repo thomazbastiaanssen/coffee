@@ -360,6 +360,34 @@ ex1DA_metab <- metab.glm_ex1 %>%
   xlab(expression(paste('\u03B2 Estimate (log'[2],'-fold change)'))) +
   theme_bw()
 
+
+
+cyt <- read.delim("raw/cytokines/cytokines_v2.csv", sep = ",")
+
+ex1_cyt <- cyt %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  separate(name, into = c("name", "Legend"), sep = "_") %>% 
+  mutate(Legend = factor(Legend, levels = c("NCD", "CD"))) %>% 
+  mutate(name = str_replace(name, "\\.", "-")) %>% 
+  mutate(name = factor(name, levels = c("IFN-gamma", "IL-6", "IL-8", "IL-10", "TNF-alpha", "CRP"))) %>% 
+  
+  ggplot() +
+  aes(x = Legend, y = value, fill = Legend) +
+  geom_violin(alpha = 1/4) +
+  ggforce::geom_sina(shape = 21) +
+  stat_summary(fun.y = median, fun.max = median,
+               geom = "crossbar", width = 0.5)+  
+  #coord_polar()
+  theme_bw() +
+  #Adjust appearance
+  scale_fill_manual(values = c("CD" = "#94641f", 
+                               "NCD"  = "#ece6ca")) +
+  facet_wrap(~name, scales = "free_y", nrow = 1) +
+  ylab("Concentration") +
+  xlab(NULL)
+
+
 # GMM_BH_ex1 <- GMMs.exp_ex1[GMMs.glm_ex1[GMMs.glm_ex1$`coffee_groupCD Pr(>|t|).BH`< 0.2,"feature"],]
 # 
 # GMM_BH_ex1 %>%

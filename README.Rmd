@@ -19,7 +19,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
-ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
+(ex1pca | (ex1alpha / ex1DA)) / ex1_cyt + plot_layout(guides = 'collect', heights = c(3,1))
 ```
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
 ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + 

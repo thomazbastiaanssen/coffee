@@ -9,7 +9,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ``` r
-ex1pca + ex1alpha / ex1DA + plot_layout(guides = 'collect')
+(ex1pca | (ex1alpha / ex1DA)) / ex1_cyt + plot_layout(guides = 'collect', heights = c(3,1))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
