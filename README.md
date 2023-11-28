@@ -9,7 +9,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ``` r
-(ex1pca | (ex1alpha / ex1DA)) / ex1_cyt + plot_layout(guides = 'collect', heights = c(3,1))
+ex1_top
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
@@ -20,6 +20,12 @@ ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') +
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+``` r
+ex1_top + ex1_metab_forest + plot_layout(guides = 'collect', heights = c(1, 1, 2))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
 In Experiment 2B, we’re looking at features that return to non-coffee
 drinker levels post washout (coffee abstinence).
@@ -32,14 +38,14 @@ source("scripts/ex_RESTORATION_coffee_analysis_post_washout_normalisation.R")
 ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ``` r
 ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect') + 
   plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout (L) vs baseline coffee drinker levels (R)")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
 In Experiment 3, we’re looking at the effects of going back on either
 caffeinated or decaffeinated coffee post-washout (coffee abstinence).
@@ -52,13 +58,13 @@ source("scripts/ex3_intervention_v3_vs_v4.R")
 ex3pca + ex3alpha + plot_layout(guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
 
 ``` r
 ex3metab
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
 
 In this additional microbiome experiment, we’re looking at the acute
 effects of coffee abstinence (coffee withdrawal).
@@ -71,7 +77,7 @@ source("scripts/ex_washout_acute_withdrawal.R")
 ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 In this additional microbiome experiment, we’re looking at the acute
 effects of going back on either caffeinated or decaffeinated coffee
@@ -81,12 +87,16 @@ post-washout (coffee abstinence).
 source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 ```
 
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
     ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
     ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
+
+![](README_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
 
 ``` r
 ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', heights = c(1,1,2,2))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->

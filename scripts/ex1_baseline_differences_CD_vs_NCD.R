@@ -101,7 +101,9 @@ ex1pca <- ggplot(pca) +
   #Adjust labels
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
-  theme_bw() 
+  theme_bw() + 
+  ggtitle("Principal Component Analysis (Beta Diversity)") +
+  guides(fill="none")
 ex1pca
 
 dis_ait = dist(t(species.exp_ex1), method = "euclidean")
@@ -133,7 +135,9 @@ ex1alpha <- alpha_div_ex1 %>%
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
   ylab("") + xlab("") + theme_bw() + 
-  theme(text = element_text(size = 12))
+  theme(text = element_text(size = 12))+ 
+  guides(fill="none") +  ggtitle("Alpha Diversity")
+
 
 alpha_div_ex1 %>% 
   pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
@@ -169,6 +173,7 @@ ex1DA <- speBH_ex1 %>%
   add_column(Legend = meta_ex1$Legend_ex1)  %>%
   pivot_longer(!c("Legend"))  %>%
   mutate(name = str_replace(name, ".*ales_", "")) %>% 
+  mutate(name = str_replace(name, pattern = "Firmicutes bacterium CAG:94", replacement = "Firmicutes CAG:94")) %>% 
   ggplot(aes(x     = Legend, 
              y     = value, 
              fill  = Legend, 
@@ -182,7 +187,9 @@ ex1DA <- speBH_ex1 %>%
                                "NCD"  = "#ece6ca")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
-  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
+  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))+ 
+  guides(fill="none") +  ggtitle("Species-level differences")
+
 
 
 
@@ -214,7 +221,10 @@ ex1DA_GBM <- GBM_BH_ex1 %>%
                                "NCD"  = "#ece6ca")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
-  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
+  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))+ 
+  guides(fill="none")+  ggtitle("Gut-Brain module differences")
+
+
 
 
 
@@ -291,7 +301,8 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   ylab(NULL) +
   xlab(NULL) +
-  theme_bw() 
+  theme_bw() + 
+  guides(fill="none")
 
 ex1_metab_forest_b <- metab.glm_ex1 %>%
   as.data.frame() %>%
@@ -327,7 +338,8 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   ylab(NULL) +
   xlab(NULL) +
-  theme_bw() 
+  theme_bw() + 
+  guides(fill="none")
 
 ex1DA_metab <- metab.glm_ex1 %>%
   as.data.frame() %>%
@@ -358,34 +370,123 @@ ex1DA_metab <- metab.glm_ex1 %>%
   ggtitle("Differentially abundant metabolites in coffee drinkers") +
   ylab(expression(paste('p-values (log'[10],'-scale)'))) +
   xlab(expression(paste('\u03B2 Estimate (log'[2],'-fold change)'))) +
-  theme_bw()
-
+  theme_bw() + 
+  guides(fill="none")
 
 
 cyt <- read.delim("raw/cytokines/cytokines_v2.csv", sep = ",")
+# 
+# ex1_cyt <- cyt %>% 
+#   rownames_to_column("ID") %>% 
+#   pivot_longer(!ID) %>% 
+#   separate(name, into = c("name", "Legend"), sep = "_") %>% 
+#   mutate(Legend = factor(Legend, levels = c("NCD", "CD"))) %>% 
+#   mutate(name = str_replace(name, "\\.", "-")) %>% 
+#   mutate(name = factor(name, levels = c("IFN-gamma", "IL-6", "IL-8", "IL-10", "TNF-alpha", "CRP"))) %>% 
+#   
+#   ggplot() +
+#   aes(x = Legend, y = value, fill = Legend) +
+#   geom_violin(alpha = 1/4) +
+#   ggforce::geom_sina(shape = 21) +
+#   stat_summary(fun.y = median, fun.max = median,
+#                geom = "crossbar", width = 0.5)+  
+#   #coord_polar()
+#   theme_bw() +
+#   #Adjust appearance
+#   scale_fill_manual(values = c("CD" = "#94641f", 
+#                                "NCD"  = "#ece6ca")) +
+#   facet_wrap(~name, scales = "free_y", nrow = 1) +
+#   ylab("Concentration") +
+#   xlab(NULL)
 
-ex1_cyt <- cyt %>% 
+
+
+ex1_cyta <- cyt %>% 
   rownames_to_column("ID") %>% 
   pivot_longer(!ID) %>% 
+  dplyr::filter(!str_detect(name, "stim")) %>% 
+  
   separate(name, into = c("name", "Legend"), sep = "_") %>% 
   mutate(Legend = factor(Legend, levels = c("NCD", "CD"))) %>% 
   mutate(name = str_replace(name, "\\.", "-")) %>% 
-  mutate(name = factor(name, levels = c("IFN-gamma", "IL-6", "IL-8", "IL-10", "TNF-alpha", "CRP"))) %>% 
+  mutate(name = paste0(name, " (pg/mL)")) %>%
+  mutate(name = str_replace(string = name, pattern = "CRP \\(pg/mL\\)", replacement = "CRP (mg/L)")) %>% 
+  mutate(name = factor(name, levels = c("IFN-gamma (pg/mL)", "IL-6 (pg/mL)", "IL-8 (pg/mL)", 
+                                        "IL-10 (pg/mL)", "TNF-alpha (pg/mL)", "CRP (mg/L)"))) %>% 
   
+  
+  group_by(name, Legend) %>% 
+  summarise(mean = mean(value, na.rm = T), 
+            SEM   =   std(value)) %>% 
+  ungroup() %>% 
   ggplot() +
-  aes(x = Legend, y = value, fill = Legend) +
-  geom_violin(alpha = 1/4) +
-  ggforce::geom_sina(shape = 21) +
-  stat_summary(fun.y = median, fun.max = median,
-               geom = "crossbar", width = 0.5)+  
-  #coord_polar()
-  theme_bw() +
+  aes(y = mean, x = name, fill = Legend) +
+  geom_errorbar(aes(ymin = mean - SEM, 
+                    ymax = mean + SEM), 
+                colour = "black", width = 1/4, position = position_dodge(1/3)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+  
+  coord_flip()+
+  scale_x_discrete(position = "top") +
+  
+  
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
-                               "NCD"  = "#ece6ca")) +
-  facet_wrap(~name, scales = "free_y", nrow = 1) +
-  ylab("Concentration") +
-  xlab(NULL)
+                               "NCD"  = "#ece6ca")) +  
+  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+  ylab(NULL) + xlab(NULL) +
+  facet_wrap(~name, nrow = 4, scales = "free")  +
+  ylim(c(0, NA)) + 
+  guides(fill="none") +
+  
+  ggtitle("Inflammatory Markers (plasma)")
+
+
+ex1_cytb <- cyt %>% 
+  rownames_to_column("ID") %>% 
+  pivot_longer(!ID) %>% 
+  dplyr::filter(str_detect(name, "stim")) %>% 
+  separate(name, into = c("name", "Legend"), sep = "_") %>% 
+  mutate(Legend = factor(Legend, levels = c("NCD", "CD"))) %>% 
+  mutate(name = str_replace(name, "\\.", "-")) %>% 
+  mutate(name = paste0(name, " (pg/mL)")) %>%
+  mutate(name = str_replace(string = name, pattern = "CRP \\(pg/mL\\)", replacement = "CRP (mg/L)")) %>% 
+  mutate(name = factor(name, levels = c("IL-1.beta (pg/mL)", "IL-6 (pg/mL)", "IL-8 (pg/mL)", 
+                                        "IL-10 (pg/mL)", "TNF-alpha (pg/mL)"))) %>% 
+  
+  
+  group_by(name, Legend) %>% 
+  summarise(mean = mean(value, na.rm = T), 
+            SEM   =   std(value)) %>% 
+  ungroup() %>% 
+  
+  ggplot() +
+  aes(y = mean, x = name, fill = Legend) +
+  geom_errorbar(aes(ymin = mean - SEM, 
+                    ymax = mean + SEM), 
+                colour = "black", width = 1/4, position = position_dodge(1/3)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+  
+  coord_flip()+
+  scale_x_discrete(position = "top") +
+  
+  
+  #Adjust appearance
+  scale_fill_manual(values = c("CD" = "#94641f", 
+                               "NCD"  = "#ece6ca")) +  
+  theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+  ylab(NULL) + xlab(NULL) +
+  facet_wrap(~name, nrow = 4, scales = "free")  +
+  ylim(c(0, NA)) + 
+  guides(fill="none") +
+  
+  ggtitle("Stimulated Inflammatory Markers (serum)")
+
+
+ex1_top <- (ex1pca | (ex1alpha / ex1DA)) / (ex1_cyta + ex1_cytb) # + plot_layout(guides = 'collect', heights = c(3,1))
+
+ex1_metab_forest <- ex1_metab_forest_a + ex1_metab_forest_b + plot_spacer() + plot_layout(guides = 'collect') + 
+  plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 
 
 # GMM_BH_ex1 <- GMMs.exp_ex1[GMMs.glm_ex1[GMMs.glm_ex1$`coffee_groupCD Pr(>|t|).BH`< 0.2,"feature"],]

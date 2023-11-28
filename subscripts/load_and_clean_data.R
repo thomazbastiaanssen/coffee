@@ -37,6 +37,8 @@ reverselog_trans <- function(base = exp(1)) {
             log_breaks(base = base), 
             domain = c(1e-100, Inf))
 }
+
+std <- function(x) sd(x, na.rm = T)/sqrt(sum(!is.na(x)))
 #Load in the species level count table and the metadata file. 
 counts   <- read.delim("raw/microbiome/species.tsv", sep = "\t", row.names = 1, header = T)
 row.names(counts) <- counts$Name

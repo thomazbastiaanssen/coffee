@@ -19,11 +19,15 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
-(ex1pca | (ex1alpha / ex1DA)) / ex1_cyt + plot_layout(guides = 'collect', heights = c(3,1))
+ex1_top
 ```
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
 ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + 
   plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
+```
+
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
+ex1_top + ex1_metab_forest + plot_layout(guides = 'collect', heights = c(1, 1, 2))
 ```
 
 
