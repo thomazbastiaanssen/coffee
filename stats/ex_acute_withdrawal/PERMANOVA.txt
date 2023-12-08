@@ -5,7 +5,7 @@ Permutation: free
 Number of permutations: 10000
 
 adonis2(formula = dis_ait ~ Legend_ex_withdraw, data = meta_ex_withdraw, permutations = 10000, method = "euclidean", strata = meta_ex_withdraw$participant_ID)
-                   Df SumOfSqs      R2      F Pr(>F)
-Legend_ex_withdraw  2     2227 0.00784 0.3475 0.2941
-Residual           88   281912 0.99216              
-Total              90   284139 1.00000              
+                    Df SumOfSqs     R2      F Pr(>F)
+Legend_ex_withdraw   3     3492 0.0091 0.3611 0.2129
+Residual           118   380369 0.9909              
+Total              121   383861 1.0000              

@@ -27,7 +27,7 @@ ex1_top + ex1_metab_forest + plot_layout(guides = 'collect', heights = c(1, 1, 2
 
 ![](README_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
 
-In Experiment 2B, we’re looking at features that return to non-coffee
+In Experiment 2, we’re looking at features that return to non-coffee
 drinker levels post washout (coffee abstinence).
 
 ``` r
@@ -47,6 +47,25 @@ ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect'
 
 ![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
+In this additional microbiome Experiment 2B, we’re looking at the acute
+effects of coffee abstinence (coffee withdrawal).
+
+``` r
+source("scripts/ex_washout_acute_withdrawal.R")
+```
+
+``` r
+ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+species_washout
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
 In Experiment 3, we’re looking at the effects of going back on either
 caffeinated or decaffeinated coffee post-washout (coffee abstinence).
 
@@ -58,28 +77,15 @@ source("scripts/ex3_intervention_v3_vs_v4.R")
 ex3pca + ex3alpha + plot_layout(guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
 
 ``` r
 ex3metab
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
 
-In this additional microbiome experiment, we’re looking at the acute
-effects of coffee abstinence (coffee withdrawal).
-
-``` r
-source("scripts/ex_washout_acute_withdrawal.R")
-```
-
-``` r
-ex_withdrawpca + ex_withdrawalpha + plot_layout(guides = 'collect')
-```
-
-![](README_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
-
-In this additional microbiome experiment, we’re looking at the acute
+In this additional microbiome experiment 3B, we’re looking at the acute
 effects of going back on either caffeinated or decaffeinated coffee
 post-washout (coffee abstinence).
 
@@ -87,16 +93,14 @@ post-washout (coffee abstinence).
 source("scripts/ex_INTERVENTION_acute_recaf_or_decaf.R")
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->![](README_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
-
     ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
     ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
     ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
 
-![](README_files/figure-gfm/unnamed-chunk-12-3.png)<!-- -->
-
 ``` r
-ex_INTERVENTIONpca + ex_INTERVENTIONalpha + ex_INTERVENTIONDA_GBM + ex_INTERVENTIONDA_GMM +  plot_layout(guides = 'collect', heights = c(1,1,2,2))
+((ex_INTERVENTIONpca | ex_INTERVENTIONalpha) + plot_layout(widths = c(2,1), guides = 'collect')) / 
+  (GBM_b  + plot_spacer() + GBM_a + plot_layout(guides = 'collect', widths = c(5,1,5))) /
+  (GMM_b  + plot_spacer() + GMM_a + plot_layout(guides = 'collect', widths = c(5,1,5))) +  plot_layout(heights = c(3,4,1))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
