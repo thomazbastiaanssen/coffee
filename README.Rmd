@@ -18,19 +18,9 @@ In Experiment 1, we're looking at differences in the microbiome between coffee d
 source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
-ex1_top
-```
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
-ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') + 
-  plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
-```
-
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
-ex1_top + ex1_metab_forest + plot_layout(guides = 'collect', heights = c(1, 1, 2))
-```
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
-ex1_composite
+(ex1pca | (ex1alpha / ex1DA)) / 
+  ((ex1_cyta  + ex1_cytb  + ex1_metab_forest) + plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
 ```
 
 In Experiment 2, we're looking at features that return to non-coffee drinker levels post washout (coffee abstinence). 
@@ -38,7 +28,7 @@ In Experiment 2, we're looking at features that return to non-coffee drinker lev
 source("scripts/ex_2_acute_and_full_withdrawal.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 8}
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
 (ex_RESTpca + (ex_RESTalpha/ex_RESTDA)) / (ex_REST_metab_forest_a + ex_REST_metab_forest_b)  + plot_layout(heights = c(2,3))
 ```
 

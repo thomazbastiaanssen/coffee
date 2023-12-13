@@ -547,9 +547,6 @@ ex1_metab_forest <- (ex1_metab_forest_a + ggtitle("Coffee & Microbiome associate
 #   (((ex1_cyta | (ex1_cytb / plot_spacer() + plot_layout(heights = c(7,1)))) | ex1_metab_forest)+ plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
 
 
-ex1_composite = (ex1pca | (ex1alpha / ex1DA)) / 
-  ((ex1_cyta  + ex1_cytb  + ex1_metab_forest) + plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
-
 # GMM_BH_ex1 <- GMMs.exp_ex1[GMMs.glm_ex1[GMMs.glm_ex1$`coffee_groupCD Pr(>|t|).BH`< 0.2,"feature"],]
 # 
 # GMM_BH_ex1 %>%

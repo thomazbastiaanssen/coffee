@@ -61,6 +61,7 @@ ex_RESTpca <- ggplot(pca) +
   
   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
   guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,21,21,22)))) +
+  guides(fill="none") +
   
   #Adjust labels
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
@@ -112,10 +113,11 @@ ex_RESTalpha <- alpha_div_ex_withdraw %>%
   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
   guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,21,21,22)))) +
   
-  scale_x_discrete(labels = c( "0 (NCD)", "0 (CD)", "2", "4", "14")) +
+  scale_x_discrete(labels = c( "0\n(NCD)", "0\n(CD)", "2", "4", "14")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
   ylab("") + xlab("") + theme_bw() + 
+  guides(fill="none") +
   theme(text = element_text(size = 12))
 
 
@@ -190,18 +192,14 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
   guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,21,21,22)))) +
   
-  scale_x_discrete(labels = c("0 (NCD)", "0 (CD)", "2", "4", "14")) +
+  scale_x_discrete(labels = c( "0\n(NCD)", "0\n(CD)", "2", "4", "14")) +
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
   facet_wrap( ~ feature, scales = "free", nrow = 2) +
   theme_bw() + xlab(NULL) + ylab("Abundance (CLR)") +  
   ggtitle("Bacterial species altered following washout") +
   theme(text = element_text(size = 12), 
-        axis.ticks.y = element_blank(), 
-        axis.text.y = element_blank(), 
-        legend.position = c(0.85, 0.25), 
-        legend.background = element_rect(fill = "white", colour = NA), 
-        legend.text = element_text(size = 16), 
-        legend.title = element_text(size = 20))
+        legend.position = c(1, -1/2), legend.justification = c(1, 0), 
+        legend.background = element_rect(fill = "white", colour = NA))
 
 
 
@@ -331,7 +329,6 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   theme_bw() 
 
 
-ex_RESTpca + (ex_RESTalpha/ex_RESTDA) + ex_REST_metab_forest_a + ex_REST_metab_forest_b 
 # 
 # ex_REST_DA_metab <- metab.glm_ex_REST %>%
 #   as.data.frame() %>%
