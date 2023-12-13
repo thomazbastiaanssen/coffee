@@ -11,6 +11,8 @@ output:
 ```{r setup, include = F}
 library(patchwork)
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(dev = 'svg') # set output device to svg
+
 ```
 
 In Experiment 1, we're looking at differences in the microbiome between coffee drinkers and non-coffee drinkers. 
