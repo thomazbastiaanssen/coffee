@@ -35,6 +35,7 @@ pca$ID                  = meta_ex_withdraw$participant_ID
 pca$Legend              = meta_ex_withdraw$Legend_ex_withdraw 
 pca$visit               = meta_ex_withdraw$visit
 pca$batch               = meta_ex_withdraw$batch
+pca$head                = "Aitchison Distance"
 
 #First, the main plot. Plot the first two components of the PCA
 ex_withdrawpca <- ggplot(pca) +
@@ -57,7 +58,8 @@ ex_withdrawpca <- ggplot(pca) +
   #Adjust labels
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
-  theme_bw() 
+  theme_bw() +
+  facet_wrap(~head)
 
 #ex_withdrawpca
 
@@ -173,10 +175,10 @@ base_exp_withdraw_species <- (species.exp_ex_withdraw/log(2)) %>%
            `coefs.Legend_ex_withdrawDay 4 of washout (T4W) Pr(>|t|)` < 0.05) %>% 
   dplyr::select(!c("anovas.Legend_ex_withdraw Pr(>F).BH", 
                    "coefs.Legend_ex_withdrawDay 2 of washout (T2W) Pr(>|t|)",
-                   "coefs.Legend_ex_withdrawDay 4 of washout (T4W) Pr(>|t|)" )) %>% 
+                   "coefs.Legend_ex_withdrawDay 4 of washout (T4W) Pr(>|t|)")) %>% 
   pivot_longer(!c(feature, interaction)) %>% 
   
-  left_join(., meta_ex_withdraw[,c("Legend_ex_withdraw", "Treatment","R_ID", "participant_ID")], by = c("name" = "R_ID")) %>% 
+  left_join(., meta_ex_withdraw[,c("Legend_ex_withdraw","R_ID", "participant_ID")], by = c("name" = "R_ID")) %>% 
   dplyr::select(!name) %>% 
   
   # group_by(participant_ID, Legend_ex_withdraw) %>% 
@@ -199,15 +201,16 @@ base_exp_withdraw_species <- (species.exp_ex_withdraw/log(2)) %>%
   
   dplyr::select(!baseline) %>% 
   
-  pivot_longer(!c(feature, Treatment, participant_ID, interaction))  
+  pivot_longer(!c(feature, participant_ID, interaction)) %>% 
+  mutate(Legend = "per participant abundance")
 
 
 
 species_washout <- base_exp_withdraw_species %>% 
-  group_by(feature, Treatment, name, interaction) %>% 
+  group_by(feature, name, interaction) %>% 
   reframe(value = mean(value, na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(Treatment = paste0("avg_", Treatment), 
+  mutate(Legend = "average abundance", 
          participant_ID = "average") %>% 
   rbind(base_exp_withdraw_species) %>% 
   
@@ -220,7 +223,7 @@ species_washout <- base_exp_withdraw_species %>%
 
   
   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  mutate(Treatment = factor(Treatment, levels = c("avg_CAFF", "CAFF", "avg_DECAF", "DECAF"))) %>% 
+  mutate(Treatment = factor(Legend, levels = c("average abundance", "per participant abundance"))) %>% 
   
   
   filter(!is.na(value)) %>% 
@@ -233,7 +236,7 @@ species_washout <- base_exp_withdraw_species %>%
   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
   
   geom_tile() +
-  geom_text(colour = "black", aes(alpha = Treatment), size = 3, show.legend = F) +
+  geom_text(colour = "black", aes(alpha = Legend), size = 3, show.legend = F) +
   
   
   scale_fill_gradientn(colours = c(
@@ -244,18 +247,72 @@ species_washout <- base_exp_withdraw_species %>%
     "#d6604d",   
     "#d73027", 
     "#a50026", "#a50026", "#a50026",  "#a50026", "#a50026", "#a50026"
-  ),  limits =  c(-6,6), "log2 fold change vs Baseline") +
+  ),  limits =  c(-9.5,9.5), "log2 fold change vs Baseline") +
   scale_y_discrete(position = "right") +
   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
-  scale_alpha_manual(values = c("avg_CAFF" = 1, "CAFF" = 0, "avg_DECAF" = 1, "DECAF" = 0)) +
+  scale_alpha_manual(values = c("average abundance" = 1, "per participant abundance" = 0)) +
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  ggh4x::facet_grid2(feature ~ Treatment, scales = "free", independent = "y") +
+  ggh4x::facet_grid2(feature ~ Legend, scales = "free", independent = "y") +
   theme_bw() + xlab(NULL) + ylab(NULL) +  
   ggtitle("Bacterial species altered following washout") +
   theme(text = element_text(size = 12), 
         axis.ticks.y = element_blank(), 
         axis.text.y = element_blank())
 
+
+
+
+base_exp_withdraw_species %>% 
+  group_by(feature, name, interaction) %>% 
+  reframe(value = mean(value, na.rm = TRUE)) %>% 
+  ungroup() %>% 
+  mutate(Legend = "average abundance", 
+         participant_ID = "average") %>% 
+  rbind(base_exp_withdraw_species) %>% 
+  
+  rename("Timepoint" = name) %>% 
+  # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
+  mutate(Timepoint = factor(Timepoint, levels = c("Baseline (T0W)", 
+                                                  "Day 2 of washout (T2W)", 
+                                                  "Day 4 of washout (T4W)", 
+                                                  "Post-washout (T14W)")))  %>% 
+  
+  
+  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+  mutate(Treatment = factor(Legend, levels = c("average abundance", "per participant abundance"))) %>% 
+  
+  
+  filter(!is.na(value)) %>% 
+  
+  filter(interaction) %>% 
+  filter(Legend != "average abundance") %>% 
+  group_by(Timepoint, feature) %>% 
+  mutate(mean = mean(value, na.rm = T), 
+         SEM   =   std(value)) %>% 
+  ungroup() %>% 
+  
+  ggplot() +
+  
+
+  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+
+  geom_point(aes(x = Timepoint, y = value, fill = Timepoint), alpha = 1/4, shape = 21) +
+
+  geom_errorbar(aes(x = Timepoint, 
+                    ymin = mean - SEM, 
+                    ymax = mean + SEM), 
+                colour = "black", width = 1/4, position = position_dodge(1/3)) +
+  geom_point(aes(x = Timepoint, y = mean, fill = Timepoint), shape = 21, size = 3) +
+  
+  scale_y_discrete(position = "right") +
+  scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
+  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+  facet_wrap( ~ feature, scales = "free") +
+  theme_bw() + xlab(NULL) + ylab(NULL) +  
+  ggtitle("Bacterial species altered following washout") +
+  theme(text = element_text(size = 12), 
+        axis.ticks.y = element_blank(), 
+        axis.text.y = element_blank())
 
 # speBH_ex_withdraw <- species.exp_ex_withdraw[species.glmer_ex_withdraw[species.glmer_ex_withdraw$`anovas.Legend_ex_withdraw Pr(>F).BH`< 0.2,"feature"],]
 # 

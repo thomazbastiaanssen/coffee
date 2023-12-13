@@ -81,6 +81,7 @@ pca$ID                  = meta_ex1$participant_ID
 pca$Legend              = meta_ex1$Legend_ex1
 pca$visit               = meta_ex1$visit
 pca$batch               = meta_ex1$batch
+pca$head                = "Aitchison Distance"
 
 #First, the main plot. Plot the first two components of the PCA
 ex1pca <- ggplot(pca) +
@@ -103,7 +104,8 @@ ex1pca <- ggplot(pca) +
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
   theme_bw() + 
   ggtitle("Principal Component Analysis (Beta Diversity)") +
-  guides(fill="none")
+  guides(fill="none") +
+  facet_wrap(~head)
 ex1pca
 
 dis_ait = dist(t(species.exp_ex1), method = "euclidean")
@@ -434,12 +436,12 @@ ex1_cyta <- cyt %>%
   scale_fill_manual(values = c("CD" = "#94641f", 
                                "NCD"  = "#ece6ca")) +  
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
-  ylab(NULL) + xlab(NULL) +
-  facet_wrap(~name, nrow = 4, scales = "free")  +
+  ylab(NULL)  + xlab(NULL) +
+  facet_wrap(~name, nrow = 6, ncol = 1, scales = "free")  +
   ylim(c(0, NA)) + 
   guides(fill="none") +
   
-  ggtitle("Inflammatory Markers (plasma)")
+  ggtitle("Unstimulated (plasma)")
 
 
 ex1_cytb <- cyt %>% 
@@ -451,14 +453,19 @@ ex1_cytb <- cyt %>%
   mutate(name = str_replace(name, "\\.", "-")) %>% 
   mutate(name = paste0(name, " (pg/mL)")) %>%
   mutate(name = str_replace(string = name, pattern = "CRP \\(pg/mL\\)", replacement = "CRP (mg/L)")) %>% 
-  mutate(name = factor(name, levels = c("IL-1.beta (pg/mL)", "IL-6 (pg/mL)", "IL-8 (pg/mL)", 
-                                        "IL-10 (pg/mL)", "TNF-alpha (pg/mL)"))) %>% 
+  mutate(name = factor(name, levels = c("IL-6 (pg/mL)", "IL-8 (pg/mL)", 
+                                        "IL-10 (pg/mL)", "TNF-alpha (pg/mL)", "IL-1.beta (pg/mL)"))) %>% 
   
   
   group_by(name, Legend) %>% 
   summarise(mean = mean(value, na.rm = T), 
             SEM   =   std(value)) %>% 
   ungroup() %>% 
+  
+  mutate(name = factor(name, levels = c("IL-6 (pg/mL)", "IL-8 (pg/mL)", 
+                                        "IL-10 (pg/mL)", "TNF-alpha (pg/mL)", "IL-1.beta (pg/mL)", ""))) %>% 
+  
+  #rbind("hue") %>% 
   
   ggplot() +
   aes(y = mean, x = name, fill = Legend) +
@@ -476,18 +483,72 @@ ex1_cytb <- cyt %>%
                                "NCD"  = "#ece6ca")) +  
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
-  facet_wrap(~name, nrow = 4, scales = "free")  +
+  facet_wrap(~name, nrow = 6, ncol = 1, scales = "free", drop = F)  +
   ylim(c(0, NA)) + 
   guides(fill="none") +
   
-  ggtitle("Stimulated Inflammatory Markers (serum)")
+  ggtitle("Stimulated (serum)")
+
+# 
+# cyt %>% 
+#   rownames_to_column("ID") %>% 
+#   pivot_longer(!ID) %>% 
+#   mutate(stim = case_when(str_detect(name, "stim") ~ "stim", 
+#                           !str_detect(name, "stim") ~ "unstim")) %>% 
+#   mutate(name = str_remove(name, "_stim")) %>% 
+#   #dplyr::filter(str_detect(name, "stim")) %>% 
+#   separate(name, into = c("name", "Legend"), sep = "_") %>% 
+#   mutate(Legend = factor(Legend, levels = c("NCD", "CD"))) %>% 
+#   mutate(name = str_replace(name, "\\.", "-")) %>% 
+#   mutate(name = paste0(name, " (pg/mL)")) %>%
+#   mutate(name = str_replace(string = name, pattern = "CRP \\(pg/mL\\)", replacement = "CRP (mg/L)")) %>% 
+#   mutate(name = factor(name, levels = c("IFN-gamma (pg/mL)", "IL-6 (pg/mL)", "IL-8 (pg/mL)", 
+#                                         "IL-10 (pg/mL)", "TNF-alpha (pg/mL)", "CRP (mg/L)", "IL-1.beta (pg/mL)"))) %>% 
+#   
+#   
+#   group_by(name, Legend, stim) %>% 
+#   summarise(mean = mean(value, na.rm = T), 
+#             SEM   =   std(value)) %>% 
+#   ungroup() %>% 
+#   
+#   ggplot() +
+#   aes(y = mean, x = name, fill = Legend) +
+#   geom_errorbar(aes(ymin = mean - SEM, 
+#                     ymax = mean + SEM), 
+#                 colour = "black", width = 1/4, position = position_dodge(1/3)) +
+#   geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+#   
+#   coord_flip()+
+#   scale_x_discrete(position = "top") +
+#   
+#   
+#   #Adjust appearance
+#   scale_fill_manual(values = c("CD" = "#94641f", 
+#                                "NCD"  = "#ece6ca")) +  
+#   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
+#   ylab(NULL) + xlab(NULL) +
+#   facet_wrap(stim ~ name, ncol = 2) +
+#   lemon::facet_rep_wrap(stim~name, ncol = 2,scales = "free") + 
+#   
+#   ylim(c(0, NA)) + 
+#   guides(fill="none") +
+#   
+#   ggtitle("Stimulated Inflammatory Markers (serum)")
+
 
 
 ex1_top <- (ex1pca | (ex1alpha / ex1DA)) / (ex1_cyta + ex1_cytb) # + plot_layout(guides = 'collect', heights = c(3,1))
 
-ex1_metab_forest <- ex1_metab_forest_a + ex1_metab_forest_b + plot_spacer() + plot_layout(guides = 'collect') + 
-  plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
+ex1_metab_forest <- (ex1_metab_forest_a + ggtitle("Coffee & Microbiome associated metabolites") + ex1_metab_forest_b + ggtitle("Other metabolites") + plot_layout(guides = 'collect')) 
+  #plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 
+
+# (ex1pca | (ex1alpha / ex1DA)) / 
+#   (((ex1_cyta | (ex1_cytb / plot_spacer() + plot_layout(heights = c(7,1)))) | ex1_metab_forest)+ plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
+
+
+ex1_composite = (ex1pca | (ex1alpha / ex1DA)) / 
+  ((ex1_cyta  + ex1_cytb  + ex1_metab_forest) + plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
 
 # GMM_BH_ex1 <- GMMs.exp_ex1[GMMs.glm_ex1[GMMs.glm_ex1$`coffee_groupCD Pr(>|t|).BH`< 0.2,"feature"],]
 # 

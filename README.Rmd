@@ -29,7 +29,9 @@ ex1_metab_forest_a + ex1_metab_forest_b  + plot_layout(guides = 'collect') +
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
 ex1_top + ex1_metab_forest + plot_layout(guides = 'collect', heights = c(1, 1, 2))
 ```
-
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
+ex1_composite
+```
 
 In Experiment 2, we're looking at features that return to non-coffee drinker levels post washout (coffee abstinence). 
 ```{r, warning=FALSE, message = FALSE}
@@ -44,6 +46,13 @@ ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect')
 ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_layout(guides = 'collect') + 
   plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout (L) vs baseline coffee drinker levels (R)")
 
+```
+
+
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
+(ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect'))/
+
+((ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_spacer() + plot_layout(guides = 'collect'))) + plot_layout(heights = c(2,4)) 
 ```
 
 In this additional microbiome Experiment 2B, we're looking at the acute effects of coffee abstinence (coffee withdrawal). 

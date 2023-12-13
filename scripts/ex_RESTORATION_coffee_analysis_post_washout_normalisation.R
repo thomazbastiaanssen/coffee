@@ -34,6 +34,8 @@ pca$ID                  = meta_ex_REST$participant_ID
 pca$Legend              = meta_ex_REST$Legend_ex_REST 
 pca$visit               = meta_ex_REST$visit
 pca$batch               = meta_ex_REST$batch
+pca$head                = "Aitchison Distance"
+
 
 #First, the main plot. Plot the first two components of the PCA
 ex_RESTpca <- ggplot(pca) +
@@ -57,7 +59,9 @@ ex_RESTpca <- ggplot(pca) +
   #Adjust labels
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
-  theme_bw() 
+  theme_bw() +
+  guides(fill="none") +
+  facet_wrap(~head)
 #ex_RESTpca
 
 
@@ -94,6 +98,7 @@ ex_RESTalpha <- alpha_div_ex_REST %>%
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
   ylab("") + xlab("") + theme_bw() + 
+  guides(fill="none") +
   theme(text = element_text(size = 12))
 
 
@@ -144,6 +149,8 @@ ex_RESTDA <- speBH_ex_REST %>%
                                "Post-washout (CD)" = "#ffa0a0")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 3) +
+  guides(fill="none") +
+  
   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))
 
 #ex_RESTDA
@@ -227,6 +234,7 @@ ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
   ylab(NULL) +
+  guides(fill="none") +
   theme_bw() 
 
 ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
@@ -279,7 +287,8 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   scale_x_discrete(position = "top", limits=rev) +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
-  ylab(NULL) +
+  ylab(NULL) +  
+  guides(fill="none") +
   theme_bw() 
 
 ex_REST_DA_metab <- metab.glm_ex_REST %>%
@@ -317,8 +326,15 @@ ex_REST_DA_metab <- metab.glm_ex_REST %>%
   theme_bw() + 
   facet_wrap(~name)
   
-  
-  
+# (ex_RESTpca + ex_RESTalpha / ex_RESTDA + plot_layout(guides = 'collect'))/
+# 
+# ((ex_REST_metab_forest_a + ex_REST_metab_forest_b + plot_spacer() + plot_layout(guides = 'collect'))) + plot_layout(heights = c(2,4)) 
+ 
+
+
+
+
+# plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers and coffee drinkers post-washout (L) vs baseline coffee drinker levels (R)")
   
   # 
   # metab.glm_ex_REST %>%
