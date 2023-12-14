@@ -227,6 +227,78 @@ species.glmer_ex_INTERVENTION <- fw_glmer(x = species.exp_ex_INTERVENTION,
                                       order = "ac", verbose = FALSE) 
 
 
+
+(species.exp_ex_INTERVENTION/log(2)) %>% 
+  as.data.frame() %>% 
+  rownames_to_column("feature") %>% 
+  
+  left_join(., species.glmer_ex_INTERVENTION[,c("feature", "anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
+                                            "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
+                                            "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)" )], by = c("feature" = "feature")) %>% 
+  
+  filter(`anovas.Legend_ex_INTERVENTION Pr(>F).BH` < 0.2) %>% 
+  dplyr::select(!c("anovas.Legend_ex_INTERVENTION Pr(>F).BH","anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
+                   "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
+                   "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)"  )) %>% 
+  
+  pivot_longer(!c(feature)) %>% 
+  
+  
+  
+  left_join(., meta_ex_INTERVENTION[,c("Legend_ex_INTERVENTION","R_ID", "participant_ID", "Treatment")], by = c("name" = "R_ID")) %>% 
+  
+  dplyr::select(!name) %>% 
+  
+  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+  
+  filter(!is.na(value)) %>% 
+  
+  # group_by(Legend_ex_withdraw, feature) %>% 
+  # mutate(mean = mean(value, na.rm = T), 
+  #        SEM   =   std(value)) %>% 
+  # ungroup() %>% 
+  
+  mutate(Legend_ex_INTERVENTION = factor(Legend_ex_INTERVENTION, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+                                                                            "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+                                                                            "Post-Intervention (V4)")
+  )) %>% 
+  
+  ggplot() +
+  
+  aes(x = Legend_ex_INTERVENTION, y = value, fill = Legend_ex_INTERVENTION) +
+  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+  
+  geom_boxplot(alpha = 1/2, coef = Inf)+
+  geom_point(shape = 21) +
+  
+  # geom_errorbar(aes(x = Legend_ex_withdraw, 
+  #                   ymin = mean - SEM, 
+  #                   ymax = mean + SEM), 
+  #               colour = "black", width = 1/4, position = position_dodge(1/3)) +
+  
+  #geom_point(aes(x = Legend_ex_withdraw, y = mean, fill = Legend_ex_withdraw), shape = 21, size = 3) +
+  
+  #scale_y_discrete(position = "right") +
+  scale_fill_manual(values = c("Pre-Intervention (V3)"        = "#ffffcc", 
+                               "Day 2 of intervention (T2I)"   = "#d9f0a3",
+                               "Day 4 of intervention (T4I)"   = "#78c679",
+                               "Day 14 of intervention (T14I)" = "#006837", 
+                               "Post-Intervention (V4)"        = "#004529"), "Legend") +
+  
+  scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
+  guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,21,21,22)))) +
+  
+  scale_x_discrete(labels = c( "0", "2", "4", "14", 21)) +
+  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+  facet_grid(feature ~ Treatment, scales = "free_y") +
+  theme_bw() + xlab(NULL) + ylab("Abundance (CLR)") +  
+  ggtitle("Bacterial species altered following coffee reintroduction") +
+  theme(text = element_text(size = 12), 
+        legend.position = c(1, -1/2), legend.justification = c(1, 0), 
+        legend.background = element_rect(fill = "white", colour = NA))
+
+
+
 base_exp_species <- (species.exp_ex_INTERVENTION/log(2)) %>% 
   as.data.frame() %>% 
   rownames_to_column("feature") %>% 
@@ -298,6 +370,7 @@ species_a <- base_exp_species %>%
   filter(!is.na(value)) %>% 
   
   filter(interaction) %>% 
+  filter(participant_ID == "average") %>% 
   
   ggplot() +
   
@@ -321,7 +394,7 @@ species_a <- base_exp_species %>%
   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
   scale_alpha_manual(values = c("avg_CAFF" = 1, "CAFF" = 0, "avg_DECAF" = 1, "DECAF" = 0)) +
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  ggh4x::facet_grid2(feature ~ Treatment, scales = "free", independent = "y") +
+  ggh4x::facet_grid2(Treatment ~ feature, scales = "free", independent = "y") +
   theme_bw() + xlab(NULL) + ylab(NULL) +  
   ggtitle("Bacterial species altered following\n coffee reintroduction, depending on caffeine content") +
   theme(text = element_text(size = 12), 

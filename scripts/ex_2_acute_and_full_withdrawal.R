@@ -66,6 +66,7 @@ ex_RESTpca <- ggplot(pca) +
   #Adjust labels
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
+  ggtitle("Principal Component Analysis (Beta Diversity)") +
   theme_bw() +
   facet_wrap(~head)
 
@@ -115,9 +116,10 @@ ex_RESTalpha <- alpha_div_ex_withdraw %>%
   
   scale_x_discrete(labels = c( "0\n(NCD)", "0\n(CD)", "2", "4", "14")) +
   
-  facet_wrap(~name, scales = "free_y", ncol = 4) +
+  facet_wrap(~name, scales = "free_y", ncol = 1) +
   ylab("") + xlab("") + theme_bw() + 
   guides(fill="none") +
+  ggtitle("Alpha Diversity") +
   theme(text = element_text(size = 12))
 
 
@@ -170,7 +172,7 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
   aes(x = Legend_ex_withdraw, y = value, fill = Legend_ex_withdraw, shape = coffee_group) +
   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
   
-  geom_boxplot(alpha = 1/2, coef = Inf)+
+  geom_boxplot(alpha = 1/2, coef = Inf, show.legend = FALSE)+
   geom_point() +
   
   # geom_errorbar(aes(x = Legend_ex_withdraw, 
@@ -190,15 +192,15 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
                                "Baseline (NCD)"  = "#ece6ca"), "Legend") +
   
   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
-  guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,21,21,22)))) +
+  guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(22,21,21,21,21), size = 5))) +
   
   scale_x_discrete(labels = c( "0\n(NCD)", "0\n(CD)", "2", "4", "14")) +
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_wrap( ~ feature, scales = "free", nrow = 2) +
+  facet_wrap( ~ feature, scales = "free", ncol = 2) +
   theme_bw() + xlab(NULL) + ylab("Abundance (CLR)") +  
   ggtitle("Bacterial species altered following washout") +
   theme(text = element_text(size = 12), 
-        legend.position = c(1, -1/2), legend.justification = c(1, 0), 
+        legend.position = c(1, -1/16), legend.justification = c(1, 0), 
         legend.background = element_rect(fill = "white", colour = NA))
 
 
@@ -272,7 +274,7 @@ ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
   xlab(NULL) +
   ylab(NULL) +
   guides(fill="none") +
-  theme_bw() 
+  theme_bw() + ggtitle("Coffee & Microbiome associated metabolites")
 
 ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   as.data.frame() %>%
@@ -326,7 +328,7 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   xlab(NULL) +
   ylab(NULL) +  
   guides(fill="none") +
-  theme_bw() 
+  theme_bw() + ggtitle("Other metabolites")
 
 
 # 

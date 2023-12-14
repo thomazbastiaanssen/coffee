@@ -128,14 +128,14 @@ ex1alpha <- alpha_div_ex1 %>%
       fill  = Legend, 
       group = Legend) + 
   
-  geom_boxplot(alpha = 1/2, coef = 100) +
-  geom_beeswarm(size = 3, cex = 3, shape = 21) + 
+  geom_boxplot(alpha = 1/2, coef = Inf) +
+  geom_point(colour = "black", shape = 21) + 
   
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
                                "NCD"  = "#ece6ca")) +
   
-  facet_wrap(~name, scales = "free_y", ncol = 4) +
+  facet_wrap(~name, scales = "free_y", ncol = 1) +
   ylab("") + xlab("") + theme_bw() + 
   theme(text = element_text(size = 12))+ 
   guides(fill="none") +  ggtitle("Alpha Diversity")
@@ -181,14 +181,14 @@ ex1DA <- speBH_ex1 %>%
              fill  = Legend, 
              group = Legend)) + 
   
-  geom_boxplot(alpha = 1/2, coef = 100) +
-  geom_beeswarm(size = 3, cex = 3, shape = 21) + 
+  geom_boxplot(alpha = 1/2, coef = Inf) +
+  geom_point(colour = "black", shape = 21) + 
   
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
                                "NCD"  = "#ece6ca")) +
   
-  facet_wrap(~name, scales = "free_y", ncol = 4) +
+  facet_wrap(~name, scales = "free_y", ncol = 1) +
   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))+ 
   guides(fill="none") +  ggtitle("Species-level differences")
 
