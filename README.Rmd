@@ -21,7 +21,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
-(ex1pca | (ex1alpha / ex1DA)) / 
+(ex1pca | (ex1alpha | ex1DA)) / 
   ((ex1_cyta  + ex1_cytb  + ex1_metab_forest) + plot_layout(widths = c(1,1,5))) + plot_layout(heights = c(2,3))
 ```
 
@@ -31,7 +31,8 @@ source("scripts/ex_2_acute_and_full_withdrawal.R")
 ```
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
-(ex_RESTpca + (ex_RESTalpha/ex_RESTDA)) / (ex_REST_metab_forest_a + ex_REST_metab_forest_b)  + plot_layout(heights = c(2,3))
+  (ex_RESTpca + ex_RESTalpha + ex_RESTDA + plot_layout(widths = c(6,2,5))) / 
+   (ex_REST_metab_forest_a + ex_REST_metab_forest_b)  + plot_layout(heights = c(4,7))
 ```
 
 
@@ -43,9 +44,8 @@ source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
 ```
 
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 30}
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
 ((ex_INTERVENTIONpca | ex_INTERVENTIONalpha) + plot_layout(widths = c(2,1), guides = 'collect')) / 
-  (GBM_b  + plot_spacer() + GBM_a + plot_layout(guides = 'collect', widths = c(5,1,5))) /
-  (GMM_b  + plot_spacer() + GMM_a + plot_layout(guides = 'collect', widths = c(5,1,5))) / ex3metab +  plot_layout(heights = c(3,4,1, 1)) 
+((mb_b | (mb_a / ex3metab)) + plot_layout(guides = 'collect', heights = c(1,2))) + plot_layout(heights = c(1,3))
 
 ```
