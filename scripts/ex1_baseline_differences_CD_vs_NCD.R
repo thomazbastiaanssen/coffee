@@ -304,7 +304,7 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
   ylab(NULL) +
   xlab(NULL) +
   theme_bw() + 
-  guides(fill="none")
+  guides(fill="none") + ggtitle("Coffee & Microbiome associated metabolites")
 
 ex1_metab_forest_b <- metab.glm_ex1 %>%
   as.data.frame() %>%
@@ -341,7 +341,7 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
   ylab(NULL) +
   xlab(NULL) +
   theme_bw() + 
-  guides(fill="none")
+  guides(fill="none")+ ggtitle("Other metabolites")
 
 ex1DA_metab <- metab.glm_ex1 %>%
   as.data.frame() %>%
@@ -539,7 +539,7 @@ ex1_cytb <- cyt %>%
 
 ex1_top <- (ex1pca | (ex1alpha / ex1DA)) / (ex1_cyta + ex1_cytb) # + plot_layout(guides = 'collect', heights = c(3,1))
 
-ex1_metab_forest <- (ex1_metab_forest_a + ggtitle("Coffee & Microbiome associated metabolites") + ex1_metab_forest_b + ggtitle("Other metabolites") + plot_layout(guides = 'collect')) 
+#ex1_metab_forest <- (ex1_metab_forest_a + ggtitle("Coffee & Microbiome associated metabolites") + ex1_metab_forest_b + ggtitle("Other metabolites") + plot_layout(guides = 'collect')) 
   #plot_annotation(title = "Differentially abundant faecal metabolites between non-coffee drinkers (L) and coffee drinkers (R)") 
 
 

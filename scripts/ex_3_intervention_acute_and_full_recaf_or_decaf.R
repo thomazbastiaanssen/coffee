@@ -56,20 +56,20 @@ ex_INTERVENTIONpca <- pca %>%
   geom_point(size = 3, col = "black", shape = 21) + 
   
   #Adjust appearance
-  scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffffcc", 
-                               "Day 2 of intervention (T2I)"   = "#d9f0a3",
-                               "Day 4 of intervention (T4I)"   = "#78c679",
-                               "Day 14 of intervention (T14I)" = "#006837", 
-                               "Post-Intervention (V4)"        = "#004529")) +
+  scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffa0a0", 
+                               "Day 2 of intervention (T2I)"   = "#d58eb6",
+                               "Day 4 of intervention (T4I)"   = "#ab7bcd",
+                               "Day 14 of intervention (T14I)" = "#8169e3", 
+                               "Post-Intervention (V4)"        = "#5757f9")) +
   
   facet_wrap(~Treatment) +
   #Adjust labels
+  guides(fill=FALSE)+
   xlab(paste("PC1: ", pc1,  "%", sep="")) + 
   ylab(paste("PC2: ", pc2,  "%", sep="")) + 
   theme_bw() + ggtitle("Principal Component Analysis (Beta Diversity)")
 
 #ex_INTERVENTIONpca
-
 
 
 
@@ -131,11 +131,11 @@ ex_INTERVENTIONalpha <- alpha_div_ex_INTERVENTION %>%
   
   
   #Adjust appearance
-  scale_fill_manual(values = c("Pre-Intervention (V3)"        = "#ffffcc", 
-                               "Day 2 of intervention (T2I)"   = "#d9f0a3",
-                               "Day 4 of intervention (T4I)"   = "#78c679",
-                               "Day 14 of intervention (T14I)" = "#006837", 
-                               "Post-Intervention (V4)"        = "#004529")) +
+  scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffa0a0", 
+                               "Day 2 of intervention (T2I)"   = "#d58eb6",
+                               "Day 4 of intervention (T4I)"   = "#ab7bcd",
+                               "Day 14 of intervention (T14I)" = "#8169e3", 
+                               "Post-Intervention (V4)"        = "#5757f9")) +
   
   facet_grid(name ~ Treatment, scales = "free_y") +
   ylab("") + xlab("") + theme_bw() + ggtitle("Alpha Diversity") +
@@ -221,11 +221,11 @@ species.glmer_ex_INTERVENTION <- fw_glmer(x = species.exp_ex_INTERVENTION,
   #geom_point(aes(x = Legend_ex_withdraw, y = mean, fill = Legend_ex_withdraw), shape = 21, size = 3) +
   
   #scale_y_discrete(position = "right") +
-  scale_fill_manual(values = c("Pre-Intervention (V3)"        = "#ffffcc", 
-                               "Day 2 of intervention (T2I)"   = "#d9f0a3",
-                               "Day 4 of intervention (T4I)"   = "#78c679",
-                               "Day 14 of intervention (T14I)" = "#006837", 
-                               "Post-Intervention (V4)"        = "#004529"), "Legend") +
+  scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffa0a0", 
+                               "Day 2 of intervention (T2I)"   = "#d58eb6",
+                               "Day 4 of intervention (T4I)"   = "#ab7bcd",
+                               "Day 14 of intervention (T14I)" = "#8169e3", 
+                               "Post-Intervention (V4)"        = "#5757f9"), "Legend") +
   
   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
   guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21)))) +
@@ -773,6 +773,7 @@ mb_a <- do.call(rbind,
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
   facet_grid(type ~  Treatment, scales = "free", space = "free") +
   theme_bw() + xlab(NULL) + ylab(NULL) +
+  guides(fill=FALSE)+
   ggtitle("Microbiome features altered following\n coffee reintroduction in a caffeine-dependent manner") +
   theme(text = element_text(size = 12))
   
@@ -826,6 +827,7 @@ mb_b <- do.call(rbind,
   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
   facet_grid(type ~  Treatment, scales = "free", space = "free") +
   theme_bw() + xlab(NULL) + ylab(NULL) +
+  guides(fill=FALSE)+
   ggtitle("Microbiome features altered following\n coffee reintroduction independently of caffeine") +
   theme(text = element_text(size = 12))
 
@@ -871,13 +873,14 @@ ex3metab <- metab_BH_ex3 %>%
                                "Post-Intervention (DECAF)" = "#5757f9")) +
   scale_x_discrete(labels = c("Pre",  "Post", "Pre", "Post")) +
   scale_shape_manual(values = c("CAFF" = 21, "DECAF" = 22))+
-  guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21,21,22,22)))) +
+  guides(shape = FALSE, #fill = guide_legend(override.aes = list(shape = c(21,21,22,22)))) +
+         fill=FALSE)+
   facet_wrap(Name ~ ., scales = "free",ncol = 2) +
   ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12)) +
   ggtitle("Metabolites differentially affected by caffeine")
-ex3metab
+#ex3metab
 
-(mb_b | (mb_a / ex3metab)) + plot_layout(guides = 'collect', heights = c(1,2))
+#(mb_b | (mb_a / ex3metab)) + plot_layout(guides = 'collect', heights = c(1,2))
 
 
 
