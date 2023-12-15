@@ -38,6 +38,16 @@ pca$visit               = meta_ex_INTERVENTION$visit
 pca$batch               = meta_ex_INTERVENTION$batch
 pca$Treatment           = meta_ex_INTERVENTION$Treatment
 
+
+
+dis_ait = dist(t(species.exp_ex_INTERVENTION), method = "euclidean")
+
+
+ex_INTERVENTION_PERMANOVA <- adonis2(dis_ait ~ Legend_ex_INTERVENTION * Treatment, 
+                                     data = meta_ex_INTERVENTION, 
+                                     method = "euclidean", 
+                                     strata = meta_ex_INTERVENTION$participant_ID,
+                                     permutations = 10000)
 #First, the main plot. Plot the first two components of the PCA
 
 ex_INTERVENTIONpca <- pca %>% 
@@ -50,6 +60,15 @@ ex_INTERVENTIONpca <- pca %>%
       fill    = Legend,
       group   = Legend) +
   
+  #Stats first
+  geom_label(x = -50, y = 32,
+             label = paste0("PERMANOVA\n",
+                            "Time: \n",
+                            "p= \t ", round(ex_INTERVENTION_PERMANOVA$`Pr(>F)`[1],3),"⁎\nR^2=", round(ex_INTERVENTION_PERMANOVA$R2[1],3),"\n",
+                            "Time x Caffeine: \n",
+                            "p= \t ", round(ex_INTERVENTION_PERMANOVA$`Pr(>F)`[3],3)," \nR^2=", round(ex_INTERVENTION_PERMANOVA$R2[3],3)), 
+             hjust =0, fill = "white", aes(colour = Treatment), show.legend = FALSE) +
+  
   #Create the points and ellipses
   #stat_ellipse(geom = "polygon", alpha = 1/4, colour = "black") +
   geom_path(aes(group = ID)) +
@@ -61,7 +80,7 @@ ex_INTERVENTIONpca <- pca %>%
                                "Day 4 of intervention (T4I)"   = "#ab7bcd",
                                "Day 14 of intervention (T14I)" = "#8169e3", 
                                "Post-Intervention (V4)"        = "#5757f9")) +
-  
+  scale_colour_manual(values = c("CAFF" = "white", "DECAF" = "black"))+
   facet_wrap(~Treatment) +
   #Adjust labels
   guides(fill=FALSE)+
@@ -73,14 +92,6 @@ ex_INTERVENTIONpca <- pca %>%
 
 
 
-dis_ait = dist(t(species.exp_ex_INTERVENTION), method = "euclidean")
-
-
-ex_INTERVENTION_PERMANOVA <- adonis2(dis_ait ~ Legend_ex_INTERVENTION * Treatment, 
-                                 data = meta_ex_INTERVENTION, 
-                                 method = "euclidean", 
-                                 strata = meta_ex_INTERVENTION$participant_ID,
-                                 permutations = 10000)
 
 
 # dis_ait %>% 
@@ -119,12 +130,41 @@ ex_INTERVENTIONalpha <- alpha_div_ex_INTERVENTION %>%
   pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
   mutate(Legend = factor(Legend_ex_INTERVENTION, levels = levels(meta_ex_INTERVENTION$Legend_ex_INTERVENTION))) %>% 
   
+  
+  left_join(., alpha_div_ex_INTERVENTION %>% 
+              pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
+           
+              
+              mutate(Legend = factor(Legend_ex_INTERVENTION, levels = levels(meta_ex_INTERVENTION$Legend_ex_INTERVENTION))) %>% 
+              
+              
+              group_by(name) %>% 
+              
+              reframe(
+                
+                lmer(value ~ Legend * Treatment + (1|participant_ID), data = across(everything())) %>% car::Anova() %>% 
+                  tidy()
+              ) %>% 
+              
+              ungroup() %>% 
+              filter(term == "Legend:Treatment") %>% 
+              mutate(star = case_when(
+                p.value < 0.001 ~ "⁂",
+                p.value < 0.01  ~ "⁎⁎", 
+                p.value < 0.05  ~ "⁎", 
+                TRUE ~  "ns")), by = c("name" = "name")) %>% 
+  
   ggplot()+
   
   aes(x = Legend, 
       y = value, 
       fill  = Legend, 
-      group = Legend) + 
+      group = Legend,
+      label = star) + 
+  
+  
+  #stats
+  geom_text(x = 5.25, y = -Inf, vjust = -1, size = 4, stat = "unique", aes(colour = Treatment), show.legend = F) +
   
   geom_boxplot(alpha = 1/2, coef = Inf, show.legend = F)+
   geom_point(shape = 21, show.legend = F) +
@@ -136,7 +176,7 @@ ex_INTERVENTIONalpha <- alpha_div_ex_INTERVENTION %>%
                                "Day 4 of intervention (T4I)"   = "#ab7bcd",
                                "Day 14 of intervention (T14I)" = "#8169e3", 
                                "Post-Intervention (V4)"        = "#5757f9")) +
-  
+  scale_colour_manual(values = c("CAFF" = "white", "DECAF" = "black")) +
   facet_grid(name ~ Treatment, scales = "free_y") +
   ylab("") + xlab("") + theme_bw() + ggtitle("Alpha Diversity") +
   scale_x_discrete(labels = c( "0\n(Post washout)", "2", "4", "14", 21)) +
@@ -148,11 +188,12 @@ alpha_div_ex_INTERVENTION %>%
   pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
   mutate(Legend = factor(Legend_ex_INTERVENTION, levels = levels(meta_ex_INTERVENTION$Legend_ex_INTERVENTION))) %>% 
   
+  
   group_by(name) %>% 
   
   reframe(
     
-    lm(value ~ Legend * Treatment, data = across(everything())) %>% car::Anova() %>% 
+    lmer(value ~ Legend * Treatment + (1|participant_ID), data = across(everything())) %>% car::Anova() %>% 
       tidy()
   ) %>% 
   
@@ -170,74 +211,74 @@ species.glmer_ex_INTERVENTION <- fw_glmer(x = species.exp_ex_INTERVENTION,
 
 
 
-(species.exp_ex_INTERVENTION/log(2)) %>% 
-  as.data.frame() %>% 
-  rownames_to_column("feature") %>% 
-  
-  left_join(., species.glmer_ex_INTERVENTION[,c("feature", "anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
-                                            "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
-                                            "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)" )], by = c("feature" = "feature")) %>% 
-  
-  filter(`anovas.Legend_ex_INTERVENTION Pr(>F).BH` < 0.2) %>% 
-  dplyr::select(!c("anovas.Legend_ex_INTERVENTION Pr(>F).BH","anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
-                   "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
-                   "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)"  )) %>% 
-  
-  pivot_longer(!c(feature)) %>% 
-  
-  
-  
-  left_join(., meta_ex_INTERVENTION[,c("Legend_ex_INTERVENTION","R_ID", "participant_ID", "Treatment")], by = c("name" = "R_ID")) %>% 
-  
-  dplyr::select(!name) %>% 
-  
-  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  
-  filter(!is.na(value)) %>% 
-  
-  # group_by(Legend_ex_withdraw, feature) %>% 
-  # mutate(mean = mean(value, na.rm = T), 
-  #        SEM   =   std(value)) %>% 
-  # ungroup() %>% 
-  
-  mutate(Legend_ex_INTERVENTION = factor(Legend_ex_INTERVENTION, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
-                                                                            "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
-                                                                            "Post-Intervention (V4)")
-  )) %>% 
-  
-  ggplot() +
-  
-  aes(x = Legend_ex_INTERVENTION, y = value, fill = Legend_ex_INTERVENTION) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
-  
-  geom_boxplot(alpha = 1/2, coef = Inf)+
-  geom_point(shape = 21) +
-  
-  # geom_errorbar(aes(x = Legend_ex_withdraw, 
-  #                   ymin = mean - SEM, 
-  #                   ymax = mean + SEM), 
-  #               colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  
-  #geom_point(aes(x = Legend_ex_withdraw, y = mean, fill = Legend_ex_withdraw), shape = 21, size = 3) +
-  
-  #scale_y_discrete(position = "right") +
-  scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffa0a0", 
-                               "Day 2 of intervention (T2I)"   = "#d58eb6",
-                               "Day 4 of intervention (T4I)"   = "#ab7bcd",
-                               "Day 14 of intervention (T14I)" = "#8169e3", 
-                               "Post-Intervention (V4)"        = "#5757f9"), "Legend") +
-  
-  scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
-  guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21)))) +
-  
-  scale_x_discrete(labels = c( "0", "2", "4", "14", 21)) +
-  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_grid(feature ~ Treatment, scales = "free_y") +
-  theme_bw() + xlab(NULL) + ylab("Abundance (CLR)") +  
-  ggtitle("Bacterial species altered following coffee reintroduction") +
-  theme(text = element_text(size = 12), 
-        legend.position = c(1, -1/2), legend.justification = c(1, 0), 
-        legend.background = element_rect(fill = "white", colour = NA))
+# (species.exp_ex_INTERVENTION/log(2)) %>% 
+#   as.data.frame() %>% 
+#   rownames_to_column("feature") %>% 
+#   
+#   left_join(., species.glmer_ex_INTERVENTION[,c("feature", "anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
+#                                             "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
+#                                             "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)" )], by = c("feature" = "feature")) %>% 
+#   
+#   filter(`anovas.Legend_ex_INTERVENTION Pr(>F).BH` < 0.2) %>% 
+#   dplyr::select(!c("anovas.Legend_ex_INTERVENTION Pr(>F).BH","anovas.Legend_ex_INTERVENTION Pr(>F).BH", 
+#                    "coefs.Legend_ex_INTERVENTIONDay 2 of intervention (T2I) Pr(>|t|)",
+#                    "coefs.Legend_ex_INTERVENTIONDay 4 of intervention (T4I) Pr(>|t|)"  )) %>% 
+#   
+#   pivot_longer(!c(feature)) %>% 
+#   
+#   
+#   
+#   left_join(., meta_ex_INTERVENTION[,c("Legend_ex_INTERVENTION","R_ID", "participant_ID", "Treatment")], by = c("name" = "R_ID")) %>% 
+#   
+#   dplyr::select(!name) %>% 
+#   
+#   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+#   
+#   filter(!is.na(value)) %>% 
+#   
+#   # group_by(Legend_ex_withdraw, feature) %>% 
+#   # mutate(mean = mean(value, na.rm = T), 
+#   #        SEM   =   std(value)) %>% 
+#   # ungroup() %>% 
+#   
+#   mutate(Legend_ex_INTERVENTION = factor(Legend_ex_INTERVENTION, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+#                                                                             "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+#                                                                             "Post-Intervention (V4)")
+#   )) %>% 
+#   
+#   ggplot() +
+#   
+#   aes(x = Legend_ex_INTERVENTION, y = value, fill = Legend_ex_INTERVENTION) +
+#   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+#   
+#   geom_boxplot(alpha = 1/2, coef = Inf)+
+#   geom_point(shape = 21) +
+#   
+#   # geom_errorbar(aes(x = Legend_ex_withdraw, 
+#   #                   ymin = mean - SEM, 
+#   #                   ymax = mean + SEM), 
+#   #               colour = "black", width = 1/4, position = position_dodge(1/3)) +
+#   
+#   #geom_point(aes(x = Legend_ex_withdraw, y = mean, fill = Legend_ex_withdraw), shape = 21, size = 3) +
+#   
+#   #scale_y_discrete(position = "right") +
+#   scale_fill_manual(values = c("Pre-Intervention (V3)"         = "#ffa0a0", 
+#                                "Day 2 of intervention (T2I)"   = "#d58eb6",
+#                                "Day 4 of intervention (T4I)"   = "#ab7bcd",
+#                                "Day 14 of intervention (T14I)" = "#8169e3", 
+#                                "Post-Intervention (V4)"        = "#5757f9"), "Legend") +
+#   
+#   scale_shape_manual(values = c("CD" = 21, "NCD" = 22)) +
+#   guides(shape = FALSE, fill = guide_legend(override.aes = list(shape = c(21)))) +
+#   
+#   scale_x_discrete(labels = c( "0", "2", "4", "14", 21)) +
+#   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+#   facet_grid(feature ~ Treatment, scales = "free_y") +
+#   theme_bw() + xlab(NULL) + ylab("Abundance (CLR)") +  
+#   ggtitle("Bacterial species altered following coffee reintroduction") +
+#   theme(text = element_text(size = 12), 
+#         legend.position = c(1, -1/2), legend.justification = c(1, 0), 
+#         legend.background = element_rect(fill = "white", colour = NA))
 
 
 
@@ -284,116 +325,116 @@ base_exp_species <- (species.exp_ex_INTERVENTION/log(2)) %>%
   pivot_longer(!c(feature, Treatment, participant_ID, interaction))  
 
 
-
-species_a <- base_exp_species %>% 
-  group_by(feature, Treatment, name, interaction) %>% 
-  reframe(value = mean(value, na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  mutate(Treatment = Treatment, 
-         participant_ID = "average") %>% 
-  rbind(base_exp_species) %>% 
-  
-  rename("Timepoint" = name) %>% 
-  # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
-  mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
-                                                  "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
-                                                  "Post-Intervention (V4)")))  %>% 
-  
-  
-  
-  #   group_by(feature, Treatment, name) %>%
-  # 
-  # reframe(value = mean(value, na.rm = TRUE)) %>%
-  
-  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
-  
-  
-  filter(!is.na(value)) %>% 
-  
-  filter(interaction) %>% 
-  filter(participant_ID == "average") %>% 
-  
-  ggplot() +
-  
-  aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 3, show.legend = F) +
-  
-  
-  scale_fill_gradientn(colours = c(
-    "#053061", 
-    "#2166ac", 
-    "#4393c3",   
-    "#f7f7f7",   
-    "#d6604d",   
-    "#d73027", 
-    "#a50026"
-  ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
-  scale_y_discrete(position = "right") +
-  scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
-  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_grid( ~ Treatment, scales = "free") +
-  theme_bw() + xlab(NULL) + ylab(NULL) +  
-  ggtitle("Bacterial species altered following coffee reintroduction, depending on caffeine content") +
-  theme(text = element_text(size = 12))
-
-species_b <-  base_exp_species %>% 
-  group_by(feature, Treatment, name, interaction) %>% 
-  reframe(value = mean(value, na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  mutate(Treatment = Treatment, 
-         participant_ID = "average") %>% 
-  rbind(base_exp_species) %>% 
-  
-  rename("Timepoint" = name) %>% 
-  # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
-  mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
-                                                  "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
-                                                  "Post-Intervention (V4)")))  %>% 
-  
-  
-  
-  #   group_by(feature, Treatment, name) %>%
-  # 
-  # reframe(value = mean(value, na.rm = TRUE)) %>%
-  
-  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
-  
-  
-  filter(!is.na(value)) %>% 
-  
-  filter(!interaction) %>% 
-  filter(participant_ID == "average") %>% 
-  
-  ggplot() +
-  
-  aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 3, show.legend = F) +
-  
-  
-  scale_fill_gradientn(colours = c(
-    "#053061", 
-    "#2166ac", 
-    "#4393c3",   
-    "#f7f7f7",   
-    "#d6604d",   
-    "#d73027", 
-    "#a50026"
-  ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
-  scale_y_discrete(position = "right") +
-  scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
-  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_grid( ~ Treatment, scales = "free") +
-  theme_bw() + xlab(NULL) + ylab(NULL) +  
-  ggtitle("Bacterial species altered following coffee reintroduction") +
-  theme(text = element_text(size = 12))
+# 
+# species_a <- base_exp_species %>% 
+#   group_by(feature, Treatment, name, interaction) %>% 
+#   reframe(value = mean(value, na.rm = TRUE)) %>% 
+#   ungroup() %>% 
+#   mutate(Treatment = Treatment, 
+#          participant_ID = "average") %>% 
+#   rbind(base_exp_species) %>% 
+#   
+#   rename("Timepoint" = name) %>% 
+#   # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
+#   mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+#                                                   "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+#                                                   "Post-Intervention (V4)")))  %>% 
+#   
+#   
+#   
+#   #   group_by(feature, Treatment, name) %>%
+#   # 
+#   # reframe(value = mean(value, na.rm = TRUE)) %>%
+#   
+#   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+#   mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
+#   
+#   
+#   filter(!is.na(value)) %>% 
+#   
+#   filter(interaction) %>% 
+#   filter(participant_ID == "average") %>% 
+#   
+#   ggplot() +
+#   
+#   aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
+#   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+#   
+#   geom_tile() +
+#   geom_text(colour = "black", size = 3, show.legend = F) +
+#   
+#   
+#   scale_fill_gradientn(colours = c(
+#     "#053061", 
+#     "#2166ac", 
+#     "#4393c3",   
+#     "#f7f7f7",   
+#     "#d6604d",   
+#     "#d73027", 
+#     "#a50026"
+#   ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
+#   scale_y_discrete(position = "right") +
+#   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
+#   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+#   facet_grid( ~ Treatment, scales = "free") +
+#   theme_bw() + xlab(NULL) + ylab(NULL) +  
+#   ggtitle("Bacterial species altered following coffee reintroduction, depending on caffeine content") +
+#   theme(text = element_text(size = 12))
+# 
+# species_b <-  base_exp_species %>% 
+#   group_by(feature, Treatment, name, interaction) %>% 
+#   reframe(value = mean(value, na.rm = TRUE)) %>% 
+#   ungroup() %>% 
+#   mutate(Treatment = Treatment, 
+#          participant_ID = "average") %>% 
+#   rbind(base_exp_species) %>% 
+#   
+#   rename("Timepoint" = name) %>% 
+#   # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
+#   mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+#                                                   "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+#                                                   "Post-Intervention (V4)")))  %>% 
+#   
+#   
+#   
+#   #   group_by(feature, Treatment, name) %>%
+#   # 
+#   # reframe(value = mean(value, na.rm = TRUE)) %>%
+#   
+#   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+#   mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
+#   
+#   
+#   filter(!is.na(value)) %>% 
+#   
+#   filter(!interaction) %>% 
+#   filter(participant_ID == "average") %>% 
+#   
+#   ggplot() +
+#   
+#   aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
+#   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+#   
+#   geom_tile() +
+#   geom_text(colour = "black", size = 3, show.legend = F) +
+#   
+#   
+#   scale_fill_gradientn(colours = c(
+#     "#053061", 
+#     "#2166ac", 
+#     "#4393c3",   
+#     "#f7f7f7",   
+#     "#d6604d",   
+#     "#d73027", 
+#     "#a50026"
+#   ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
+#   scale_y_discrete(position = "right") +
+#   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
+#   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+#   facet_grid( ~ Treatment, scales = "free") +
+#   theme_bw() + xlab(NULL) + ylab(NULL) +  
+#   ggtitle("Bacterial species altered following coffee reintroduction") +
+#   theme(text = element_text(size = 12))
 
 
 
@@ -446,116 +487,116 @@ base_exp_GBM <- (GBMs.exp_ex_INTERVENTION/log(2)) %>%
 
 
 
-GBM_a <- base_exp_GBM %>% 
-  group_by(feature, Treatment, name, interaction) %>% 
-  reframe(value = mean(value, na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  mutate(Treatment = Treatment, 
-         participant_ID = "average") %>% 
-  rbind(base_exp_species) %>% 
-  
-  rename("Timepoint" = name) %>% 
-  # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
-  mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
-                                                  "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
-                                                  "Post-Intervention (V4)")))  %>% 
-  
-  
-  
-  #   group_by(feature, Treatment, name) %>%
-  # 
-  # reframe(value = mean(value, na.rm = TRUE)) %>%
-  
-  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
-  
-  
-  filter(!is.na(value)) %>% 
-  
-  filter(interaction) %>% 
-  filter(participant_ID == "average") %>% 
-  
-  ggplot() +
-  
-  aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 3, show.legend = F) +
-  
-  
-  scale_fill_gradientn(colours = c(
-    "#053061", 
-    "#2166ac", 
-    "#4393c3",   
-    "#f7f7f7",   
-    "#d6604d",   
-    "#d73027", 
-    "#a50026"
-  ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
-  scale_y_discrete(position = "right") +
-  scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
-  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_grid( ~ Treatment, scales = "free") +
-  theme_bw() + xlab(NULL) + ylab(NULL) +
-  ggtitle("Gut-Brain modules altered following coffee reintroduction, depending on caffeine content") +
-  theme(text = element_text(size = 12))
-
-
-GBM_b <- base_exp_GBM %>% 
-  group_by(feature, Treatment, name, interaction) %>% 
-  reframe(value = mean(value, na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  mutate(Treatment = Treatment, 
-         participant_ID = "average") %>% 
-  rbind(base_exp_species) %>% 
-  
-  rename("Timepoint" = name) %>% 
-  # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
-  mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
-                                                  "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
-                                                  "Post-Intervention (V4)")))  %>% 
-  
-  
-  
-  #   group_by(feature, Treatment, name) %>%
-  # 
-  # reframe(value = mean(value, na.rm = TRUE)) %>%
-  
-  mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
-  mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
-  
-  
-  filter(!is.na(value)) %>% 
-  
-  filter(!interaction) %>% 
-  filter(participant_ID == "average") %>% 
-  
-  ggplot() +
-  
-  aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
-  
-  geom_tile() +
-  geom_text(colour = "black", size = 3, show.legend = F) +
-  
-  
-  scale_fill_gradientn(colours = c(
-    "#053061", 
-    "#2166ac", 
-    "#4393c3",   
-    "#f7f7f7",   
-    "#d6604d",   
-    "#d73027", 
-    "#a50026"
-  ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
-  scale_y_discrete(position = "right") +
-  scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
-  #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
-  facet_grid( ~ Treatment, scales = "free") +
-  theme_bw() + xlab(NULL) + ylab(NULL) +
-  ggtitle("Gut-Brain modules altered following coffee reintroduction") +
-  theme(text = element_text(size = 12))
+# GBM_a <- base_exp_GBM %>% 
+#   group_by(feature, Treatment, name, interaction) %>% 
+#   reframe(value = mean(value, na.rm = TRUE)) %>% 
+#   ungroup() %>% 
+#   mutate(Treatment = Treatment, 
+#          participant_ID = "average") %>% 
+#   rbind(base_exp_species) %>% 
+#   
+#   rename("Timepoint" = name) %>% 
+#   # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
+#   mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+#                                                   "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+#                                                   "Post-Intervention (V4)")))  %>% 
+#   
+#   
+#   
+#   #   group_by(feature, Treatment, name) %>%
+#   # 
+#   # reframe(value = mean(value, na.rm = TRUE)) %>%
+#   
+#   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+#   mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
+#   
+#   
+#   filter(!is.na(value)) %>% 
+#   
+#   filter(interaction) %>% 
+#   filter(participant_ID == "average") %>% 
+#   
+#   ggplot() +
+#   
+#   aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
+#   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+#   
+#   geom_tile() +
+#   geom_text(colour = "black", size = 3, show.legend = F) +
+#   
+#   
+#   scale_fill_gradientn(colours = c(
+#     "#053061", 
+#     "#2166ac", 
+#     "#4393c3",   
+#     "#f7f7f7",   
+#     "#d6604d",   
+#     "#d73027", 
+#     "#a50026"
+#   ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
+#   scale_y_discrete(position = "right") +
+#   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
+#   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+#   facet_grid( ~ Treatment, scales = "free") +
+#   theme_bw() + xlab(NULL) + ylab(NULL) +
+#   ggtitle("Gut-Brain modules altered following coffee reintroduction, depending on caffeine content") +
+#   theme(text = element_text(size = 12))
+# 
+# 
+# GBM_b <- base_exp_GBM %>% 
+#   group_by(feature, Treatment, name, interaction) %>% 
+#   reframe(value = mean(value, na.rm = TRUE)) %>% 
+#   ungroup() %>% 
+#   mutate(Treatment = Treatment, 
+#          participant_ID = "average") %>% 
+#   rbind(base_exp_species) %>% 
+#   
+#   rename("Timepoint" = name) %>% 
+#   # pivot_longer(!c(feature, participant_ID, Timepoint)) %>% 
+#   mutate(Timepoint = factor(Timepoint, levels = c("Pre-Intervention (V3)", "Day 2 of intervention (T2I)", 
+#                                                   "Day 4 of intervention (T4I)", "Day 14 of intervention (T14I)", 
+#                                                   "Post-Intervention (V4)")))  %>% 
+#   
+#   
+#   
+#   #   group_by(feature, Treatment, name) %>%
+#   # 
+#   # reframe(value = mean(value, na.rm = TRUE)) %>%
+#   
+#   mutate(feature = str_remove(feature, " \\(alternative pathway\\: futalosine pathway\\)")) %>% 
+#   mutate(Treatment = factor(Treatment, levels = c("CAFF", "DECAF", "avg_CAFF", "avg_DECAF"))) %>% 
+#   
+#   
+#   filter(!is.na(value)) %>% 
+#   
+#   filter(!interaction) %>% 
+#   filter(participant_ID == "average") %>% 
+#   
+#   ggplot() +
+#   
+#   aes(x = Timepoint, y = feature, fill = value, label = round(value,2)) +
+#   # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+#   
+#   geom_tile() +
+#   geom_text(colour = "black", size = 3, show.legend = F) +
+#   
+#   
+#   scale_fill_gradientn(colours = c(
+#     "#053061", 
+#     "#2166ac", 
+#     "#4393c3",   
+#     "#f7f7f7",   
+#     "#d6604d",   
+#     "#d73027", 
+#     "#a50026"
+#   ),  limits =  c(-3,3), "log2 fold change vs Baseline") +
+#   scale_y_discrete(position = "right") +
+#   scale_x_discrete(labels = c("0", "2", "4", "14", "21")) +
+#   #facet_grid(feature ~ Treatment , scales = "free", switch = "y") +
+#   facet_grid( ~ Treatment, scales = "free") +
+#   theme_bw() + xlab(NULL) + ylab(NULL) +
+#   ggtitle("Gut-Brain modules altered following coffee reintroduction") +
+#   theme(text = element_text(size = 12))
 
 
 #GBM_b  + plot_spacer() + GBM_a + plot_layout(guides = 'collect', widths = c(5,1,5))

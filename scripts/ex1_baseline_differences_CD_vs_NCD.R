@@ -373,9 +373,10 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
                 colour = "black", width = 1/2) +
   geom_point(shape = 21, fill = "red") +
   
-  geom_text(x = 6, size = 4, stat = "unique")+
+  geom_text(x = 7, size = 4, stat = "unique")+
   
-  
+  scale_x_continuous(limits = c(NA, 7), breaks = c(-4, -2, 2, 0, 4, 6, 7), 
+                     labels = c("-4,", "-2", "0", "2", "4", "6", "vs\nNCD")) +
   scale_y_discrete(position = "right", limits=rev) +
   #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
@@ -422,8 +423,9 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
                 colour = "black", width = 1/2) +
   geom_point(shape = 21, fill = "red") +
   
-  geom_text(x = 3.5, size = 4, stat = "unique")+
-  
+  geom_text(x = 4, size = 4, stat = "unique")+
+  scale_x_continuous(limits = c(NA, 4), breaks = c(-4, -2, 0, 2, 4), 
+                     labels = c("-4,", "-2", "0", "2", "vs\nNCD")) +
   scale_y_discrete(position = "right", limits=rev) +
   #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
@@ -432,7 +434,6 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
   theme_bw() + 
   guides(fill="none")+ ggtitle("Other metabolites")
 
-ex1_metab_forest_b
 # 
 # ex1DA_metab <- metab.glm_ex1 %>%
 #   as.data.frame() %>%
