@@ -24,6 +24,15 @@ pc2 <- round(data.a.pca$sdev[2]^2/sum(data.a.pca$sdev^2),4) * 100
 pc3 <- round(data.a.pca$sdev[3]^2/sum(data.a.pca$sdev^2),4) * 100
 pc4 <- round(data.a.pca$sdev[4]^2/sum(data.a.pca$sdev^2),4) * 100
 
+
+dis_ait = dist(t(species.exp_ex_withdraw), method = "euclidean")
+
+
+ex_withdraw_PERMANOVA <- adonis2(dis_ait ~ Legend_ex_withdraw, 
+                                 data = meta_ex_withdraw, 
+                                 method = "euclidean", 
+                                 strata = meta_ex_withdraw$participant_ID,
+                                 permutations = 10000)
 #Extract the scores for every sample for the first four components for plotting. 
 pca  = data.frame(PC1 = data.a.pca$x[,1], 
                   PC2 = data.a.pca$x[,2], 
@@ -38,6 +47,8 @@ pca$batch               = meta_ex_withdraw$batch
 pca$coffee              = meta_ex_withdraw$coffee_group
 pca$head                = "Aitchison Distance"
 
+
+
 #First, the main plot. Plot the first two components of the PCA
 ex_RESTpca <- ggplot(pca) +
   
@@ -51,6 +62,13 @@ ex_RESTpca <- ggplot(pca) +
   #stat_ellipse(geom = "polygon", alpha = 1/4, colour = "black") +
   geom_path(aes(group = ID)) +
   geom_point(size = 3, col = "black") + 
+  
+  #Stats first
+  geom_label(x = -48, y = 47,
+             label = paste0("PERMANOVA\n",
+                            "p\t= ", round(ex_withdraw_PERMANOVA$`Pr(>F)`[1],3),"\n",
+                            "R^2\t= ",            round(ex_withdraw_PERMANOVA$R2[1],3)  ), 
+             hjust =0, fill = "white") +
   
   #Adjust appearance
   scale_fill_manual(values = c("Baseline (CD)"  = "#543005",
@@ -74,17 +92,6 @@ ex_RESTpca <- ggplot(pca) +
 
 
 
-
-dis_ait = dist(t(species.exp_ex_withdraw), method = "euclidean")
-
-
-ex_withdraw_PERMANOVA <- adonis2(dis_ait ~ Legend_ex_withdraw, 
-                                 data = meta_ex_withdraw, 
-                                 method = "euclidean", 
-                                 strata = meta_ex_withdraw$participant_ID,
-                                 permutations = 10000)
-
-
 ex_RESTalpha <- alpha_div_ex_withdraw %>% 
   pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
   mutate(Legend = factor(Legend_ex_withdraw, levels = c( "Baseline (NCD)", "Baseline (CD)" ,
@@ -93,13 +100,43 @@ ex_RESTalpha <- alpha_div_ex_withdraw %>%
                                                          "Post-washout (T14W)"  
   ))) %>% 
   
+  left_join(., alpha_div_ex_withdraw %>% 
+              pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
+              filter(Legend_ex_withdraw != "Baseline (NCD)") %>% 
+              mutate(Legend = factor(Legend_ex_withdraw, levels = c("Baseline (CD)" ,
+                                                                         "Day 2 of washout (T2W)", 
+                                                                         "Day 4 of washout (T4W)" , 
+                                                                         "Post-washout (T14W)" ))) %>% 
+              
+              group_by(name) %>% 
+              
+              reframe(
+                
+                lmer(value ~ Legend + (1|participant_ID), data = pick(everything())) %>% 
+                  car::Anova() %>% 
+                  tidy()
+              ) %>% 
+              
+              ungroup() %>% 
+              filter(term != "(Intercept)") %>% 
+              mutate(star = case_when(
+                p.value < 0.001 ~ "⁂",
+                p.value < 0.01  ~ "⁎⁎", 
+                p.value < 0.05  ~ "⁎", 
+                TRUE ~  "ns")), by = c("name" = "name")) %>% 
+  
   ggplot() +
   
   aes(x = Legend, 
       y = value, 
       fill  = Legend, 
       group = Legend,
-      shape = coffee_group) + 
+      shape = coffee_group,
+      label = star) + 
+  
+  
+  #stats
+  geom_text(x = 5.25, y = -Inf, vjust = -1, size = 4, stat = "unique") +
   
   geom_boxplot(alpha = 1/2, coef = Inf) +
   geom_point(colour = "black") + 
@@ -136,15 +173,25 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
   rownames_to_column("feature") %>% 
   
   left_join(., species.glmer_ex_withdraw[,c("feature", "anovas.Legend_ex_withdraw Pr(>F).BH", 
+                                            "anovas.Legend_ex_withdraw Pr(>F)",
                                             "coefs.Legend_ex_withdrawDay 2 of washout (T2W) Pr(>|t|)",
                                             "coefs.Legend_ex_withdrawDay 4 of washout (T4W) Pr(>|t|)" )], by = c("feature" = "feature")) %>% 
   
-  filter(`anovas.Legend_ex_withdraw Pr(>F).BH` < 0.2) %>% 
+  filter(`anovas.Legend_ex_withdraw Pr(>F).BH` < 0.2) %>%
+  
+  mutate(star = case_when(
+    `anovas.Legend_ex_withdraw Pr(>F)` < 0.001 ~ "⁂",
+    `anovas.Legend_ex_withdraw Pr(>F)` < 0.01  ~ "⁎⁎", 
+    `anovas.Legend_ex_withdraw Pr(>F)` < 0.05  ~ "⁎", 
+    TRUE ~  "ns")) %>% 
+  
+
   dplyr::select(!c("anovas.Legend_ex_withdraw Pr(>F).BH", 
+                   "anovas.Legend_ex_withdraw Pr(>F)", 
                    "coefs.Legend_ex_withdrawDay 2 of washout (T2W) Pr(>|t|)",
                    "coefs.Legend_ex_withdrawDay 4 of washout (T4W) Pr(>|t|)" )) %>% 
   
-  pivot_longer(!c(feature)) %>% 
+  pivot_longer(!c(feature, star)) %>% 
   
   
   
@@ -169,20 +216,19 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
   
   ggplot() +
   
-  aes(x = Legend_ex_withdraw, y = value, fill = Legend_ex_withdraw, shape = coffee_group) +
-  # aes(x = name, y = participant_ID, fill = value, label = round(value,2)) +
+  aes(x = Legend_ex_withdraw, 
+      y = value, 
+      fill = Legend_ex_withdraw, 
+      shape = coffee_group, 
+      label = star) +
+
+  #stats
+  geom_text(x = 5.25, y = -Inf, vjust = -1, size = 4, stat = "unique") +
   
   geom_boxplot(alpha = 1/2, coef = Inf, show.legend = FALSE)+
   geom_point() +
   
-  # geom_errorbar(aes(x = Legend_ex_withdraw, 
-  #                   ymin = mean - SEM, 
-  #                   ymax = mean + SEM), 
-  #               colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  
-  #geom_point(aes(x = Legend_ex_withdraw, y = mean, fill = Legend_ex_withdraw), shape = 21, size = 3) +
-  
-  #scale_y_discrete(position = "right") +
+
   geom_vline(xintercept  = 1.5, linetype = "dashed", colour = "black") +
   
   scale_fill_manual(values = c("Baseline (CD)"  = "#543005",
@@ -202,7 +248,6 @@ ex_RESTDA <- (species.exp_ex_withdraw/log(2)) %>%
   theme(text = element_text(size = 12), 
         legend.position = c(1, -1/16), legend.justification = c(1, 0), 
         legend.background = element_rect(fill = "white", colour = NA))
-
 
 
 #####Coffee vs non-coffee
@@ -252,6 +297,21 @@ ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
                               "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
   mutate(Plot_category = factor(Plot_category,  levels = c("Coffee-associated compounds", "Neuroactive compounds & derivatives",
                                                            "Bile acids", "Phytochemical compounds"))) %>% 
+  
+  
+  mutate(star_CD = case_when(
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
+  mutate(star_NCD = case_when(
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
+  
   ggplot() +
   
   aes(y = Estimate/log(2), 
@@ -266,15 +326,21 @@ ex_REST_metab_forest_a <- metab.glm_ex_REST %>%
                 colour = "black", width = 3/4 , position = position_dodge(1/3)) +
   
   geom_point(size = 3, shape = 21, position = position_dodge(1/3)) +
+   geom_text(y = 7.5, size = 4, stat = "unique", aes(label = star_CD )) +  
+   geom_text(y = 6.5   , size = 4, stat = "unique", aes(label = star_NCD)) +  
+  
   coord_flip() +
-  scale_fill_manual(values = c("vs NCD baseline"  = "#ece6ca", 
-                    "vs CD post-washout" = "#ffa0a0")) +
+  scale_fill_manual(values = c("vs NCD baseline"    = "#ece6ca", 
+                               "vs CD post-washout" = "#ffa0a0")) +
   scale_x_discrete(position = "top", limits=rev) +
+  scale_y_continuous(limits = c(NA, 7.5), breaks = c(-4, -2, 0, 2, 4, 6, 6.5, 7.5), labels = c("-4", "-2", "0", "2", "4", "6", "vs\nNCD", "vs\nCD")) +
+  
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
   ylab(NULL) +
   guides(fill="none") +
   theme_bw() + ggtitle("Coffee & Microbiome associated metabolites")
+
 
 ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   as.data.frame() %>%
@@ -306,6 +372,20 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
   mutate(Plot_category = factor(Plot_category,  levels = c("Carbohydrates", "Lipids & organic acids",
                                                            "Peptides, nucleic acids & nucleosides", 
                                                            "Vitamins, nutrients and cofactors", "Other"))) %>% 
+  
+  
+  mutate(star_CD = case_when(
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex_RESTPost-washout (CD) Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
+  mutate(star_NCD = case_when(
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex_RESTBaseline (NCD) Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
   ggplot() +
   
   aes(y = Estimate/log(2), 
@@ -320,16 +400,21 @@ ex_REST_metab_forest_b <- metab.glm_ex_REST %>%
                 colour = "black", width = 3/4 , position = position_dodge(1/3)) +
   
   geom_point(size = 3, shape = 21, position = position_dodge(1/3)) +
+  
+  geom_text(y = 5, size = 3, stat = "unique", aes(label = star_CD )) +  
+  geom_text(y = 4   , size = 3, stat = "unique", aes(label = star_NCD)) +  
+  
   coord_flip() +
   scale_fill_manual(values = c("vs NCD baseline"  = "#ece6ca", 
                                "vs CD post-washout" = "#ffa0a0")) +
+  
   scale_x_discrete(position = "top", limits=rev) +
+  scale_y_continuous(limits = c(NA, 5), breaks = c(-2.5, 0, 2.5, 4,5), labels = c("-2.5", "0", "2.5", "vs\nNCD", "vs\nCD")) +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
   xlab(NULL) +
   ylab(NULL) +  
   guides(fill="none") +
   theme_bw() + ggtitle("Other metabolites")
-
 
 # 
 # ex_REST_DA_metab <- metab.glm_ex_REST %>%

@@ -9,8 +9,18 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```
 
 ``` r
-(ex1pca | (ex1alpha | ex1DA)) / 
-  ((ex1_cyta  + ex1_cytb  + ex1_metab_forest_a  + ex1_metab_forest_b + plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))) + plot_layout(heights = c(2,3))
+(
+  
+  (ex1pca | (ex1alpha | (ex1DA/ex1DA_GBM + plot_layout(heights = c(3,1))))) 
+  
+  / 
+  
+  (
+    (
+      ex1_cyta  + ex1_cytb  + ex1_metab_forest_a  + ex1_metab_forest_b + plot_spacer()
+     ) + plot_layout(widths = c(1,1,2,2,0.1))
+    )
+  ) + plot_layout(heights = c(2,3))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->

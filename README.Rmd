@@ -23,7 +23,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
 ```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
 (
   
-  (ex1pca | (ex1alpha | ex1DA)) 
+  (ex1pca | (ex1alpha | (ex1DA/ex1DA_GBM + plot_layout(heights = c(3,1))))) 
   
   / 
   

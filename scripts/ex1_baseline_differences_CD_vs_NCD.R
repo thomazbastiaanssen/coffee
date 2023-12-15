@@ -83,6 +83,13 @@ pca$visit               = meta_ex1$visit
 pca$batch               = meta_ex1$batch
 pca$head                = "Aitchison Distance"
 
+dis_ait = dist(t(species.exp_ex1), method = "euclidean")
+
+
+ex1_PERMANOVA <- adonis2(dis_ait ~ coffee_group, 
+                         data = meta_ex1, 
+                         method = "euclidean", permutations = 10000)
+
 #First, the main plot. Plot the first two components of the PCA
 ex1pca <- ggplot(pca) +
   
@@ -91,10 +98,17 @@ ex1pca <- ggplot(pca) +
       fill    = Legend,
       group   = Legend) +
   
+  #Stats first
+  geom_label(x = -58, y = 47,
+             label = paste0("PERMANOVA\n",
+                            "p\t= ", round(ex1_PERMANOVA$`Pr(>F)`[1],3),"⁎\n",
+                            "R^2\t= ",            round(ex1_PERMANOVA$R2[1],3)  ), 
+             hjust =0, fill = "white") +
+  
   #Create the points and ellipses
   stat_ellipse(geom = "polygon", alpha = 1/4, colour = "black") +
   geom_point(size = 3, col = "black", shape = 21) + 
-  
+
 
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
@@ -105,20 +119,37 @@ ex1pca <- ggplot(pca) +
   theme_bw() + 
   ggtitle("Principal Component Analysis (Beta Diversity)") +
   guides(fill="none") +
-  facet_wrap(~head)
-ex1pca
-
-dis_ait = dist(t(species.exp_ex1), method = "euclidean")
+  facet_wrap(~head) 
 
 
-ex1_PERMANOVA <- adonis2(dis_ait ~ coffee_group, 
-        data = meta_ex1, 
-        method = "euclidean", permutations = 10000)
+
+
+#ex1pca
 
 
 ex1alpha <- alpha_div_ex1 %>% 
   pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
   mutate(Legend = factor(Legend_ex1, levels = levels(meta_ex1$Legend_ex1))) %>% 
+  
+  left_join(., alpha_div_ex1 %>% 
+              pivot_longer(c("Chao1", "Shannon", "Simpson")) %>% 
+              mutate(Legend = factor(Legend_ex1, levels = levels(meta_ex1$Legend_ex1))) %>% 
+              
+              group_by(name) %>% 
+              
+              reframe(
+                
+                lm(value ~ Legend, data = pick(everything())) %>% 
+                  tidy()
+              ) %>% 
+              
+              ungroup() %>% 
+              filter(term != "(Intercept)") %>% 
+              mutate(star = case_when(
+                p.value < 0.001 ~ "⁂",
+                p.value < 0.01  ~ "⁎⁎", 
+                p.value < 0.05  ~ "⁎", 
+                TRUE ~  "ns")), by = c("name" = "name")) %>% 
   
   
   ggplot() +
@@ -126,17 +157,22 @@ ex1alpha <- alpha_div_ex1 %>%
   aes(x = Legend, 
       y = value, 
       fill  = Legend, 
-      group = Legend) + 
+      group = Legend,
+      label = star) + 
   
   geom_boxplot(alpha = 1/2, coef = Inf) +
   geom_point(colour = "black", shape = 21) + 
+  
+  
+  #stats
+  geom_text(x = 1.5, y = Inf, vjust = 1, size = 4,stat = "unique")+
   
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
                                "NCD"  = "#ece6ca")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 1) +
-  ylab("") + xlab("") + theme_bw() + 
+  ylab(NULL) + xlab(NULL) + theme_bw() + 
   theme(text = element_text(size = 12))+ 
   guides(fill="none") +  ggtitle("Alpha Diversity")
 
@@ -174,12 +210,28 @@ ex1DA <- speBH_ex1 %>%
   as.data.frame() %>%
   add_column(Legend = meta_ex1$Legend_ex1)  %>%
   pivot_longer(!c("Legend"))  %>%
+  
+  left_join(., species.glm_ex1[,c("feature", "Legend_ex1CD Pr(>|t|)")] %>%  
+              mutate(star = case_when(
+                `Legend_ex1CD Pr(>|t|)` < 0.001 ~ "⁂",
+                `Legend_ex1CD Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+                `Legend_ex1CD Pr(>|t|)` < 0.05  ~ "⁎", 
+                TRUE ~  "#")), by = c("name" = "feature")) %>% 
+  
+  
+  
   mutate(name = str_replace(name, ".*ales_", "")) %>% 
   mutate(name = str_replace(name, pattern = "Firmicutes bacterium CAG:94", replacement = "Firmicutes CAG:94")) %>% 
+  
   ggplot(aes(x     = Legend, 
              y     = value, 
              fill  = Legend, 
-             group = Legend)) + 
+             group = Legend,
+             label = star)) + 
+  
+  
+  #stats
+  geom_text(x = 1.5, y = Inf, vjust = 1, size = 4,stat = "unique")+
   
   geom_boxplot(alpha = 1/2, coef = Inf) +
   geom_point(colour = "black", shape = 21) + 
@@ -189,7 +241,7 @@ ex1DA <- speBH_ex1 %>%
                                "NCD"  = "#ece6ca")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 1) +
-  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))+ 
+  ylab(NULL) + xlab(NULL) + theme_bw() + theme(text = element_text(size = 12))+ 
   guides(fill="none") +  ggtitle("Species-level differences")
 
 
@@ -209,21 +261,33 @@ ex1DA_GBM <- GBM_BH_ex1 %>%
   as.data.frame() %>%
   add_column(Legend = meta_ex1$Legend_ex1)  %>%
   pivot_longer(!c("Legend"))  %>%
+  
+  left_join(., GBMs.glm_ex1[,c("feature", "Legend_ex1CD Pr(>|t|)")] %>%  
+              mutate(star = case_when(
+                `Legend_ex1CD Pr(>|t|)` < 0.001 ~ "⁂",
+                `Legend_ex1CD Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+                `Legend_ex1CD Pr(>|t|)` < 0.05  ~ "⁎", 
+                TRUE ~  "#")), by = c("name" = "feature")) %>% 
+  
   mutate(name = str_replace(name, ".*ales_", "")) %>% 
   ggplot(aes(x     = Legend, 
              y     = value, 
              fill  = Legend, 
-             group = Legend)) + 
+             group = Legend, 
+             label = star)) + 
   
-  geom_boxplot(alpha = 1/2, coef = 100) +
-  geom_beeswarm(size = 3, cex = 3, shape = 21) + 
+  #stats
+  geom_text(x = 1.5, y = Inf, vjust = 2, size = 4,stat = "unique")+
+  
+  geom_boxplot(alpha = 1/2, coef = Inf) +
+  geom_point(colour = "black", shape = 21) + 
   
   #Adjust appearance
   scale_fill_manual(values = c("CD" = "#94641f", 
                                "NCD"  = "#ece6ca")) +
   
   facet_wrap(~name, scales = "free_y", ncol = 4) +
-  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12))+ 
+  ylab(NULL) + xlab(NULL) + theme_bw() + theme(text = element_text(size = 12))+ 
   guides(fill="none")+  ggtitle("Gut-Brain module differences")
 
 
@@ -288,9 +352,19 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
                                "Neuroactive compounds & derivatives", "Phytochemical compounds")) %>% 
   mutate(Plot_category = factor(Plot_category,  levels = c("Coffee-associated compounds", "Neuroactive compounds & derivatives",
                                                            "Bile acids", "Phytochemical compounds"))) %>% 
+  
+  
+  mutate(star = case_when(
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
+  
   ggplot() +
   aes(x = `log2(FoldChange)`, 
-      y = (Name)) +
+      y = (Name), 
+      label = star) +
   
   geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
   
@@ -298,6 +372,10 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
                     xmax = `coefs.Legend_ex1CD 97.5 %`/log(2)), 
                 colour = "black", width = 1/2) +
   geom_point(shape = 21, fill = "red") +
+  
+  geom_text(x = 6, size = 4, stat = "unique")+
+  
+  
   scale_y_discrete(position = "right", limits=rev) +
   #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
@@ -305,6 +383,7 @@ ex1_metab_forest_a <- metab.glm_ex1 %>%
   xlab(NULL) +
   theme_bw() + 
   guides(fill="none") + ggtitle("Coffee & Microbiome associated metabolites")
+
 
 ex1_metab_forest_b <- metab.glm_ex1 %>%
   as.data.frame() %>%
@@ -325,9 +404,16 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
                                                            "Peptides, nucleic acids & nucleosides", 
                                                            "Vitamins, nutrients and cofactors", "Other"))) %>% 
   
+  mutate(star = case_when(
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.001 ~ "⁂",
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.01  ~ "⁎⁎", 
+    `coefs.Legend_ex1CD Pr(>|t|)` < 0.05  ~ "⁎", 
+    TRUE                                  ~  "#")) %>% 
+  
   ggplot() +
   aes(x = `log2(FoldChange)`, 
-      y = (Name)) +
+      y = (Name), 
+      label = star) +
   
   geom_vline(xintercept = 0, linetype = "dashed", colour = "red")+
   
@@ -335,6 +421,9 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
                     xmax = `coefs.Legend_ex1CD 97.5 %`/log(2)), 
                 colour = "black", width = 1/2) +
   geom_point(shape = 21, fill = "red") +
+  
+  geom_text(x = 3.5, size = 4, stat = "unique")+
+  
   scale_y_discrete(position = "right", limits=rev) +
   #facet_wrap(~Class, ncol = 2, strip.position = "right", scales = "free_y") +
   ggforce::facet_col(~Plot_category, strip.position = "top", space = "free", scale = "free_y") +
@@ -343,37 +432,39 @@ ex1_metab_forest_b <- metab.glm_ex1 %>%
   theme_bw() + 
   guides(fill="none")+ ggtitle("Other metabolites")
 
-ex1DA_metab <- metab.glm_ex1 %>%
-  as.data.frame() %>%
-  # rownames_to_column("name") %>% 
-  #
-  left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
-  mutate(`Legend_ex1CD Estimate` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
-  #mutate(direction = `GroupLithium Estimate` < 0) %>% 
-  mutate(direction = case_when(`coefs.Legend_ex1CD Pr(>|t|).BH` > 0.05 ~ "ns",
-                               (`coefs.Legend_ex1CD Estimate` < 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Down",
-                               (`coefs.Legend_ex1CD Estimate` > 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Up")) %>% 
-  
-  ggplot() + 
-  
-  aes(x     = `coefs.Legend_ex1CD Estimate`, 
-      y     = `coefs.Legend_ex1CD Pr(>|t|)`, 
-      #fill  = `Legend_ex1CD Pr(>|t|).BH` < 0.1,
-      alpha = `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05, 
-      fill = direction) +
-  
-  geom_hline(yintercept = 0.05, color = "red", linetype = "dashed") +
-  
-  scale_fill_manual(values = c("Up" = "red", "Down" = "blue", "ns" = "gray"), "Directionality") +
-  
-  scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3), guide = 'none') +
-  scale_y_continuous(trans=reverselog_trans(10)) +
-  geom_point(shape = 21,colour = "black") +
-  ggtitle("Differentially abundant metabolites in coffee drinkers") +
-  ylab(expression(paste('p-values (log'[10],'-scale)'))) +
-  xlab(expression(paste('\u03B2 Estimate (log'[2],'-fold change)'))) +
-  theme_bw() + 
-  guides(fill="none")
+ex1_metab_forest_b
+# 
+# ex1DA_metab <- metab.glm_ex1 %>%
+#   as.data.frame() %>%
+#   # rownames_to_column("name") %>% 
+#   #
+#   left_join(., metab_trans, by = c("feature" = "Compound_ID")) %>% 
+#   mutate(`Legend_ex1CD Estimate` = (`coefs.Legend_ex1CD Estimate`/log(2))) %>% 
+#   #mutate(direction = `GroupLithium Estimate` < 0) %>% 
+#   mutate(direction = case_when(`coefs.Legend_ex1CD Pr(>|t|).BH` > 0.05 ~ "ns",
+#                                (`coefs.Legend_ex1CD Estimate` < 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Down",
+#                                (`coefs.Legend_ex1CD Estimate` > 0 & `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05) ~ "Up")) %>% 
+#   
+#   ggplot() + 
+#   
+#   aes(x     = `coefs.Legend_ex1CD Estimate`, 
+#       y     = `coefs.Legend_ex1CD Pr(>|t|)`, 
+#       #fill  = `Legend_ex1CD Pr(>|t|).BH` < 0.1,
+#       alpha = `coefs.Legend_ex1CD Pr(>|t|).BH` < 0.05, 
+#       fill = direction) +
+#   
+#   geom_hline(yintercept = 0.05, color = "red", linetype = "dashed") +
+#   
+#   scale_fill_manual(values = c("Up" = "red", "Down" = "blue", "ns" = "gray"), "Directionality") +
+#   
+#   scale_alpha_manual(values = c("TRUE" = 1, "FALSE" = 1/3), guide = 'none') +
+#   scale_y_continuous(trans=reverselog_trans(10)) +
+#   geom_point(shape = 21,colour = "black") +
+#   ggtitle("Differentially abundant metabolites in coffee drinkers") +
+#   ylab(expression(paste('p-values (log'[10],'-scale)'))) +
+#   xlab(expression(paste('\u03B2 Estimate (log'[2],'-fold change)'))) +
+#   theme_bw() + 
+#   guides(fill="none")
 
 
 cyt <- read.delim("raw/cytokines/cytokines_v2.csv", sep = ",")
