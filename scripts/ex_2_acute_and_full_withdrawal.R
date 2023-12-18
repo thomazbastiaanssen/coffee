@@ -50,7 +50,11 @@ pca$head                = "Aitchison Distance"
 
 
 #First, the main plot. Plot the first two components of the PCA
-ex_RESTpca <- ggplot(pca) +
+
+ex_RESTpca <- pca %>% 
+  arrange(Legend) %>% 
+  
+  ggplot() +
   
   aes(x       = PC1, 
       y       = PC2, 

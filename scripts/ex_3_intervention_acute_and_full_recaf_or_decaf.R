@@ -51,8 +51,8 @@ ex_INTERVENTION_PERMANOVA <- adonis2(dis_ait ~ Legend_ex_INTERVENTION * Treatmen
 #First, the main plot. Plot the first two components of the PCA
 
 ex_INTERVENTIONpca <- pca %>% 
-  
   arrange(Legend) %>% 
+  
   ggplot() +
   
   aes(x       = PC1, 
