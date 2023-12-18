@@ -23,7 +23,7 @@ source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
   ) + plot_layout(heights = c(2,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
 
 In Experiment 2, we’re looking at features that return to non-coffee
 drinker levels post washout (coffee abstinence).
@@ -34,10 +34,10 @@ source("scripts/ex_2_acute_and_full_withdrawal.R")
 
 ``` r
   ((ex_RESTpca + ex_RESTalpha + ex_RESTDA + plot_layout(widths = c(6,2,5))) / 
-   ((ex1_cyta + ggtitle("PLACEHOLDER") | ex1_cytb + ggtitle("PLACEHOLDER") | ex_REST_metab_forest_a | ex_REST_metab_forest_b | plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))))  + plot_layout(heights = c(4,7))
+   ((ex2_cyta + ggtitle("PLACEHOLDER") | ex2_cytb + ggtitle("PLACEHOLDER") | ex_REST_metab_forest_a | ex_REST_metab_forest_b | plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))))  + plot_layout(heights = c(4,7))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-4-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-5-1.svg)<!-- -->
 
 In Experiment 3, we’re looking at the effects of going back on either
 caffeinated or decaffeinated coffee post-washout (coffee abstinence).
@@ -63,7 +63,7 @@ source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
   / 
 
     (
-      (ex1_cyta + ggtitle("PLACEHOLDER") | ex1_cytb + ggtitle("PLACEHOLDER")  | mb_b | (((mb_a |plot_spacer()) + plot_layout(widths = c(9,1))) / ex3metab) + plot_layout(heights = c(3,2))) + 
+      (ex3_cyta + ggtitle("PLACEHOLDER") | ex3_cytb + ggtitle("PLACEHOLDER")  | mb_b | (((mb_a |plot_spacer()) + plot_layout(widths = c(9,1))) / ex3metab) + plot_layout(heights = c(3,2))) + 
   
             plot_layout(guides = 'collect', widths = c(1,1,2,4))
       )
@@ -72,4 +72,4 @@ source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
     plot_layout(heights = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-7-1.svg)<!-- -->

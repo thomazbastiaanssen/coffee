@@ -28,6 +28,7 @@ set.seed(1)
 library(broom)
 library(broom.mixed)
 
+#Set contrasts for type-3 sum of squares 
 options(contrasts = c("contr.treatment","contr.poly"))
 
 reverselog_trans <- function(base = exp(1)) {

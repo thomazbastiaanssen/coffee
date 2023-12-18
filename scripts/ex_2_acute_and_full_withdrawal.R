@@ -64,7 +64,7 @@ ex_RESTpca <- ggplot(pca) +
   geom_point(size = 3, col = "black") + 
   
   #Stats first
-  geom_label(x = -48, y = 47,
+  geom_label(x = -48, y = 48,
              label = paste0("PERMANOVA\n",
                             "p\t= ", round(ex_withdraw_PERMANOVA$`Pr(>F)`[1],3),"\n",
                             "R^2\t= ",            round(ex_withdraw_PERMANOVA$R2[1],3)  ), 
