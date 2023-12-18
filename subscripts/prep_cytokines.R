@@ -69,7 +69,8 @@ ex1_cyta = rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep )+
 
   guides(fill="none") +
   
@@ -109,7 +110,8 @@ ex1_cytb = rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
   ggtitle("Stimulated (serum)")
@@ -138,8 +140,8 @@ ex2_cyta <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(2/3)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(2/3))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -153,7 +155,8 @@ ex2_cyta <- rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
   ggtitle("Unstimulated (plasma)")
@@ -186,8 +189,8 @@ ex2_cytb <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(2/3)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(2/3))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -201,7 +204,8 @@ ex2_cytb <- rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
   ggtitle("Stimulated (serum)")
@@ -233,8 +237,8 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -249,7 +253,8 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep )+
   guides(fill="none")+
   
   ggtitle("Unstimulated (plasma)")
@@ -285,8 +290,8 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -301,7 +306,14 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   theme_bw() + theme(axis.text.y = element_blank(), axis.ticks.y = element_blank()) +
   ylab(NULL) + xlab(NULL) +
   facet_wrap(~name, scales = "free", ncol = 1, drop = F)  +
-  ylim(c(0, NA)) + 
+  #ylim(c(0, NA)) + 
+  scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
   ggtitle("Stimulated (serum)")
+
+
+
+((ex1_cyta + ex1_cytb)|
+    (ex2_cyta + ex2_cytb)|
+    (ex3_cyta + ex3_cytb))
