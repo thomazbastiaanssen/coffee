@@ -61,7 +61,7 @@ ex_INTERVENTIONpca <- pca %>%
       group   = Legend) +
   
   #Stats first
-  geom_label(x = -52, y = 18,
+  geom_label(x = -52, y = 20,
              label = paste0("PERMANOVA\n",
                             "Time: \n",
                             "p= \t ", round(ex_INTERVENTION_PERMANOVA$`Pr(>F)`[1],3),"⁎\nR^2=", round(ex_INTERVENTION_PERMANOVA$R2[1],3),"\n",
@@ -903,7 +903,7 @@ ex3metab <- metab_BH_ex3 %>%
              fill  = Legend, 
              group = Legend, 
              shape = Treatment)) + 
-  
+  geom_vline(xintercept = 2.5, linetype = "dashed") +
   geom_boxplot(alpha = 1/2, coef = Inf, show.legend = F) +
   geom_point(colour = "black") + 
   
@@ -917,7 +917,9 @@ ex3metab <- metab_BH_ex3 %>%
   guides(shape = FALSE, #fill = guide_legend(override.aes = list(shape = c(21,21,22,22)))) +
          fill=FALSE)+
   facet_wrap(Name ~ ., scales = "free",ncol = 2) +
-  ylab("") + xlab("") + theme_bw() + theme(text = element_text(size = 12)) +
+  ylab("") +
+  xlab("CAFF                  DECAF                           CAFF                  DECAF") + 
+  theme_bw() + theme(text = element_text(size = 12)) +
   ggtitle("Metabolites differentially affected by caffeine")
 #ex3metab
 

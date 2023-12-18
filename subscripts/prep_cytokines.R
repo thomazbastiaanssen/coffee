@@ -236,8 +236,8 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
   ggplot() +
   aes(y = mean, x = name, fill = Legend) +
   
-  geom_label(y = 0, x = 1.5, label = "CAFF", fill = "white") +
-  geom_label(y = 0, x = 0.5, label = "DECAF", fill = "white") +
+  geom_label(y = 0, x = 1.4, label = "CAFF", fill = "white", hjust = 0, size = 3) +
+  geom_label(y = 0, x = 0.6, label = "DECAF", fill = "white", hjust = 0,  size = 3) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
                 colour = "black", width = 1/4, position = position_dodge(1)) +
@@ -291,8 +291,8 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   
   ggplot() +
   aes(y = mean, x = name, fill = Legend) +
-  geom_label(y = 0, x = 1.5, label = "CAFF", fill = "white") +
-  geom_label(y = 0, x = 0.5, label = "DECAF", fill = "white") +
+  geom_label(y = 0, x = 1.4, label = "CAFF", fill = "white", hjust = 0, size = 3) +
+  geom_label(y = 0, x = 0.6, label = "DECAF", fill = "white", hjust = 0,  size = 3) +
   
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 

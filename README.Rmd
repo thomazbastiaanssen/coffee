@@ -58,7 +58,7 @@ source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
 ```
 
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
+```{r fig.height=16, fig.width=16, message=FALSE, warning=FALSE}
 (
   (
     (ex_INTERVENTIONpca | ex_INTERVENTIONalpha) + 
