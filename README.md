@@ -34,7 +34,7 @@ source("scripts/ex_2_acute_and_full_withdrawal.R")
 
 ``` r
   ((ex_RESTpca + ex_RESTalpha + ex_RESTDA + plot_layout(widths = c(6,2,5))) / 
-   ((ex2_cyta + ggtitle("PLACEHOLDER") | ex2_cytb + ggtitle("PLACEHOLDER") | ex_REST_metab_forest_a | ex_REST_metab_forest_b | plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))))  + plot_layout(heights = c(4,7))
+   ((ex2_cyta | ex2_cytb | ex_REST_metab_forest_a | ex_REST_metab_forest_b | plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))))  + plot_layout(heights = c(4,7))
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-5-1.svg)<!-- -->
@@ -63,7 +63,7 @@ source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
   / 
 
     (
-      (ex3_cyta + ggtitle("PLACEHOLDER") | ex3_cytb + ggtitle("PLACEHOLDER")  | mb_b | (((mb_a |plot_spacer()) + plot_layout(widths = c(9,1))) / ex3metab) + plot_layout(heights = c(3,2))) + 
+      (ex3_cyta  | ex3_cytb  | mb_b | (((mb_a |plot_spacer()) + plot_layout(widths = c(9,1))) / ex3metab) + plot_layout(heights = c(3,2))) + 
   
             plot_layout(guides = 'collect', widths = c(1,1,2,4))
       )

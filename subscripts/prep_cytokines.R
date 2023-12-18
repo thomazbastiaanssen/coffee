@@ -56,8 +56,8 @@ ex1_cyta = rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
 
   
   coord_flip()+
@@ -97,8 +97,8 @@ ex1_cytb = rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(1/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(1/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -140,8 +140,8 @@ ex2_cyta <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(2/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(2/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -189,8 +189,8 @@ ex2_cytb <- rbind(stim_df, unstim_df) %>%
   aes(y = mean, x = name, fill = Legend) +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
-                colour = "black", width = 1/4, position = position_dodge(2/3)) +
-  geom_point(shape = 21, size = 3, position = position_dodge(2/3))+
+                colour = "black", width = 1/4, position = position_dodge(1)) +
+  geom_point(shape = 21, size = 3, position = position_dodge(1))+
   
   coord_flip()+
   scale_x_discrete(position = "top") +
@@ -222,8 +222,8 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
                             Legend == "F_V4"  ~ "Post-Intervention (CAFF)",
                             Legend == "S_V4"  ~ "Post-Intervention (DECAF)")) %>% 
   
-  mutate(Legend = factor(Legend, levels = c("Pre-Intervention (CAFF)","Pre-Intervention (DECAF)", 
-                                            "Post-Intervention (CAFF)","Post-Intervention (DECAF)"))) %>% 
+  mutate(Legend = factor(Legend, levels = c("Pre-Intervention (CAFF)", "Post-Intervention (CAFF)",
+                                            "Pre-Intervention (DECAF)", "Post-Intervention (DECAF)"))) %>% 
   
   mutate(name = factor(name, levels = c("IFN-γ (pg/mL)", "IL-6 (pg/mL)", "IL-8 (pg/mL)", 
                                         "IL-10 (pg/mL)", "TNF-α (pg/mL)", "CRP (mg/L)"))) %>% 
@@ -235,11 +235,14 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
   
   ggplot() +
   aes(y = mean, x = name, fill = Legend) +
+  
+  geom_label(y = 0, x = 1.5, label = "CAFF", fill = "white") +
+  geom_label(y = 0, x = 0.5, label = "DECAF", fill = "white") +
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
                 colour = "black", width = 1/4, position = position_dodge(1)) +
   geom_point(shape = 21, size = 3, position = position_dodge(1))+
-  
+  geom_vline(xintercept = 1, colour = "black", linetype = "dashed") +
   coord_flip()+
   scale_x_discrete(position = "top") +
   
@@ -273,8 +276,8 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
                             Legend == "F_V4"  ~ "Post-Intervention (CAFF)",
                             Legend == "S_V4"  ~ "Post-Intervention (DECAF)")) %>% 
   
-  mutate(Legend = factor(Legend, levels = c("Pre-Intervention (CAFF)","Pre-Intervention (DECAF)", 
-                                            "Post-Intervention (CAFF)","Post-Intervention (DECAF)"))) %>% 
+  mutate(Legend = factor(Legend, levels = c("Pre-Intervention (CAFF)", "Post-Intervention (CAFF)",
+                                            "Pre-Intervention (DECAF)", "Post-Intervention (DECAF)"))) %>% 
   
   mutate(name = as.character(name), 
          name = str_replace(name, pattern = "pg", replacement = "ng")) %>% 
@@ -288,11 +291,14 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   
   ggplot() +
   aes(y = mean, x = name, fill = Legend) +
+  geom_label(y = 0, x = 1.5, label = "CAFF", fill = "white") +
+  geom_label(y = 0, x = 0.5, label = "DECAF", fill = "white") +
+  
   geom_errorbar(aes(ymin = mean - SEM, 
                     ymax = mean + SEM), 
                 colour = "black", width = 1/4, position = position_dodge(1)) +
   geom_point(shape = 21, size = 3, position = position_dodge(1))+
-  
+  geom_vline(xintercept = 1, colour = "black", linetype = "dashed") +
   coord_flip()+
   scale_x_discrete(position = "top") +
   
@@ -313,7 +319,7 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   ggtitle("Stimulated (serum)")
 
 
-
-((ex1_cyta + ex1_cytb)|
-    (ex2_cyta + ex2_cytb)|
-    (ex3_cyta + ex3_cytb))
+# 
+# ((ex1_cyta + ex1_cytb)|
+#     (ex2_cyta + ex2_cytb)|
+#     (ex3_cyta + ex3_cytb))
