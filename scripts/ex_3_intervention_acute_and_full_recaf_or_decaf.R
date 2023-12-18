@@ -61,7 +61,7 @@ ex_INTERVENTIONpca <- pca %>%
       group   = Legend) +
   
   #Stats first
-  geom_label(x = -50, y = 28,
+  geom_label(x = -50, y = 20,
              label = paste0("PERMANOVA\n",
                             "Time: \n",
                             "p= \t ", round(ex_INTERVENTION_PERMANOVA$`Pr(>F)`[1],3),"⁎\nR^2=", round(ex_INTERVENTION_PERMANOVA$R2[1],3),"\n",
