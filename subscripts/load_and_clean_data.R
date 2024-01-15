@@ -61,6 +61,7 @@ metadata = metadata %>%
   filter(n == 1 | n == 2 & batch == "Batch_2") %>% 
   dplyr::select(!n) 
 
+
 alpha_div = alpha_div[metadata$R_ID,] %>% 
   rownames_to_column("rownames") %>% 
   left_join(.,y = metadata, by = c("rownames"="R_ID")) %>% 

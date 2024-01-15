@@ -74,7 +74,7 @@ ex1_cyta = rbind(stim_df, unstim_df) %>%
 
   guides(fill="none") +
   
-  ggtitle("Unstimulated (plasma)")
+  ggtitle("Unstimulated")
 
 ex1_cytb = rbind(stim_df, unstim_df) %>% 
   
@@ -114,7 +114,7 @@ ex1_cytb = rbind(stim_df, unstim_df) %>%
   scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
-  ggtitle("Stimulated (serum)")
+  ggtitle("Stimulated")
 
 
 ex2_cyta <- rbind(stim_df, unstim_df) %>% 
@@ -159,7 +159,7 @@ ex2_cyta <- rbind(stim_df, unstim_df) %>%
   scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
-  ggtitle("Unstimulated (plasma)")
+  ggtitle("Unstimulated")
 
 
 ex2_cytb <- rbind(stim_df, unstim_df) %>% 
@@ -208,7 +208,7 @@ ex2_cytb <- rbind(stim_df, unstim_df) %>%
   scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
-  ggtitle("Stimulated (serum)")
+  ggtitle("Stimulated")
 
 
 
@@ -260,7 +260,7 @@ ex3_cyta <- rbind(stim_df, unstim_df) %>%
   scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep )+
   guides(fill="none")+
   
-  ggtitle("Unstimulated (plasma)")
+  ggtitle("Unstimulated")
 
 
 ex3_cytb <- rbind(stim_df, unstim_df) %>% 
@@ -316,7 +316,7 @@ ex3_cytb <- rbind(stim_df, unstim_df) %>%
   scale_y_continuous(limits = c(0,NA), oob = scales::oob_keep ) +  
   guides(fill="none") +
   
-  ggtitle("Stimulated (serum)")
+  ggtitle("Stimulated")
 
 
 # 
