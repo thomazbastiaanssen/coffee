@@ -34,23 +34,41 @@ source("subscripts/load_and_clean_data.R")
                            Visit == "4" ~ "Post-\nreintroduction")) %>% 
   mutate(ID = str_replace(participant_ID, "X", "APC115-")) %>% 
   
-  dplyr::select(ID, Metab_ID, R_ID, Visit, Coffee_Type) %>% 
+  dplyr::select(ID, Metab_ID, R_ID, Visit, Coffee_Type) -> base_long
   
-  left_join(., species.exp %>% as.data.frame() %>%  rownames_to_column("ID") %>% pivot_longer(!ID),
+  base_long %>% 
+ 
+  left_join(., species.exp %>% 
+              as.data.frame() %>%  
+              rownames_to_column("ID") %>%
+              pivot_longer(!ID) %>%  
+              filter(ID %in% c("Eggerthella sp. CAG:209", "Firmicutes bacterium CAG:94")),
             by = c("R_ID" = "name")) %>% 
-  rename(species_name = ID.y, species_value = value ) %>% 
-  left_join(., metabs.exp %>% as.data.frame() %>%  rownames_to_column("ID") %>% pivot_longer(!ID),
-            by = c("Metab_ID" = "name"), relationship = "many-to-many") %>% 
+  rename(species_name = ID.y, species_value = value ) -> species_long
   
-  rename(ID = ID.x, metabolite_name = ID, metabolite_value = value) %>% 
-  left_join(., metab_trans[,1:2], by = c("metabolite_name" = "Compound_ID")) %>% 
-  mutate(metabolite_name = Name) %>% 
   
+  omics_metabs <- metabs.exp %>% 
+    as.data.frame() %>%  rownames_to_column("ID") %>% pivot_longer(!ID) %>% 
+    rename(metabolite_name = ID, metabolite_value = value) %>%
+    left_join(., metab_trans[,1:2], by = c("metabolite_name" = "Compound_ID")) %>% 
+    filter(Name %in% c("Caffeine")) 
+    
+  
+  species_long %>% 
+    left_join(., omics_metabs,
+              by = c("Metab_ID" = "name"), relationship = "many-to-many") -> omics_long
+  
+    
+  omics_long %>% 
+    mutate(metabolite_name = Name, ID = ID.x) %>%
+    dplyr::select(ID, Visit, Coffee_Type, species_name, species_value, metabolite_name, metabolite_value) -> omics_long
+  
+  
+  omics_long %>% 
+    
   dplyr::select(ID, Visit, Coffee_Type, species_name, species_value, metabolite_name, metabolite_value) %>% 
   
   
-  filter(species_name %in% c("Eggerthella sp. CAG:209", "Firmicutes bacterium CAG:94")) %>% 
-  filter(metabolite_name %in% c("Caffeine")) %>% 
   
   pivot_longer(cols = c(ends_with("_name"), ends_with("_value")),
                names_to = c('type','.value' ),
