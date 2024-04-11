@@ -1,317 +1,85 @@
 <p align="justify">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-In Experiment 1, we’re looking at differences in the microbiome between
-coffee drinkers and non-coffee drinkers.
+    ## Loading required package: permute
+
+    ## Loading required package: lattice
+
+    ## This is vegan 2.6-2
+
+    ## Loading required package: Matrix
+
+    ## 
+    ## Attaching package: 'lmerTest'
+
+    ## The following object is masked from 'package:lme4':
+    ## 
+    ##     lmer
+
+    ## The following object is masked from 'package:stats':
+    ## 
+    ##     step
+
+    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
+
+    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
+    ## ✔ tibble  3.2.1     ✔ dplyr   1.1.4
+    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
+    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
+
+    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ## ✖ tidyr::expand() masks Matrix::expand()
+    ## ✖ dplyr::filter() masks stats::filter()
+    ## ✖ dplyr::lag()    masks stats::lag()
+    ## ✖ tidyr::pack()   masks Matrix::pack()
+    ## ✖ tidyr::unpack() masks Matrix::unpack()
+
+    ## 
+    ## Attaching package: 'scales'
+
+    ## The following object is masked from 'package:purrr':
+    ## 
+    ##     discard
+
+    ## The following object is masked from 'package:readr':
+    ## 
+    ##     col_factor
+
+Fig. 1: Cognitive effects of coffee.
 
 ``` r
-source("scripts/ex1_baseline_differences_CD_vs_NCD.R")
+source("new_scripts/fig_1_behav_cog_health_data.R")
 ```
 
 ``` r
-(
-  
-  (ex1pca | (ex1alpha | (ex1DA/ex1DA_GBM + plot_layout(heights = c(3,1))))) 
-  
-  / 
-  
-  (
-    (
-      ex1_cyta  + ex1_cytb  + ex1_metab_forest_a  + ex1_metab_forest_b + plot_spacer()
-     ) + plot_layout(widths = c(1,1,2,2,0.1))
-    )
-  ) + plot_layout(heights = c(2,3))
+(plot_cog_NCD | plot_cog_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->
 
-In Experiment 2, we’re looking at features that return to non-coffee
-drinker levels post washout (coffee abstinence).
+Fig 2b Microbiome
 
 ``` r
-source("scripts/ex_2_acute_and_full_withdrawal.R")
+source("new_scripts/fig_2_gi_microbiome_data.R")
 ```
 
 ``` r
-  ((ex_RESTpca + ex_RESTalpha + ex_RESTDA + plot_layout(widths = c(6,2,5))) / 
-   ((ex2_cyta | ex2_cytb | ex_REST_metab_forest_a | ex_REST_metab_forest_b | plot_spacer()) + plot_layout(widths = c(1,1,2,2, 0.1))))  + plot_layout(heights = c(4,7))
+(plot_mb_NCD |  plot_mb_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,8))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-4-1.svg)<!-- -->
 
-In Experiment 3, we’re looking at the effects of going back on either
-caffeinated or decaffeinated coffee post-washout (coffee abstinence).
-
-In this additional microbiome experiment 3B, we’re looking at the acute
-effects of going back on either caffeinated or decaffeinated coffee
-post-washout (coffee abstinence).
+Fig 2b Metabolome
 
 ``` r
-source("scripts/ex_3_intervention_acute_and_full_recaf_or_decaf.R")
+source("new_scripts/fig_2_gi_metabolome_data.R")
 ```
-
-    ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
-    ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
 
 ``` r
-(
-  (
-    (ex_INTERVENTIONpca | ex_INTERVENTIONalpha) + 
-     plot_layout(widths = c(2,1), guides = 'collect')
-    ) 
-  / 
-
-    (
-      (ex3_cyta  | ex3_cytb  | mb_b | (((mb_a |plot_spacer()) + plot_layout(widths = c(9,1))) / ex3metab) + plot_layout(heights = c(3,2))) + 
-  
-            plot_layout(guides = 'collect', widths = c(1,1,2,4))
-      )
-  ) + 
-
-    plot_layout(heights = c(1,3))
+(plot_mt_NCD | plot_mt_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.svg)<!-- -->
-
-Integrating ’omics and cognition
-
-``` r
-source("scripts/final_ex_integration.R")
-```
-
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ Legend_ex_INTERVENTION + Treatment + (1 | participant_ID) + "
-    ## [2] "Using the following formula:     Legend_ex_INTERVENTION:Treatment"                            
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-    ## [1] "Using the following formula: x ~ X + (1 | participant_ID)"
-    ## [1] "Adjusting for FDR using Benjamini & Hochberg's procedure."
-
-``` r
-(f_1_2 | f_3tot) + plot_layout(guides = "collect", widths = c(1,4))
-```
-
-![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-6-1.svg)<!-- -->
