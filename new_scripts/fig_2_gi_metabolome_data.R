@@ -122,7 +122,7 @@ plot_mt_NCD <- df_long_omic %>%
   ungroup() %>% 
   
   ggplot() +
-  aes(y = ID, x = lab, fill = value) + 
+  aes(y = ID, x = visit, fill = value, label = avg_by_group) + 
   geom_tile() +
 
   geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, type) %>% 
@@ -200,7 +200,7 @@ plot_mt_CD <- df_long_omic %>%
   ungroup() %>% 
   
 ggplot() +
-  aes(y = ID, x = lab, fill = value, label = avg_by_group)+ 
+  aes(y = ID, x = visit, fill = value, label = avg_by_group)+ 
   geom_tile() +
   
   geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab) %>% 
