@@ -14,7 +14,7 @@ knitr::opts_chunk$set(dev = 'svg') # set output device to svg
 ```
 
 
-```{r load and prep, include = TRUE, echo = FALSE}
+```{r load and prep, include = TRUE, echo = FALSE, message = FALSE}
 source("subscripts/load_and_clean_data.R")
 library(tidyverse)
 library(patchwork)
@@ -43,7 +43,7 @@ source("new_scripts/fig_1_behav_cog_health_data.R")
 
 ```
 
-Fig 2b Microbiome
+Fig 2a Microbiome
 ```{r, warning=FALSE, message = FALSE}
 source("new_scripts/fig_2_gi_microbiome_data.R")
 ```
