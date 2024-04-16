@@ -134,16 +134,55 @@ do.call(rbind,
                                          "(PSS)", "(STAI-T) Tot", "(BDI) Tot", "(GIS-VAS) Tot", 
                                          "(PSQI) Tot", "(IPAQ) MET-minutes", "(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot")))) %>% 
   
-  mutate(mdlab = case_when(Coffee_Type == "NCD" ~ "<img \n src='raw/icons/NCD.png' width='80' />",
-                           Coffee_Type == "Coffee" ~ "<img \n src='raw/icons/CD.png' width='80' />",
-                           Coffee_Type == "No Coffee" ~ "<img \n src='raw/icons/WASHOUT.png' width='80' />",
-                           Coffee_Type == "DECAF" ~ "<img \n src='raw/icons/REINTRO.png' width='80' />", 
-                           Coffee_Type == "CAF"   ~ "<img \n src='raw/icons/REINTRO.png' width='80' />"), 
-         mdlab = factor(mdlab, levels = c("<img \n src='raw/icons/NCD.png' width='80' />", 
-                                          "<img \n src='raw/icons/CD.png' width='80' />", 
-                                          "<img \n src='raw/icons/WASHOUT.png' width='80' />", 
-                                          "<img \n src='raw/icons/REINTRO.png' width='80' />"))
-  ) -> df_long_cog
+  mutate(caffeine = case_when(
+    ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
+              "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
+              "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
+    ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
+              "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
+              "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
+  mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
+  
+  mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
+         Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
+  
+  mutate(mdlab = case_when(Coffee_Type == "NCD" ~ "<img \n src='raw/icons/NCD.png' width='50' />",
+                           Coffee_Type == "Coffee" ~ "<img \n src='raw/icons/CD.png' width='50' />",
+                           Coffee_Type == "No Coffee" ~ "<img \n src='raw/icons/WASHOUT.png' width='50' />",
+                           Coffee_Type == "DECAF" ~ "<img \n src='raw/icons/REINTRO.png' width='50' />", 
+                           Coffee_Type == "CAF"   ~ "<img \n src='raw/icons/REINTRO.png' width='50' />"), 
+         mdlab = factor(mdlab, levels = c("<img \n src='raw/icons/NCD.png' width='50' />", 
+                                          "<img \n src='raw/icons/CD.png' width='50' />", 
+                                          "<img \n src='raw/icons/WASHOUT.png' width='50' />", 
+                                          "<img \n src='raw/icons/REINTRO.png' width='50' />"))
+  )  %>% 
+  
+  group_by(name, visit, Coffee_Type) %>% 
+  mutate(avg_by_caf_timepoint = mean(value)) %>%
+  ungroup() %>% #filter(name == "Cryptobacterium curtum") %>% View
+  
+  group_by(name, visit, mdlab) %>% 
+  mutate(avg_delta_caf_decaf = case_when(visit == "V2" ~ 0,
+                                         visit != "V2" ~ abs(
+                                           mean(avg_by_caf_timepoint[caffeine == "CAF"]) - mean(avg_by_caf_timepoint[caffeine == "DECAF"])
+                                         ),
+                                         .default = NA)
+  ) %>% 
+  
+  mutate(plot_label = case_when((max(abs(avg_by_caf_timepoint)) > 0.5 | max(abs(avg_delta_caf_decaf)) > 0.5 ) ~ 'moderate', 
+                                .default = "less")) %>% 
+  ungroup() %>% 
+  
+  group_by(name, mdlab) %>%
+  mutate(max_per_group = max(abs(avg_by_caf_timepoint))) %>% 
+  ungroup() %>% 
+  group_by(name) %>% 
+  mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
+  filter(any(plot_label == "moderate")) %>% 
+  filter(any(max_per_group > 0.5) ) %>% 
+  
+  filter(abs_delta_NCD > 0.5) %>% 
+  ungroup() -> df_long_cog
 #df_long_cog$name
 
 
@@ -258,10 +297,12 @@ plot_cog_CD <- df_long_cog %>%
   aes(y = ID, x = visit, fill = value, label = avg_by_group)+ 
   geom_tile() +
   
-  geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab) %>% 
-             summarise(n = length(unique(ID)), 
-                       avg_by_group = mean(avg_by_group)) %>% ungroup(), 
-            # x = 1,
+  geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab, plot_label) %>% 
+               summarise(n = length(unique(ID)), 
+                         avg_by_group = mean(avg_by_group)) %>% 
+               ungroup() %>% group_by(name, mdlab) 
+             %>% filter(any(plot_label == "moderate")) %>% ungroup(), 
+             
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
 
 #geom_hline(aes(alpha = Visit, yintercept = 16), show.legend = FALSE)+

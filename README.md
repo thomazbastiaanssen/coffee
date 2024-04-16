@@ -1,50 +1,6 @@
 <p align="justify">
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-    ## Loading required package: permute
-
-    ## Loading required package: lattice
-
-    ## This is vegan 2.6-2
-
-    ## Loading required package: Matrix
-
-    ## 
-    ## Attaching package: 'lmerTest'
-
-    ## The following object is masked from 'package:lme4':
-    ## 
-    ##     lmer
-
-    ## The following object is masked from 'package:stats':
-    ## 
-    ##     step
-
-    ## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──
-
-    ## ✔ ggplot2 3.3.6     ✔ purrr   0.3.4
-    ## ✔ tibble  3.2.1     ✔ dplyr   1.1.4
-    ## ✔ tidyr   1.2.0     ✔ stringr 1.4.0
-    ## ✔ readr   2.1.2     ✔ forcats 0.5.1
-
-    ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ tidyr::expand() masks Matrix::expand()
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-    ## ✖ tidyr::pack()   masks Matrix::pack()
-    ## ✖ tidyr::unpack() masks Matrix::unpack()
-
-    ## 
-    ## Attaching package: 'scales'
-
-    ## The following object is masked from 'package:purrr':
-    ## 
-    ##     discard
-
-    ## The following object is masked from 'package:readr':
-    ## 
-    ##     col_factor
-
 Fig. 1: Cognitive effects of coffee.
 
 ``` r
@@ -58,7 +14,7 @@ source("new_scripts/fig_1_behav_cog_health_data.R")
 
 ![](README_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->
 
-Fig 2b Microbiome
+Fig 2a Microbiome
 
 ``` r
 source("new_scripts/fig_2_gi_microbiome_data.R")
@@ -82,4 +38,23 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-6-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-6-1.svg)<!-- --> Fig 2c
+Cytokines
+
+``` r
+source("new_scripts/fig_2_cytokine_data.R")
+```
+
+``` r
+(plot_cyt_stim_NCD | plot_cyt_stim_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-8-1.svg)<!-- -->
+
+``` r
+(plot_cyt_unstim_NCD | plot_cyt_unstim_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->

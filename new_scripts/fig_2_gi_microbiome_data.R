@@ -62,21 +62,19 @@ species_long %>%
   
   distinct() -> species_long
 
-species_long %>% 
-  mutate(caf_status = paste(Coffee_Type, visit)) %>% 
-    group_by(name, caf_status) %>% 
-    summarise(avg = mean(value)) %>% 
-    pivot_wider(names_from = caf_status, values_from = avg) %>% 
-    
-    mutate(no_caf = mean(`DECAF V4`, `NCD V2` , `No Coffee V3`), 
-           caf    = mean(`CAF V4`, `Coffee V2`)) %>% 
-  mutate(delta = no_caf - caf) %>% 
-  dplyr::select(name, delta) %>% 
-  ungroup() %>% 
-  arrange(desc(abs(delta))) %>% .$name -> species_order
 
-  
 species_long %>% 
+  # group_by(name, Coffee_Type, visit) %>% 
+  # mutate(avg_by_caf_decaf = mean(value)) %>% 
+  # ungroup() %>% 
+  mutate(caffeine = case_when(
+    ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
+              "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
+              "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
+    ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
+              "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
+              "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
+  mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
   
   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
@@ -90,9 +88,37 @@ species_long %>%
                                           "<img \n src='raw/icons/CD.png' width='50' />", 
                                           "<img \n src='raw/icons/WASHOUT.png' width='50' />", 
                                           "<img \n src='raw/icons/REINTRO.png' width='50' />"))
-  ) %>% 
-  filter(name %in% species_order) %>% 
-  mutate(name  = factor(name, levels = species_order)) -> df_long_omic
+  )  %>% 
+  
+  group_by(name, visit, Coffee_Type) %>% 
+  mutate(avg_by_caf_timepoint = mean(value)) %>%
+  ungroup() %>% #filter(name == "Cryptobacterium curtum") %>% View
+
+  group_by(name, visit, mdlab) %>% 
+  mutate(avg_delta_caf_decaf = case_when(visit == "V2" ~ 0,
+                                         visit != "V2" ~ abs(
+                                           mean(avg_by_caf_timepoint[caffeine == "CAF"]) - mean(avg_by_caf_timepoint[caffeine == "DECAF"])
+                                           ),
+                                         .default = NA)
+         ) %>% 
+  
+  mutate(plot_label = case_when((max(abs(avg_by_caf_timepoint)) > 0.5 | max(abs(avg_delta_caf_decaf)) > 0.5 ) ~ 'moderate', 
+                                .default = "less")) %>% 
+  ungroup() %>% 
+  
+  group_by(name, mdlab) %>%
+  mutate(max_per_group = max(abs(avg_by_caf_timepoint))) %>% 
+  ungroup() %>% 
+  group_by(name) %>% 
+  mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
+  filter(any(plot_label == "moderate")) %>% 
+  filter(any(max_per_group > 0.5) ) %>% 
+  
+  filter(abs_delta_NCD > 0.5) %>% 
+  ungroup() -> df_long_omic
+ #%>% 
+  #mutate(name  = factor(name, levels = species_order)) 
+
 
 
 
@@ -124,7 +150,7 @@ plot_mb_NCD <- df_long_omic %>%
   ggplot() +
   aes(y = ID, x = visit, fill = value, label = avg_by_group) + 
   geom_tile() +
-  geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, type) %>% 
+  geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, type, plot_label) %>% 
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% ungroup(), 
              # x = 1,
@@ -176,14 +202,7 @@ plot_mb_CD <- df_long_omic %>%
   arrange(avg_val) %>% 
   mutate(ID = factor(ID, levels = unique(ID))) %>% 
   
-  mutate(caffeine = case_when(
-    ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
-              "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
-              "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
-    ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
-              "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
-              "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
-  mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
+ 
   mutate(lab = case_when(Visit == "Baseline" ~ "Coffee\n(baseline)", .default = Visit),
          lab = factor(lab, levels = c("Coffee\n(baseline)", "Post-\nwashout", "Post-\nreintroduction"))) %>%
   
@@ -201,10 +220,12 @@ plot_mb_CD <- df_long_omic %>%
   ggplot() +
   aes(y = ID, x = visit, fill = value, label = avg_by_group) + 
   geom_tile() +
-  geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab) %>% 
+  geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab, plot_label) %>% 
                summarise(n = length(unique(ID)), 
-                         avg_by_group = mean(avg_by_group)) %>% ungroup(), 
-             # x = 1,
+                         avg_by_group = mean(avg_by_group)) %>% 
+               ungroup() %>% group_by(name, mdlab) 
+             %>% filter(any(plot_label == "moderate")) %>% ungroup(), 
+             
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
   
   scale_fill_gradientn(colours = c(
@@ -220,13 +241,12 @@ plot_mb_CD <- df_long_omic %>%
   ), 
   limits = c(-4.5, 4.5), "Effect size (d)"
   ) +
-  scale_alpha_manual(values = c("Baseline" = 0, "Post-\nwashout" = 0, "Post-\nreintroduction" = 1))+
+  #scale_alpha_manual(values = c("less" = 0, "moderate" = 1))+
   
   scale_y_discrete(position = "right"
                #   , labels = c(rep("",7), "DECAF",rep("",15),  "CAF", rep("",7))
                    ) +
   scale_x_discrete(expand = expansion(mult = c(0))) +
-  
   ggh4x::facet_nested(name * caffeine ~ mdlab, scales = "free", space = "free", 
                       strip = ggh4x::strip_nested(background_y = list(element_blank(), element_rect(), element_rect()), 
                                                   text_y       = list(element_blank(), element_text(), element_text()), 
@@ -242,8 +262,6 @@ plot_mb_CD <- df_long_omic %>%
         #axis.text.x = element_blank(),
         axis.ticks.x = element_blank(), 
         panel.spacing.x = unit(0, "lines")
-  )
+  ) 
 
   
-
-
