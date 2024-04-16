@@ -152,7 +152,12 @@ plot_mb_NCD <- df_long_omic %>%
   geom_tile() +
   geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, type, plot_label) %>% 
                summarise(n = length(unique(ID)), 
-                         avg_by_group = mean(avg_by_group)) %>% ungroup(), 
+                         avg_by_group = mean(avg_by_group)) %>% ungroup() %>% 
+               mutate(avg_by_group_lab = case_when(avg_by_group > 0.5  ~ paste(avg_by_group, "\U21C8"), 
+                                                   avg_by_group > 0.2  ~ paste(avg_by_group, "\U2191"),
+                                                   avg_by_group < -0.5 ~ paste(avg_by_group, "\U21CA"),
+                                                   avg_by_group < -0.2 ~ paste(avg_by_group, "\U2193"),
+                                                   .default = paste(avg_by_group, "\U21CB"))), 
              # x = 1,
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +    
   scale_fill_gradientn(colours = c(
@@ -223,8 +228,13 @@ plot_mb_CD <- df_long_omic %>%
   geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab, plot_label) %>% 
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% 
-               ungroup() %>% group_by(name, mdlab) 
-             %>% filter(any(plot_label == "moderate")) %>% ungroup(), 
+               ungroup() %>% group_by(name, mdlab) %>% 
+               filter(any(plot_label == "moderate")) %>% ungroup() %>% 
+               mutate(avg_by_group_lab = case_when(avg_by_group > 0.5  ~ paste(avg_by_group, "\U21C8"), 
+                                                   avg_by_group > 0.2  ~ paste(avg_by_group, "\U2191"),
+                                                   avg_by_group < -0.5 ~ paste(avg_by_group, "\U21CA"),
+                                                   avg_by_group < -0.2 ~ paste(avg_by_group, "\U2193"),
+                                                   .default = paste(avg_by_group, "\U21CB"))), 
              
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
   

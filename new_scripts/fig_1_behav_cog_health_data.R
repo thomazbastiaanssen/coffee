@@ -126,7 +126,10 @@ do.call(rbind,
   
 
   group_by(name) %>%
-  mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
+  mutate(avg_cof = case_when(name  %in% c("(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot") ~ mean(value[Coffee_Type == "CAF" & visit == "V4"], na.rm = T),
+                             !name %in% c("(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot") ~ mean(value[Coffee_Type == "Coffee"], na.rm = T), 
+                             .default = NA)
+         ) %>% 
   mutate(sd_tot = sd(value, na.rm = T)) %>% 
   mutate(value = (value - avg_cof)/sd_tot) %>% 
   ungroup() %>% 
@@ -330,7 +333,75 @@ plot_cog_CD <- df_long_cog %>%
   ) 
 
 
-
-
-
+plot_cog_craving <- df_long_cog %>% 
+  filter(Coffee_Type != "NCD") %>% 
+  filter(name %in% c("(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot")) %>% 
+  mutate(caffeine = case_when(
+    ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
+              "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
+              "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
+    ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
+              "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
+              "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
+  mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
+  mutate(lab = case_when(Visit == "Baseline" ~ "Coffee\n(baseline)", .default = Visit),
+         lab = factor(lab, levels = c("Coffee\n(baseline)", "Post-\nwashout", "Post-\nreintroduction"))) %>%
+  
+  mutate(facet_lab = case_when(Visit == "Baseline" ~ "CD", 
+                               Visit == "Post-\nwashout" ~ "wash\nout", 
+                               Visit == "Post-\nreintroduction" ~ "inter\nvention"), 
+         facet_lab = factor(facet_lab, levels = c("CD","wash\nout", "inter\nvention"))) %>% 
+  
+  group_by(Coffee_Type, caffeine, name) %>% 
+  mutate(avg_by_group = round(mean(value, na.rm = T), digits = 2)) %>%
+  
+  ungroup() %>% 
+  
+  
+  
+  ggplot() +
+  aes(y = ID, x = visit, fill = value, label = avg_by_group)+ 
+  geom_tile() +
+  
+  geom_label(data = . %>% group_by(visit, Coffee_Type, caffeine, name, mdlab, plot_label) %>% 
+               summarise(n = length(unique(ID)), 
+                         avg_by_group = mean(avg_by_group)) %>% 
+               ungroup() %>% group_by(name, mdlab) 
+             %>% filter(any(plot_label == "moderate")) %>% ungroup(), 
+             
+             aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
+  
+  scale_fill_gradientn(colours = c(
+    "#053061","#053061",
+    "#2166ac","#2166ac",
+    "#4393c3","#4393c3",
+    "#f7f7f7","#f7f7f7", 
+    "#d6604d","#d6604d",
+    "#d73027","#d73027",
+    "#a50026", "#a50026"
+    
+    
+  ), 
+  limits = c(-4.5, 4.5), "Effect size (d)"
+  ) +
+  scale_y_discrete(position = "right"  ) +
+  
+  scale_x_discrete(expand = expansion(mult = c(0))) +
+  ggh4x::facet_nested(name * caffeine ~ mdlab, scales = "free", space = "free_x", switch = "y",
+                      strip = ggh4x::strip_nested(background_y = list(element_rect(), element_rect(), element_rect()), 
+                                                  text_y       = list(element_text(), element_text(), element_text()), 
+                                                  by_layer_y = TRUE )) +
+  xlab(NULL) + ylab(NULL) + 
+  theme_test() +
+  theme(
+    strip.text.y.left = element_text(angle =0), 
+    strip.text.x = element_markdown(angle = 0), #,
+    # strip.text.x = element_blank(), strip.background.x = element_blank()
+    #strip.text.y = element_text(angle =0),
+    axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
+    #axis.text.x = element_text(angle = 330, hjust = 0)#,   panel.spacing.x =unit(0, "lines")
+    #axis.text.x = element_blank(), 
+    #axis.ticks.x = element_blank(), 
+    panel.spacing.x = unit(0, "lines")
+  ) 
 

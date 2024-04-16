@@ -32,11 +32,10 @@ decaf = readPNG("raw/icons/DECAF.png")
 caff  = readPNG("raw/icons/CAFF.png")
 ```
 
-Fig. 1: Cognitive effects of coffee. 
+Fig. 1a: Cognitive effects of coffee. 
 ```{r, warning=FALSE, message = FALSE}
 source("new_scripts/fig_1_behav_cog_health_data.R")
 ```
-
 
 ```{r, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 14}
 (plot_cog_NCD | plot_cog_CD) + 
@@ -44,12 +43,18 @@ source("new_scripts/fig_1_behav_cog_health_data.R")
 
 ```
 
+
+```{r, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 8}
+plot_cog_craving
+```
+
+
 Fig 2a Microbiome
 ```{r, warning=FALSE, message = FALSE}
 source("new_scripts/fig_2_gi_microbiome_data.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
 (plot_mb_NCD |  plot_mb_CD) + 
   plot_layout(guides = 'collect', widths = c(1,8))
 
