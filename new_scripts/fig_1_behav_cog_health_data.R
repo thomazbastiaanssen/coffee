@@ -178,12 +178,13 @@ do.call(rbind,
   ungroup() %>% 
   group_by(name) %>% 
   mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
-  filter(any(plot_label == "moderate")) %>% 
-  filter(any(max_per_group > 0.5) ) %>% 
   
-  filter(abs_delta_NCD > 0.5) %>% 
+  #Currently no filters for cognition
+  # filter(any(plot_label == "moderate")) %>% 
+  # filter(any(max_per_group > 0.5) ) %>% 
+  # 
+  # filter(abs_delta_NCD > 0.5) %>% 
   ungroup() -> df_long_cog
-#df_long_cog$name
 
 
 CAF_DECAF_order <- c(df_long_cog %>% 
