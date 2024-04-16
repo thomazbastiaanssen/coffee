@@ -197,17 +197,17 @@ CAF_DECAF_order <- c(df_long_cog %>%
   
 plot_cog_NCD <- df_long_cog %>% 
   filter(Coffee_Type =="NCD") %>% 
-  mutate(mdlab = factor("<img \n src='raw/icons/NCD.png' width='80' />", levels = c("<img \n src='raw/icons/NCD.png' width='80' />"))) %>%
+  mutate(mdlab = factor("<img \n src='raw/icons/NCD.png' width='50' />", levels = c("<img \n src='raw/icons/NCD.png' width='50' />"))) %>%
   mutate(visit = factor("V2", levels = c("V2"))) %>% 
   mutate(lab = "NCD") %>% 
   
   group_by(Coffee_Type, name) %>% 
   mutate(avg_by_group = round(mean(value, na.rm = T), digits = 2)) %>%
   ungroup() %>% 
-  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(CWSQ) Tot", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='80' />", lab = "NCD")) %>%
-  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Energy", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='80' />", lab = "NCD")) %>% 
-  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Fatigue", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='80' />", lab = "NCD")) %>% 
-  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(QCC) Tot", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='80' />", lab = "NCD")) %>% 
+  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(CWSQ) Tot", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>%
+  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Energy", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>% 
+  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Fatigue", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>% 
+  # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(QCC) Tot", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>% 
   # 
   # mutate(value = as.numeric(value)) %>% 
 
@@ -282,17 +282,7 @@ plot_cog_CD <- df_long_cog %>%
   
   ungroup() %>% 
   
-  
 
-
-  # group_by(Visit, name, Coffee_Type, meas_group) %>%
-  # 
-  # reframe(value = mean(value, na.rm = T)) %>% 
-  # 
-  # ungroup() %>% 
-  #df_long_cog %>% 
-  
-  #  filter(Coffee_Type == "NCD") %>% 
   
   ggplot() +
   aes(y = ID, x = visit, fill = value, label = avg_by_group)+ 
@@ -306,9 +296,6 @@ plot_cog_CD <- df_long_cog %>%
              
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
 
-#geom_hline(aes(alpha = Visit, yintercept = 16), show.legend = FALSE)+
-  #geom_point(shape = 24) +
-  
   scale_fill_gradientn(colours = c(
     "#053061","#053061",
     "#2166ac","#2166ac",
@@ -322,10 +309,7 @@ plot_cog_CD <- df_long_cog %>%
   ), 
   limits = c(-4.5, 4.5), "Effect size (d)"
   ) +
-  #scale_alpha_manual(values = c("Baseline" = 0, "Post-\nwashout" = 0, "Post-\nreintroduction" = 1))+
-  scale_y_discrete(position = "right"
-                   #   , labels = c(rep("",7), "DECAF",rep("",15),  "CAF", rep("",7))
-  ) +
+  scale_y_discrete(position = "right"  ) +
 
   scale_x_discrete(expand = expansion(mult = c(0))) +
   ggh4x::facet_nested(name * caffeine ~ mdlab, scales = "free", space = "free_x",

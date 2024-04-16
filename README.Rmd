@@ -49,7 +49,7 @@ Fig 2a Microbiome
 source("new_scripts/fig_2_gi_microbiome_data.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 14, fig.height = 20}
+```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 12}
 (plot_mb_NCD |  plot_mb_CD) + 
   plot_layout(guides = 'collect', widths = c(1,8))
 
