@@ -64,3 +64,7 @@ source("new_scripts/fig_2_cytokine_data.R")
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-10-1.svg)<!-- -->
+
+``` r
+source("new_scripts/fig_final_integration.R")
+```
