@@ -352,7 +352,7 @@ plot_cog_craving <- df_long_cog %>%
                                Visit == "Post-\nreintroduction" ~ "inter\nvention"), 
          facet_lab = factor(facet_lab, levels = c("CD","wash\nout", "inter\nvention"))) %>% 
   
-  group_by(Coffee_Type, caffeine, name) %>% 
+  group_by(Coffee_Type, caffeine, name, visit) %>% 
   mutate(avg_by_group = round(mean(value, na.rm = T), digits = 2)) %>%
   
   ungroup() %>% 

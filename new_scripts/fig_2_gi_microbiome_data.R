@@ -115,22 +115,22 @@ species_long %>%
   filter(any(max_per_group > 0.5) ) %>% 
   
   filter(abs_delta_NCD > 0.5) %>% 
-  ungroup() -> df_long_omic
+  ungroup() -> df_long_MB
  #%>% 
   #mutate(name  = factor(name, levels = species_order)) 
 
 
 
 
-CAF_DECAF_order <-  c(df_long_omic %>% 
+CAF_DECAF_order <-  c(df_long_MB %>% 
                         filter(Visit == "Post-\nreintroduction") %>% 
                         filter(Coffee_Type == "CAF") %>% .$ID %>% sort %>% unique,
-                      df_long_omic %>% 
+                      df_long_MB %>% 
                         filter(Visit == "Post-\nreintroduction") %>% 
                         filter(Coffee_Type == "DECAF") %>% .$ID %>% sort %>% unique)
  
 
-plot_mb_NCD <- df_long_omic %>% 
+plot_mb_NCD <- df_long_MB %>% 
   filter(Coffee_Type =="NCD") %>% 
   mutate(lab = "NCD") %>% 
   filter(!is.na(value)) %>% 
@@ -196,7 +196,7 @@ plot_mb_NCD <- df_long_omic %>%
 
 
 
-plot_mb_CD <- df_long_omic %>% 
+plot_mb_CD <- df_long_MB %>% 
   filter(Coffee_Type != "NCD") %>% 
   
   group_by(ID) %>% 

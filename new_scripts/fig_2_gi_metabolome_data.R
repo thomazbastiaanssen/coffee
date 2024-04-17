@@ -1,6 +1,33 @@
 # 1=NCD	0=F
 # 2=CD	1=M
 
+# #1
+# c("Cholic acid", "Piperine", "Pipecolinic acid", "Agmatine", 
+#   "3-(3-Hydroxyphenyl)propanoic acid", "ω-Muricholic acid", "Indole-3-carboxyaldehyde", 
+#   "N1-Methyl-2-pyridone-5-carboxamide", "Tetradecanedioic acid", 
+#   "Indole-3-propionic acid", "2,5-’ or 3,4-Dihydroxybenzoic acid", 
+#   "2-’ or 3-Hydroxybutyric acid", "γ-Aminobutyric acid", "Fumaric acid", 
+#   "Tryptophan", "4-Guanidinobutyric acid", "3-Methylxanthine", 
+#   "Xanthosine", "N-Acetylglutamic acid", "4-Hydroxybenzaldehyde", 
+#   "N-Methylaspartic acid", "Xanthine", "Pimelic acid", "4-Hydroxy-2,5-dimethyl-3(2H)-furanone", 
+#   "Serotonin", "Theobromine", "Hippuric acid", "Dopamine", "Trigonelline", 
+#   "Kynurenine", "Norepinephrine", "Homovanilic acid", "Caffeine", 
+#   "Ferulic acid", "1,7-Dimethylxanthine", "Theophylline", "Epinephrine", 
+#   "Quinic acid")
+# #2
+# c("Cholic acid", "Pipecolinic acid", "3-(3-Hydroxyphenyl)propanoic acid", 
+#   "ω-Muricholic acid", "N1-Methyl-2-pyridone-5-carboxamide", "β-Muricholic acid", 
+#   "Indole-3-propionic acid", "2,5-’ or 3,4-Dihydroxybenzoic acid", 
+#   "Indole-3-carboxyaldehyde", "2-’ or 3-Hydroxybutyric acid", 
+#   "γ-Aminobutyric acid", "Fumaric acid", "Tryptophan", "4-Hydroxy-2,5-dimethyl-3(2H)-furanone", 
+#   "Acetylcholine", "Hippuric acid", "Pimelic acid", "Trigonelline", 
+#   "Dopamine", "Theobromine", "Homovanilic acid", "Kynurenine", 
+#   "Norepinephrine", "Caffeine", "Quinic acid", "1,7-Dimethylxanthine", 
+#   "Theophylline", "Ferulic acid", "Epinephrine")
+# #3
+# c("1,7-Dimethylxanthine", "2-Methylbutyrylglycine", "Hexamethylene bisacetamide", 
+#   "Pentose", "Piperine", "Theophylline")
+
  metadata %>% 
   mutate(Visit = str_remove(Visit, "Visit "),
          Coffee_Type = coffee_group) %>% 
@@ -25,9 +52,20 @@
    as.data.frame() %>%  rownames_to_column("ID") %>% pivot_longer(!ID) %>% 
    rename(metabolite_name = ID, metabolite_value = value) %>%
    left_join(., metab_trans[,1:2], by = c("metabolite_name" = "Compound_ID")) %>% 
-   filter(Name %in% c("Caffeine", "Hippuric acid")) 
- 
- 
+   filter(Name %in% c("Cholic acid", "Piperine", "Pipecolinic acid", "Agmatine", 
+                      "3-(3-Hydroxyphenyl)propanoic acid", "ω-Muricholic acid", "Indole-3-carboxyaldehyde", 
+                      "N1-Methyl-2-pyridone-5-carboxamide", "Tetradecanedioic acid", 
+                      "Indole-3-propionic acid", "2,5-’ or 3,4-Dihydroxybenzoic acid", 
+                      "2-’ or 3-Hydroxybutyric acid", "γ-Aminobutyric acid", "Fumaric acid", 
+                      "Tryptophan", "4-Guanidinobutyric acid", "3-Methylxanthine", 
+                      "Xanthosine", "N-Acetylglutamic acid", "4-Hydroxybenzaldehyde", 
+                      "N-Methylaspartic acid", "Xanthine", "Pimelic acid", "4-Hydroxy-2,5-dimethyl-3(2H)-furanone", 
+                      "Serotonin", "Theobromine", "Hippuric acid", "Dopamine", "Trigonelline", 
+                      "Kynurenine", "Norepinephrine", "Homovanilic acid", "Caffeine", 
+                      "Ferulic acid", "1,7-Dimethylxanthine", "Theophylline", "Epinephrine", 
+                      "Quinic acid", "β-Muricholic acid", "Acetylcholine", "2-Methylbutyrylglycine", 
+                      "Hexamethylene bisacetamide", "Pentose")) 
+
   base_long %>% 
   filter(Metab_ID != "") %>% 
   left_join(., omics_metabs, 
@@ -132,18 +170,18 @@ metab_long %>%
   filter(abs_delta_NCD > 0.5) %>% 
   ungroup() %>% 
   filter(name %in% metab_order) %>% 
-  mutate(name  = factor(name, levels = metab_order)) -> df_long_omic
+  mutate(name  = factor(name, levels = metab_order)) -> df_long_MX
 
 
-CAF_DECAF_order <-  c(df_long_omic %>% 
+CAF_DECAF_order <-  c(df_long_MX %>% 
                         filter(Visit == "Post-\nreintroduction") %>% 
                         filter(Coffee_Type == "CAF") %>% .$ID %>% sort %>% unique,
-                      df_long_omic %>% 
+                      df_long_MX %>% 
                         filter(Visit == "Post-\nreintroduction") %>% 
                         filter(Coffee_Type == "DECAF") %>% .$ID %>% sort %>% unique)
  
 
-plot_mt_NCD <- df_long_omic %>% 
+plot_mt_NCD <- df_long_MX %>% 
   filter(Coffee_Type =="NCD") %>% 
   mutate(lab = "NCD") %>% 
   filter(!is.na(value)) %>% 
@@ -203,7 +241,7 @@ plot_mt_NCD <- df_long_omic %>%
 
 
 
-plot_mt_CD <- df_long_omic %>% 
+plot_mt_CD <- df_long_MX %>% 
   filter(Coffee_Type != "NCD") %>% 
   
   group_by(ID) %>% 

@@ -67,7 +67,7 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
 ```
 
 
-```{r fig.width=10, fig.height=4, message=FALSE, warning=FALSE}
+```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
 (plot_mt_NCD | plot_mt_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
