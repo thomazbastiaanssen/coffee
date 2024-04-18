@@ -92,8 +92,7 @@ for(cg in 1:ncol(cog)){
 
 
 
-    
-    mxcog_P_marg %>% 
+    fig_alluvial <-    mxcog_P_marg %>% 
       as.data.frame() %>% 
       rownames_to_column("Cognition") %>% 
       pivot_longer(!"Cognition", names_to = "Metabolites", values_to = "p.val") %>% 

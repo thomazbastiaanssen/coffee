@@ -91,3 +91,7 @@ source("new_scripts/fig_2_cytokine_data.R")
 ```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
 source("new_scripts/fig_final_integration.R")
 ```
+
+```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
+fig_alluvial
+```
