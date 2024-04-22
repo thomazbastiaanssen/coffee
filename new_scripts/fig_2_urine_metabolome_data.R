@@ -13,7 +13,25 @@ urmet_df_long <- urmet %>%
          type = "Urine\nMetabolome") %>% 
   
   dplyr::select(c(ID, name, Visit, value, type, Coffee_Type, visit)) %>% 
-  mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) %>% 
+  mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) 
+
+  
+ 
+urmet_df_long %>% 
+  
+mutate(caf_status = paste(Coffee_Type, visit)) %>% 
+  group_by(name, caf_status) %>% 
+  summarise(avg = mean(value, na.rm = T)) %>% 
+  pivot_wider(names_from = caf_status, values_from = avg) %>% 
+  
+  mutate(no_caf = mean(`DECAF V4`, `NCD V2` , `No Coffee V3`, na.rm = T), 
+         caf    = mean(`CAF V4`, `Coffee V2`, na.rm = T)) %>% 
+  mutate(delta = no_caf - caf) %>% 
+  dplyr::select(name, delta) %>% 
+  ungroup() %>% 
+  arrange(desc(abs(delta))) %>% .$name -> urmet_order
+
+urmet_df_long %>% 
   
   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
@@ -38,8 +56,9 @@ urmet_df_long <- urmet %>%
          mdlab = factor(mdlab, levels = c("<img \n src='raw/icons/NCD.png' width='50' />", 
                                           "<img \n src='raw/icons/CD.png' width='50' />", 
                                           "<img \n src='raw/icons/WASHOUT.png' width='50' />", 
-                                          "<img \n src='raw/icons/REINTRO.png' width='50' />"))) %>%
-
+                                          "<img \n src='raw/icons/REINTRO.png' width='50' />"))
+  )  %>% 
+  
   group_by(name, visit, Coffee_Type) %>% 
   mutate(avg_by_caf_timepoint = mean(value)) %>%
   ungroup() %>% #filter(name == "Cryptobacterium curtum") %>% View
@@ -61,34 +80,13 @@ urmet_df_long <- urmet %>%
   ungroup() %>% 
   group_by(name) %>% 
   mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
-  # filter(any(plot_label == "moderate")) %>% 
-  # filter(any(max_per_group > 0.5) ) %>% 
-  # 
-  # filter(abs_delta_NCD > 0.5) %>% 
+  filter(any(plot_label == "moderate")) %>% 
+  filter(any(max_per_group > 0.5) ) %>% 
+  
+  filter(abs_delta_NCD > 0.5) %>% 
   ungroup() %>% 
-  
-  
-  group_by(name, type) %>%
-  mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
-  mutate(sd_tot = sd(value, na.rm = T)) %>% 
-  mutate(value = (value - avg_cof)/sd_tot) %>% 
-  ungroup() %>% 
-  
-  distinct()
-         
-urmet_df_long %>% 
-  
-mutate(caf_status = paste(Coffee_Type, visit)) %>% 
-  group_by(name, caf_status) %>% 
-  summarise(avg = mean(value, na.rm = T)) %>% 
-  pivot_wider(names_from = caf_status, values_from = avg) %>% 
-  
-  mutate(no_caf = mean(`DECAF V4`, `NCD V2` , `No Coffee V3`, na.rm = T), 
-         caf    = mean(`CAF V4`, `Coffee V2`, na.rm = T)) %>% 
-  mutate(delta = no_caf - caf) %>% 
-  dplyr::select(name, delta) %>% 
-  ungroup() %>% 
-  arrange(desc(abs(delta))) %>% .$name -> urmet_order
+  filter(name %in% urmet_order) %>% 
+  mutate(name  = factor(name, levels = urmet_order)) -> urmet_df_long
 
 
 CAF_DECAF_order <-  c(urmet_df_long %>% 
@@ -242,6 +240,3 @@ plot_urmet_CD <- urmet_df_long %>%
     strip.clip = "off"
   )
 
-
-plot_urmet_NCD | plot_urmet_CD +
-  plot_layout(guides = 'collect')
