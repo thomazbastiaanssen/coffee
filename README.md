@@ -44,8 +44,22 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.svg)<!-- --> Fig 2c
-Cytokines
+![](README_files/figure-gfm/unnamed-chunk-7-1.svg)<!-- -->
+
+Fig 2b2 Urine Metabolome
+
+``` r
+source("new_scripts/fig_2_urine_metabolome_data.R")
+```
+
+``` r
+(plot_urmet_NCD | plot_urmet_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+
+Fig 2c Cytokines
 
 ``` r
 source("new_scripts/fig_2_cytokine_data.R")
@@ -56,14 +70,14 @@ source("new_scripts/fig_2_cytokine_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
 
 ``` r
 (plot_cyt_unstim_NCD | plot_cyt_unstim_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-10-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-12-1.svg)<!-- -->
 
 ``` r
 source("new_scripts/fig_final_integration.R")
@@ -73,4 +87,4 @@ source("new_scripts/fig_final_integration.R")
 fig_alluvial
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
