@@ -3,7 +3,7 @@ urmet <- read.delim("raw/urine_metabolome/urine_metabs.csv", row.names = 1, sep 
 urmet <- urmet %>% 
   dplyr::select(!Group)
 
-urmet[,-c(1:3)] <- t(Tjazi::clr_c(t(urmet[,-c(1:3)])))
+urmet[,-c(1:3)] <- urmet[,-c(1:3)] %>% t() %>% Tjazi::clr_c() %>% t()
 
 urmet_df_long <- urmet %>% 
   pivot_longer(!c(ID, visit, Coffee_Type))  %>% 
@@ -13,7 +13,13 @@ urmet_df_long <- urmet %>%
          type = "Urine\nMetabolome") %>% 
   
   dplyr::select(c(ID, name, Visit, value, type, Coffee_Type, visit)) %>% 
-  mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) 
+  mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) %>% 
+  
+  group_by(name) %>%
+  mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
+  mutate(sd_tot = sd(value, na.rm = T)) %>% 
+  mutate(value = (value - avg_cof)/sd_tot) %>% 
+  ungroup()
 
   
  
@@ -239,4 +245,3 @@ plot_urmet_CD <- urmet_df_long %>%
     panel.spacing.x = unit(0, "lines"), 
     strip.clip = "off"
   )
-

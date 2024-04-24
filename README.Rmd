@@ -78,7 +78,7 @@ source("new_scripts/fig_2_urine_metabolome_data.R")
 ```
 
 
-```{r fig.width=10, fig.height=20, message=FALSE, warning=FALSE}
+```{r fig.width=10, fig.height=30, message=FALSE, warning=FALSE}
 (plot_urmet_NCD | plot_urmet_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
