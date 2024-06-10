@@ -189,7 +189,7 @@ plot_mb_NCD <- df_long_MB %>%
         strip.text.x = element_markdown(angle = 1),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
         # axis.text.x = element_text(angle = 330, hjust = 0),
-        #axis.text.x = element_blank(), 
+        axis.text.x = element_blank(), 
         axis.ticks.x = element_blank(), 
         axis.text.x.top = element_markdown()
   )
@@ -269,7 +269,7 @@ plot_mb_CD <- df_long_MB %>%
         strip.text.y = element_text(angle =0),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
         #axis.text.x = element_text(angle = 330, hjust = 0)#,   panel.spacing.x =unit(0, "lines")
-        #axis.text.x = element_blank(),
+        axis.text.x = element_blank(),
         axis.ticks.x = element_blank(), 
         panel.spacing.x = unit(0, "lines")
   ) 
