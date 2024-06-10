@@ -233,7 +233,7 @@ plot_mt_NCD <- df_long_MX %>%
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme(strip.text.y.left = element_text(angle =0), 
-        strip.text.x = element_markdown(angle = 0),
+        strip.text.x = element_markdown(angle = 1),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
         # axis.text.x = element_text(angle = 330, hjust = 0),
         axis.text.x = element_blank(), axis.ticks.x = element_blank()
@@ -312,7 +312,7 @@ ggplot() +
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme(#strip.text.y = element_blank(), 
-        strip.text.x = element_markdown(angle = 0), #,
+        strip.text.x = element_markdown(angle = 1), #,
         # strip.text.x = element_blank(), strip.background.x = element_blank()
         strip.text.y = element_text(angle =0),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 

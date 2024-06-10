@@ -57,8 +57,6 @@ source("new_scripts/fig_2_urine_metabolome_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
-
 Fig 2c Cytokines
 
 ``` r
@@ -84,7 +82,7 @@ source("new_scripts/fig_final_integration.R")
 ```
 
 ``` r
-fig_alluvial
+fig_int
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
