@@ -104,6 +104,6 @@ source("new_scripts/fig_2_cytokine_data.R")
 source("new_scripts/fig_final_integration.R")
 ```
 
-```{r fig.width=16, fig.height=8, message=FALSE, warning=FALSE}
+```{r fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
 fig_int
 ```
