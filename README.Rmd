@@ -48,6 +48,16 @@ source("new_scripts/fig_1_behav_cog_health_data.R")
 plot_cog_craving
 ```
 
+```{r fig_1_full, warning=FALSE, message=FALSE, fig.width=16, fig.height=9}
+design_1 <- c("AAAAAAAAAAAABBCCCCCC
+               AAAAAAAAAAAABBCCCCCC
+               AAAAAAAAAAAABBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC")
+(plot_spacer() + plot_cog_NCD + plot_cog_CD + plot_cog_craving) + plot_layout(design = design_1, guides = 'collect') & theme(legend.position = 'left')
+```
+
 
 Fig 2a Microbiome
 ```{r, warning=FALSE, message = FALSE}

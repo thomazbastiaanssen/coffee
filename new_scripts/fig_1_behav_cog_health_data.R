@@ -400,7 +400,6 @@ plot_cog_craving <- df_long_cog %>%
     #strip.text.y = element_text(angle =0),
     axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
     #axis.text.x = element_text(angle = 330, hjust = 0)#,   panel.spacing.x =unit(0, "lines")
-    #axis.text.x = element_blank(), 
-    #axis.ticks.x = element_blank(), 
+    axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
     panel.spacing.x = unit(0, "lines")
   ) 

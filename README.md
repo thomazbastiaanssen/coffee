@@ -20,6 +20,18 @@ plot_cog_craving
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
 
+``` r
+design_1 <- c("AAAAAAAAAAAABBCCCCCC
+               AAAAAAAAAAAABBCCCCCC
+               AAAAAAAAAAAABBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC
+               DDDDDDDDDDDDBBCCCCCC")
+(plot_spacer() + plot_cog_NCD + plot_cog_CD + plot_cog_craving) + plot_layout(design = design_1, guides = 'collect') & theme(legend.position = 'left')
+```
+
+![](README_files/figure-gfm/fig_1_full-1.svg)<!-- -->
+
 Fig 2a Microbiome
 
 ``` r
