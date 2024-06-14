@@ -117,3 +117,7 @@ source("new_scripts/fig_final_integration.R")
 ```{r fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
 fig_int
 ```
+
+```{r generate_stats_tables, message=FALSE, warning=FALSE}
+source("new_scripts/generate_stats_tables.R")
+```

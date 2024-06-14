@@ -98,3 +98,7 @@ fig_int
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
+
+``` r
+source("new_scripts/generate_stats_tables.R")
+```
