@@ -221,10 +221,10 @@ plot_mt_NCD <- df_long_MX %>%
   limits = c(-4.5, 4.5), "Effect size (d)"
   ) +
   scale_y_discrete(position = "right")+
-  ggh4x::facet_nested(type*name~mdlab, scales = "free", switch = "y", 
+  ggh4x::facet_nested(name~mdlab, scales = "free", switch = "y", 
                       strip = ggh4x::strip_nested(
                         #text_y = list(element_text(), element_blank()),
-                        background_y = list(element_blank(), element_rect()), 
+                        background_y = list(element_rect()), 
                         by_layer_y = TRUE
                       )
   ) +
