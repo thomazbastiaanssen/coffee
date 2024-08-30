@@ -61,12 +61,21 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
 Fig 2b2 Urine Metabolome
 
 ``` r
-source("new_scripts/fig_2_urine_metabolome_data.R")
+source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
 ```
 
 ``` r
-(plot_urmet_NCD | plot_urmet_CD) + 
+(plot_urmet_reclass_NCD | plot_urmet_reclass_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+
+``` r
+#Sometimes bugs out, so alternatively:
+
+# ggsave(plot = plot_urmet_NCD + guides(fill= "none"), width = 11,  height = 45, units = "cm", device = "svg", filename = "new_stats/urine_plot_a.svg")
+# ggsave(plot = plot_urmet_CD + guides(fill= "none"), width = 8,  height = 45, units = "cm", device = "svg", filename = "new_stats/urine_plot_b.svg")
 ```
 
 Fig 2c Cytokines
@@ -100,5 +109,5 @@ fig_int
 ![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
 
 ``` r
-source("new_scripts/generate_stats_tables.R")
+#source("new_scripts/generate_stats_tables.R")
 ```

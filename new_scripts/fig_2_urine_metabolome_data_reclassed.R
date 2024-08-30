@@ -1,12 +1,67 @@
-urmet <- read.delim("raw/urine_metabolome/urine_metabs.csv", row.names = 1, sep = ",", check.names = FALSE)
+urmet <- read.delim("raw/urine_reclustered/urine_metabs_classified.csv", sep = ",", header = FALSE)
+
 
 urmet <- urmet %>% 
-  dplyr::select(!Group)
+  separate(V1, into = c("visit", "ID"), sep = "_", remove = FALSE) %>% 
+  mutate(visit = toupper(visit), 
+         ID = case_when(visit == "SAMPLE" ~ "ID", .default = ID), 
+         ID = case_when(ID != "" & ID != "ID" ~ paste0("X", ID), .default = ID), 
+         visit = case_when(visit == "SAMPLE" ~ "visit", .default = visit))
+
+
+urmet_info <- urmet %>% 
+  t() %>% 
+  as.data.frame() %>% 
+  dplyr::select(c(V1, V2, V3)) %>% 
+  data.frame() %>% 
+  dplyr::filter(!V3 %in% c("Sample","visit","ID","Visit","Group")) %>% 
+  mutate(V1 = na_if(V1, ""), 
+         V2 = na_if(V2, "")) %>%
+  fill(V1) %>% 
+  mutate(V2 = case_when(V2 == "-" ~ V1, .default = V2)) %>% 
+  fill(V2) 
+
+urmet <- urmet %>% 
+  filter(V1!="") %>% 
+  janitor::row_to_names(1) %>%
+  dplyr::select(!c(Visit, Sample)) %>% 
+  rename(Coffee_Type = Group) %>% 
+  pivot_longer(!c(ID, visit, Coffee_Type)) %>% 
+  # 
+  mutate(
+#ID = paste0("APC0115-", str_remove(ID, "X")), 
+          ID = str_remove(ID, "F"), 
+          ID = str_remove(ID, "S")) 
+
+ urmet <- urmet %>% 
+    left_join(., urmet_info, by = c("name" = "V3")) %>% 
+    mutate(value = as.numeric(value)) %>% 
+    group_by(ID, V2, visit) %>% 
+    mutate(value = sum(value)) %>% 
+    ungroup() %>% 
+    
+    dplyr::select(ID, visit, Coffee_Type, name = V2, value) %>%
+    
+    distinct() %>% 
+    
+    pivot_wider(names_from = name, values_from = value)
+  
+
 
 urmet[,-c(1:3)] <- urmet[,-c(1:3)] %>% t() %>% Tjazi::clr_c() %>% t()
 
-urmet_df_long <- urmet %>% 
-  pivot_longer(!c(ID, visit, Coffee_Type))  %>% 
+urmet_df_long <-  urmet %>% 
+  left_join(., metadata %>% 
+              dplyr::select(participant_ID, visit, coffee_group,Treatment), 
+            by = c("ID" = "participant_ID", "visit" = "visit")) %>% 
+  
+  mutate(Coffee_Type = case_when(
+    coffee_group == "CD" & visit == "V2" ~ "Coffee", 
+    visit        == "V3"   ~ "No Coffee",
+    visit        == "V4"   ~ Treatment, 
+    .default = coffee_group)) %>% 
+    dplyr::select(!c(coffee_group, Treatment)) %>% 
+  pivot_longer(!c(ID, visit, Coffee_Type)) %>% 
   mutate(Visit = case_when(visit == "V2" ~ "Baseline", 
                            visit %in% c("V3", "T2W", "T4W") ~ "Post-\nwashout", 
                            visit %in% c("V4", "T2I", "T4I", "T14I") ~ "Post-\nreintroduction"), 
@@ -19,13 +74,15 @@ urmet_df_long <- urmet %>%
   mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
   mutate(sd_tot = sd(value, na.rm = T)) %>% 
   mutate(value = (value - avg_cof)/sd_tot) %>% 
-  ungroup()
+  ungroup() %>% 
+  filter(!is.na(Coffee_Type)) %>% 
+  mutate(Coffee_Type = str_replace(Coffee_Type, "CAFF", "CAF"))
 
-  
- 
+
+
 urmet_df_long %>% 
   
-mutate(caf_status = paste(Coffee_Type, visit)) %>% 
+  mutate(caf_status = paste(Coffee_Type, visit)) %>% 
   group_by(name, caf_status) %>% 
   summarise(avg = mean(value, na.rm = T)) %>% 
   pivot_wider(names_from = caf_status, values_from = avg) %>% 
@@ -41,7 +98,7 @@ urmet_df_long %>%
   
   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
-  
+  mutate(ID = str_replace(ID, "X", "APC115-")) %>% 
   mutate(caffeine = case_when(
     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
               "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
@@ -103,7 +160,7 @@ CAF_DECAF_order <-  c(urmet_df_long %>%
                         filter(Coffee_Type == "DECAF") %>% .$ID %>% sort %>% unique)
 
 
-plot_urmet_NCD <- urmet_df_long %>% 
+plot_urmet_reclass_NCD <- urmet_df_long %>% 
   filter(Coffee_Type =="NCD") %>% 
   mutate(lab = "NCD") %>% 
   filter(!is.na(value)) %>% 
@@ -165,9 +222,9 @@ plot_urmet_NCD <- urmet_df_long %>%
 
 
 
-plot_urmet_CD <- urmet_df_long %>% 
+plot_urmet_reclass_CD <-  urmet_df_long %>% 
   filter(Coffee_Type != "NCD") %>% 
-
+  
   group_by(ID) %>% 
   
   mutate(avg_val = mean(value)) %>% 
@@ -199,6 +256,7 @@ plot_urmet_CD <- urmet_df_long %>%
   mutate(avg_by_group = round(mean(value, na.rm = T), digits = 2)) %>%
   
   ungroup() %>% 
+     
   
   ggplot() +
   aes(y = ID, x = visit, fill = value, label = avg_by_group)+ 
@@ -245,3 +303,6 @@ plot_urmet_CD <- urmet_df_long %>%
     panel.spacing.x = unit(0, "lines"), 
     strip.clip = "off"
   )
+
+
+#(plot_urmet_NCD + plot_urmet_CD) + plot_layout(guides = 'collect')

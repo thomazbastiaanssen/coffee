@@ -893,40 +893,42 @@ df_long_stats_input %>%
 #METABOLOMICS URINE----
 measurement_type <- "metabolomics_urine"
 
-#generate input-
-urmet_df_long <- urmet %>% 
-  pivot_longer(!c(ID, visit, Coffee_Type))  %>% 
-  mutate(Visit = case_when(visit == "V2" ~ "Baseline", 
-                           visit %in% c("V3", "T2W", "T4W") ~ "Post-\nwashout", 
-                           visit %in% c("V4", "T2I", "T4I", "T14I") ~ "Post-\nreintroduction"), 
-         type = "Urine\nMetabolome") %>% 
-  
-  dplyr::select(c(ID, name, Visit, value, type, Coffee_Type, visit)) %>% 
-  mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) %>% 
-  
-  group_by(name) %>%
-  mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
-  mutate(sd_tot = sd(value, na.rm = T)) %>% 
-  mutate(value = (value - avg_cof)/sd_tot) %>% 
-  ungroup()
+# #generate input-
+# urmet_df_long <- urmet %>% 
+#   pivot_longer(!c(ID, visit, Coffee_Type))  %>% 
+#   mutate(Visit = case_when(visit == "V2" ~ "Baseline", 
+#                            visit %in% c("V3", "T2W", "T4W") ~ "Post-\nwashout", 
+#                            visit %in% c("V4", "T2I", "T4I", "T14I") ~ "Post-\nreintroduction"), 
+#          type = "Urine\nMetabolome") %>% 
+#   
+#   dplyr::select(c(ID, name, Visit, value, type, Coffee_Type, visit)) %>% 
+#   mutate(visit = factor(visit, levels = c("V2", "V3", "V4"))) %>% 
+#   
+#   group_by(name) %>%
+#   mutate(avg_cof = mean(value[Coffee_Type == "Coffee"], na.rm = T)) %>% 
+#   mutate(sd_tot = sd(value, na.rm = T)) %>% 
+#   mutate(value = (value - avg_cof)/sd_tot) %>% 
+#   ungroup()
+# 
+# 
+# urmet_df_long %>% 
+#   
+#   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
+#          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
+#   
+#   mutate(caffeine = case_when(
+#     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
+#               "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
+#               "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
+#     ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
+#               "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
+#               "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
+#   mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
+#   
+#   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
+#          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) 
 
-
-urmet_df_long %>% 
-  
-  mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
-         Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
-  
-  mutate(caffeine = case_when(
-    ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
-              "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
-              "APC115-072", "APC115-087", "APC115-101", "APC115-108", "APC115-109") ~ "DECAF",
-    ID %in% c("APC115-008", "APC115-011","APC115-016", "APC115-033","APC115-036", 
-              "APC115-042", "APC115-052","APC115-058", "APC115-059", "APC115-060",
-              "APC115-061","APC115-063","APC115-090","APC115-103","APC115-105","APC115-113") ~ "CAF")) %>% 
-  mutate(caffeine = factor(caffeine, levels  = c("CAF", "DECAF"))) %>% 
-  
-  mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
-         Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) -> df_long_stats_input
+df_long_stats_input <-urmet_df_long
 
 
 #Exp 1 Baseline
