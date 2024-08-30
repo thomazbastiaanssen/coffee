@@ -78,6 +78,19 @@ source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
 # ggsave(plot = plot_urmet_CD + guides(fill= "none"), width = 8,  height = 45, units = "cm", device = "svg", filename = "new_stats/urine_plot_b.svg")
 ```
 
+Fig 2bx Targeted faecal metabolomics
+
+``` r
+source("new_scripts/fig_2_faecal_metabolome_data_reclassed.R")
+```
+
+``` r
+(plot_fecmet_reclass_NCD | plot_fecmet_reclass_CD) + 
+  plot_layout(guides = 'collect', widths = c(1,3))
+```
+
+![](README_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
+
 Fig 2c Cytokines
 
 ``` r
@@ -89,14 +102,14 @@ source("new_scripts/fig_2_cytokine_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
 
 ``` r
 (plot_cyt_unstim_NCD | plot_cyt_unstim_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
 
 ``` r
 source("new_scripts/fig_final_integration.R")
@@ -106,7 +119,7 @@ source("new_scripts/fig_final_integration.R")
 fig_int
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-16-1.svg)<!-- -->
 
 ``` r
 #source("new_scripts/generate_stats_tables.R")
