@@ -37,14 +37,14 @@ Fig. 1a: Cognitive effects of coffee.
 source("new_scripts/fig_1_behav_cog_health_data.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 14}
+```{r plot_cog, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 14}
 (plot_cog_NCD | plot_cog_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 
 ```
 
 
-```{r, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 8}
+```{r, plot_cog_craving, warning=FALSE, message = FALSE, fig.width = 10, fig.height = 8}
 plot_cog_craving
 ```
 
@@ -64,7 +64,7 @@ Fig 2a Microbiome
 source("new_scripts/fig_2_gi_microbiome_data.R")
 ```
 
-```{r, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
+```{r, plot_MB, warning=FALSE, message = FALSE, fig.width = 16, fig.height = 14}
 (plot_mb_NCD |  plot_mb_CD) + 
   plot_layout(guides = 'collect', widths = c(1,8))
 
@@ -77,7 +77,7 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
 ```
 
 
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+```{r plot_MT, fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
 (plot_mt_NCD | plot_mt_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
@@ -88,9 +88,10 @@ source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
 ```
 
 
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
-(plot_urmet_reclass_NCD | plot_urmet_reclass_CD) + 
-  plot_layout(guides = 'collect', widths = c(1,3))
+```{r, plot_met_urine, fig.width=12, fig.height=20, message=FALSE, warning=FALSE}
+(plot_urmet_reclass_NCD  + plot_urmet_reclass_CD) + 
+  plot_layout(widths = c(1,3), guides = 'collect')
+
 
 #Sometimes bugs out, so alternatively:
 
@@ -106,7 +107,7 @@ source("new_scripts/fig_2_faecal_metabolome_data_reclassed.R")
 ```
 
 
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+```{r, plot_met_fec, fig.width=10, fig.height=5, message=FALSE, warning=FALSE}
 (plot_fecmet_reclass_NCD | plot_fecmet_reclass_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 
@@ -118,13 +119,13 @@ source("new_scripts/fig_2_cytokine_data.R")
 ```
 
 
-```{r fig.width=10, fig.height=8, message=FALSE, warning=FALSE}
+```{r, plot_cyt_stim, fig.width=10, fig.height=8, message=FALSE, warning=FALSE}
 (plot_cyt_stim_NCD | plot_cyt_stim_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
 
-```{r fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
+```{r, plot_cyt_unstim, fig.width=10, fig.height=10, message=FALSE, warning=FALSE}
 (plot_cyt_unstim_NCD | plot_cyt_unstim_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
@@ -133,7 +134,7 @@ source("new_scripts/fig_2_cytokine_data.R")
 source("new_scripts/fig_final_integration.R")
 ```
 
-```{r fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
+```{r, plot_sankey_MB_MT_cog, fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
 fig_int
 ```
 

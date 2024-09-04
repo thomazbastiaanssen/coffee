@@ -36,11 +36,12 @@ urmet <- urmet %>%
  urmet <- urmet %>% 
     left_join(., urmet_info, by = c("name" = "V3")) %>% 
     mutate(value = as.numeric(value)) %>% 
-    group_by(ID, V2, visit) %>% 
-    mutate(value = sum(value)) %>% 
-    ungroup() %>% 
-    
-    dplyr::select(ID, visit, Coffee_Type, name = V2, value) %>%
+    # group_by(ID, V2, visit) %>% 
+    # mutate(value = sum(value)) %>% 
+    # ungroup() %>% 
+    # dplyr::select(ID, visit, Coffee_Type, name = V2, value) %>%
+    # 
+    dplyr::select(ID, visit, Coffee_Type, name, value) %>%
     
     distinct() %>% 
     
@@ -134,7 +135,8 @@ urmet_df_long %>%
                                          .default = NA)
   ) %>% 
   
-  mutate(plot_label = case_when((max(abs(avg_by_caf_timepoint)) > 0.5 | max(abs(avg_delta_caf_decaf)) > 0.5 ) ~ 'moderate', 
+  mutate(plot_label = case_when((max(abs(avg_by_caf_timepoint)) > 0.8 | max(abs(avg_delta_caf_decaf)) > 0.8 ) ~ 'high', 
+                                (max(abs(avg_by_caf_timepoint)) > 0.5 | max(abs(avg_delta_caf_decaf)) > 0.5 ) ~ 'moderate', 
                                 .default = "less")) %>% 
   ungroup() %>% 
   
@@ -143,7 +145,7 @@ urmet_df_long %>%
   ungroup() %>% 
   group_by(name) %>% 
   mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
-  filter(any(plot_label == "moderate")) %>% 
+  filter(any(plot_label == "high")) %>% 
   filter(any(max_per_group > 0.5) ) %>% 
   
   filter(abs_delta_NCD > 0.5) %>% 
@@ -266,7 +268,7 @@ plot_urmet_reclass_CD <-  urmet_df_long %>%
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% 
                ungroup() %>% group_by(name, mdlab) 
-             %>% filter(any(plot_label == "moderate")) %>% ungroup(), 
+             %>% filter(any(plot_label == "high")) %>% ungroup(), 
              
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
   

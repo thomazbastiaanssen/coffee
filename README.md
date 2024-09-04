@@ -12,13 +12,13 @@ source("new_scripts/fig_1_behav_cog_health_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-2-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_cog-1.svg)<!-- -->
 
 ``` r
 plot_cog_craving
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-3-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_cog_craving-1.svg)<!-- -->
 
 ``` r
 design_1 <- c("AAAAAAAAAAAABBCCCCCC
@@ -43,7 +43,7 @@ source("new_scripts/fig_2_gi_microbiome_data.R")
   plot_layout(guides = 'collect', widths = c(1,8))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-5-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_MB-1.svg)<!-- -->
 
 Fig 2b Metabolome
 
@@ -56,7 +56,7 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_MT-1.svg)<!-- -->
 
 Fig 2b2 Urine Metabolome
 
@@ -65,11 +65,11 @@ source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
 ```
 
 ``` r
-(plot_urmet_reclass_NCD | plot_urmet_reclass_CD) + 
-  plot_layout(guides = 'collect', widths = c(1,3))
+(plot_urmet_reclass_NCD  + plot_urmet_reclass_CD) + 
+  plot_layout(widths = c(1,3), guides = 'collect')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-9-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_met_urine-1.svg)<!-- -->
 
 ``` r
 #Sometimes bugs out, so alternatively:
@@ -89,7 +89,7 @@ source("new_scripts/fig_2_faecal_metabolome_data_reclassed.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-11-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_met_fec-1.svg)<!-- -->
 
 Fig 2c Cytokines
 
@@ -102,14 +102,14 @@ source("new_scripts/fig_2_cytokine_data.R")
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-13-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_cyt_stim-1.svg)<!-- -->
 
 ``` r
 (plot_cyt_unstim_NCD | plot_cyt_unstim_CD) + 
   plot_layout(guides = 'collect', widths = c(1,3))
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-14-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_cyt_unstim-1.svg)<!-- -->
 
 ``` r
 source("new_scripts/fig_final_integration.R")
@@ -119,7 +119,7 @@ source("new_scripts/fig_final_integration.R")
 fig_int
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-16-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_sankey_MB_MT_cog-1.svg)<!-- -->
 
 ``` r
 #source("new_scripts/generate_stats_tables.R")
