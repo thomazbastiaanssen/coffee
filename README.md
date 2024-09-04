@@ -122,6 +122,28 @@ fig_int
 ![](README_files/figure-gfm/plot_sankey_MB_MT_cog-1.svg)<!-- -->
 
 ``` r
+source("new_scripts/fig_final_integration_MB_fecmet_cog.R")
+```
+
+``` r
+fig_int_mb_fecmet_cog
+```
+
+![](README_files/figure-gfm/plot_sankey_MB_fecmet_cog-1.svg)<!-- -->
+
+``` r
+source("new_scripts/fig_final_integration_MB_urmet_cog.R")
+```
+
+``` r
+fig_int_mb_urmet_cog
+```
+
+![](README_files/figure-gfm/plot_sankey_MB_urmet_cog-1.svg)<!-- -->
+
+\#Microbiome in the middle
+
+``` r
 source("new_scripts/fig_final_integration_fecmet_MB_behav.R")
 ```
 
@@ -129,7 +151,7 @@ source("new_scripts/fig_final_integration_fecmet_MB_behav.R")
 fig_int_fecmet_MB_cog
 ```
 
-![](README_files/figure-gfm/plot_sankey_fecmet_MBT_cog-1.svg)<!-- -->
+![](README_files/figure-gfm/plot_sankey_fecmet_MB_cog-1.svg)<!-- -->
 
 ``` r
 source("new_scripts/fig_final_integration_urmet_MB_behav.R")
@@ -139,7 +161,7 @@ source("new_scripts/fig_final_integration_urmet_MB_behav.R")
 fig_int_urmet_MB_cog
 ```
 
-![](README_files/figure-gfm/plot_sankey_urmet_BM_cog-1.svg)<!-- -->
+![](README_files/figure-gfm/fig_int_urmet_MB_cog-1.svg)<!-- -->
 
 ``` r
 #source("new_scripts/generate_stats_tables.R")

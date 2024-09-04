@@ -139,10 +139,31 @@ fig_int
 ```
 
 ```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
+source("new_scripts/fig_final_integration_MB_fecmet_cog.R")
+```
+
+```{r, plot_sankey_MB_fecmet_cog, fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
+fig_int_mb_fecmet_cog
+```
+
+
+```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
+source("new_scripts/fig_final_integration_MB_urmet_cog.R")
+```
+
+```{r, plot_sankey_MB_urmet_cog, fig.width=17, fig.height=14, message=FALSE, warning=FALSE}
+
+fig_int_mb_urmet_cog
+```
+
+
+#Microbiome in the middle
+```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
 source("new_scripts/fig_final_integration_fecmet_MB_behav.R")
 ```
 
-```{r, plot_sankey_fecmet_MBT_cog, fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
+
+```{r, plot_sankey_fecmet_MB_cog, fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
 fig_int_fecmet_MB_cog
 ```
 
@@ -151,10 +172,13 @@ fig_int_fecmet_MB_cog
 source("new_scripts/fig_final_integration_urmet_MB_behav.R")
 ```
 
-```{r, plot_sankey_urmet_BM_cog, fig.width=17, fig.height=12, message=FALSE, warning=FALSE}
+```{r, fig_int_urmet_MB_cog, fig.width=17, fig.height=14, message=FALSE, warning=FALSE}
 
 fig_int_urmet_MB_cog
 ```
+
+
+
 ```{r generate_stats_tables, message=FALSE, warning=FALSE}
 #source("new_scripts/generate_stats_tables.R")
 ```
