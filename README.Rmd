@@ -138,6 +138,23 @@ source("new_scripts/fig_final_integration.R")
 fig_int
 ```
 
+```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
+source("new_scripts/fig_final_integration_fecmet_MB_behav.R")
+```
+
+```{r, plot_sankey_fecmet_MBT_cog, fig.width=17, fig.height=10, message=FALSE, warning=FALSE}
+fig_int_fecmet_MB_cog
+```
+
+
+```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
+source("new_scripts/fig_final_integration_urmet_MB_behav.R")
+```
+
+```{r, plot_sankey_urmet_BM_cog, fig.width=17, fig.height=12, message=FALSE, warning=FALSE}
+
+fig_int_urmet_MB_cog
+```
 ```{r generate_stats_tables, message=FALSE, warning=FALSE}
 #source("new_scripts/generate_stats_tables.R")
 ```
