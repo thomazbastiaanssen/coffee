@@ -198,9 +198,12 @@ plot_fecmet_reclass_NCD <- fecmet_df_long %>%
   aes(y = ID, x = visit, fill = value, label = avg_by_group) + 
   geom_tile() +
   
-  geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, type, plot_label) %>% 
+  geom_label(data = . %>% 
+               group_by(visit, Coffee_Type, name, mdlab, type, plot_label) %>% 
                summarise(n = length(unique(ID)), 
-                         avg_by_group = mean(avg_by_group)) %>% ungroup(), 
+                         avg_by_group = mean(avg_by_group)) %>% ungroup() %>% 
+               group_by(name, mdlab) %>% 
+               filter(any(plot_label %in% c("moderate", "high"))) %>% ungroup(), 
              # x = 1,
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +    
   scale_fill_gradientn(colours = c(
@@ -283,7 +286,7 @@ plot_fecmet_reclass_CD <-  fecmet_df_long %>%
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% 
                ungroup() %>% group_by(name, mdlab) 
-             %>% filter(any(plot_label == "high")) %>% ungroup(), 
+             %>% filter(any(plot_label %in% c("moderate", "high"))) %>% ungroup(), 
              
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
   

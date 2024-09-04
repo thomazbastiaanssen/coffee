@@ -145,7 +145,7 @@ urmet_df_long %>%
   ungroup() %>% 
   group_by(name) %>% 
   mutate(abs_delta_NCD = mean(abs(avg_by_caf_timepoint[Coffee_Type == "NCD"]))) %>% 
-  filter(any(plot_label == "high")) %>% 
+  filter(any(plot_label %in% c("high"))) %>% 
   filter(any(max_per_group > 0.5) ) %>% 
   
   filter(abs_delta_NCD > 0.5) %>% 
@@ -268,7 +268,7 @@ plot_urmet_reclass_CD <-  urmet_df_long %>%
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% 
                ungroup() %>% group_by(name, mdlab) 
-             %>% filter(any(plot_label == "high")) %>% ungroup(), 
+             %>% filter(any(plot_label %in% c("moderate", "high"))) %>% ungroup(), 
              
              aes(x = visit, y = n/2, fill = avg_by_group, label = avg_by_group)) +
   
