@@ -4,7 +4,7 @@
 Fig. 1a: Cognitive effects of coffee.
 
 ``` r
-source("new_scripts/fig_1_behav_cog_health_data.R")
+source("scripts/fig_1_behav_cog_health_data.R")
 ```
 
 ``` r
@@ -35,7 +35,7 @@ design_1 <- c("AAAAAAAAAAAABBCCCCCC
 Fig 2a Microbiome
 
 ``` r
-source("new_scripts/fig_2_gi_microbiome_data.R")
+source("scripts/fig_2_gi_microbiome_data.R")
 ```
 
 ``` r
@@ -48,7 +48,7 @@ source("new_scripts/fig_2_gi_microbiome_data.R")
 Fig 2b Metabolome
 
 ``` r
-source("new_scripts/fig_2_gi_metabolome_data.R")
+source("scripts/fig_2_gi_metabolome_data.R")
 ```
 
 ``` r
@@ -61,7 +61,7 @@ source("new_scripts/fig_2_gi_metabolome_data.R")
 Fig 2b2 Urine Metabolome
 
 ``` r
-source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
+source("scripts/fig_2_urine_metabolome_data_reclassed.R")
 ```
 
 ``` r
@@ -74,14 +74,14 @@ source("new_scripts/fig_2_urine_metabolome_data_reclassed.R")
 ``` r
 #Sometimes bugs out, so alternatively:
 
-# ggsave(plot = plot_urmet_NCD + guides(fill= "none"), width = 11,  height = 45, units = "cm", device = "svg", filename = "new_stats/urine_plot_a.svg")
-# ggsave(plot = plot_urmet_CD + guides(fill= "none"), width = 8,  height = 45, units = "cm", device = "svg", filename = "new_stats/urine_plot_b.svg")
+# ggsave(plot = plot_urmet_NCD + guides(fill= "none"), width = 11,  height = 45, units = "cm", device = "svg", filename = "stats/urine_plot_a.svg")
+# ggsave(plot = plot_urmet_CD + guides(fill= "none"), width = 8,  height = 45, units = "cm", device = "svg", filename = "stats/urine_plot_b.svg")
 ```
 
 Fig 2bx Targeted faecal metabolomics
 
 ``` r
-source("new_scripts/fig_2_faecal_metabolome_data_reclassed.R")
+source("scripts/fig_2_faecal_metabolome_data_reclassed.R")
 ```
 
 ``` r
@@ -94,7 +94,7 @@ source("new_scripts/fig_2_faecal_metabolome_data_reclassed.R")
 Fig 2c Cytokines
 
 ``` r
-source("new_scripts/fig_2_cytokine_data.R")
+source("scripts/fig_2_cytokine_data.R")
 ```
 
 ``` r
@@ -112,7 +112,7 @@ source("new_scripts/fig_2_cytokine_data.R")
 ![](README_files/figure-gfm/plot_cyt_unstim-1.svg)<!-- -->
 
 ``` r
-source("new_scripts/fig_final_integration.R")
+source("scripts/fig_final_integration.R")
 ```
 
 ``` r
@@ -122,7 +122,7 @@ fig_int
 ![](README_files/figure-gfm/plot_sankey_MB_MT_cog-1.svg)<!-- -->
 
 ``` r
-source("new_scripts/fig_final_integration_MB_fecmet_cog.R")
+source("scripts/fig_final_integration_MB_fecmet_cog.R")
 ```
 
 ``` r
@@ -132,7 +132,7 @@ fig_int_mb_fecmet_cog
 ![](README_files/figure-gfm/plot_sankey_MB_fecmet_cog-1.svg)<!-- -->
 
 ``` r
-source("new_scripts/fig_final_integration_MB_urmet_cog.R")
+source("scripts/fig_final_integration_MB_urmet_cog.R")
 ```
 
 ``` r
@@ -144,7 +144,7 @@ fig_int_mb_urmet_cog
 \#Microbiome in the middle
 
 ``` r
-source("new_scripts/fig_final_integration_fecmet_MB_behav.R")
+source("scripts/fig_final_integration_fecmet_MB_behav.R")
 ```
 
 ``` r
@@ -154,7 +154,7 @@ fig_int_fecmet_MB_cog
 ![](README_files/figure-gfm/plot_sankey_fecmet_MB_cog-1.svg)<!-- -->
 
 ``` r
-source("new_scripts/fig_final_integration_urmet_MB_behav.R")
+source("scripts/fig_final_integration_urmet_MB_behav.R")
 ```
 
 ``` r
@@ -164,5 +164,5 @@ fig_int_urmet_MB_cog
 ![](README_files/figure-gfm/fig_int_urmet_MB_cog-1.svg)<!-- -->
 
 ``` r
-#source("new_scripts/generate_stats_tables.R")
+#source("scripts/generate_stats_tables.R")
 ```
