@@ -102,7 +102,7 @@ do.call(rbind,
   mutate(name =  str_replace(name, "STAI_TRAIT", "(STAI-T) ")) %>% 
   mutate(name =  str_replace(name, "PSS", "(PSS)")) %>% 
   mutate(name =  str_replace(name, "BDITot", "(BDI) Tot")) %>% 
-  mutate(name =  str_replace(name, "IPAQ_MET", "(IPAQ) MET-minutes")) %>% 
+  mutate(name =  str_replace(name, "IPAQ_MET", "(IPAQ)\nMET-minutes")) %>% 
   mutate(name =  str_replace(name, "PSQI_GlobalScore", "(PSQI) Tot")) %>% 
   mutate(name =  str_replace(name, "TotalA_F1", "Tot")) %>% 
   mutate(name =  str_replace(name, "Tot ", "Tot")) %>% 
@@ -133,9 +133,11 @@ do.call(rbind,
   mutate(sd_tot = sd(value, na.rm = T)) %>% 
   mutate(value = (value - avg_cof)/sd_tot) %>% 
   ungroup() %>% 
-  mutate(name = factor(name, levels = (c("(UPPS) Tot", "(ERS) Tot", "(ModRey) Tot", "(PASAT) Tot",
-                                         "(PSS)", "(STAI-T) Tot", "(BDI) Tot", "(GIS-VAS) Tot", 
-                                         "(PSQI) Tot", "(IPAQ) MET-minutes", "(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot")))) %>% 
+  mutate(name = str_replace(name, "\\) ", "\\)\n")) %>% 
+  mutate(name = factor(name, levels = (c("(UPPS)\nTot", "(ERS)\nTot", "(ModRey)\nTot", "(PASAT)\nTot",
+                                         "(PSS)", "(STAI-T)\nTot", "(BDI)\nTot", "(GIS-VAS)\nTot", 
+                                         "(PSQI)\nTot", "(IPAQ)\nMET-minutes", 
+                                         "(CWSQ)\nTot", "(VASF)\nFatigue", "(VASF)\nEnergy", "(QCC)\nTot")))) %>% 
   
   mutate(caffeine = case_when(
     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
@@ -240,7 +242,8 @@ plot_cog_NCD <- df_long_cog %>%
   scale_y_discrete(position = "right") +
   scale_x_discrete(expand = expansion(mult = c(0))) +
   ggh4x::facet_nested(meas_group*name~mdlab, scales = "free", switch = "y",
-                      strip = ggh4x::strip_nested(
+                      strip = ggh4x::strip_nested(size = "variable",
+                        text_y = list(element_text(), element_text(angle = 0, hjust = 1)),
                       #  text_y = list(element_text(), element_blank()),
                         background_y = list(element_blank(), element_rect()), 
                         by_layer_y = TRUE
@@ -250,7 +253,7 @@ plot_cog_NCD <- df_long_cog %>%
   # geom_image(x = 1, y = 3, image = "/home/thomaz/Downloads/Cryan, John 2015.png", size = 3)+
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
-  theme(strip.text.y.left = element_text(angle =0), 
+  theme( 
         strip.text.x = element_markdown(angle = 1),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
        # axis.text.x = element_text(angle = 330, hjust = 0),
@@ -316,7 +319,8 @@ plot_cog_CD <- df_long_cog %>%
 
   scale_x_discrete(expand = expansion(mult = c(0))) +
   ggh4x::facet_nested(name * caffeine ~ mdlab, scales = "free", space = "free_x",
-                      strip = ggh4x::strip_nested(background_y = list(element_blank(), element_rect(), element_rect()), 
+                      strip = ggh4x::strip_nested(size = "variable", 
+                                                  background_y = list(element_blank(), element_rect(), element_rect()), 
                                                   text_y       = list(element_blank(), element_text(), element_text()), 
                                                   by_layer_y = TRUE )) +
   xlab(NULL) + ylab(NULL) + 
@@ -335,7 +339,7 @@ plot_cog_CD <- df_long_cog %>%
 
 plot_cog_craving <- df_long_cog %>% 
   filter(Coffee_Type != "NCD") %>% 
-  filter(name %in% c("(CWSQ) Tot", "(VASF) Fatigue", "(VASF) Energy", "(QCC) Tot")) %>% 
+  filter(name %in% c("(CWSQ)\nTot", "(VASF)\nFatigue", "(VASF)\nEnergy", "(QCC)\nTot")) %>% 
   mutate(caffeine = case_when(
     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
               "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
@@ -388,7 +392,8 @@ plot_cog_craving <- df_long_cog %>%
   
   scale_x_discrete(expand = expansion(mult = c(0))) +
   ggh4x::facet_nested(name * caffeine ~ mdlab, scales = "free", space = "free_x", switch = "y",
-                      strip = ggh4x::strip_nested(background_y = list(element_rect(), element_rect(), element_rect()), 
+                      strip = ggh4x::strip_nested(size = "variable",
+                                                  background_y = list(element_rect(), element_rect(), element_rect()), 
                                                   text_y       = list(element_text(), element_text(), element_text()), 
                                                   by_layer_y = TRUE )) +
   xlab(NULL) + ylab(NULL) + 
