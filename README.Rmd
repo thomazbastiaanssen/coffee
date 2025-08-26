@@ -188,12 +188,12 @@ fig_int_fecmet_MB_cog
 
 
 ```{r fig.width=12, fig.height=12, message=FALSE, warning=FALSE}
-source("scripts/fig_final_integration_urmet_MB_behav.R")
+# source("scripts/fig_final_integration_urmet_MB_behav.R")
 ```
 
 ```{r, fig_int_urmet_MB_cog, fig.width=17, fig.height=14, message=FALSE, warning=FALSE}
 
-fig_int_urmet_MB_cog
+# fig_int_urmet_MB_cog
 ```
 
 
