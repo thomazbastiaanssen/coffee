@@ -76,7 +76,7 @@ do.call(rbind,
                                 str_detect(name, "PASA")    ~ "Stress\n&\nAnxiety",
                                 str_detect(name, "PASAT")      ~ "Attention", 
                                 str_detect(name, "PSQI")       ~ "Sleep",
-                                str_detect(name, "BMI|BSC|GIS_VAS")    ~ "Gastrointestinal\nHealth",
+                                str_detect(name, "BMI|BSC|GIS_VAS")    ~ "GI\nHealth",
                                 str_detect(name, "CAR|STAI|PSS")    ~ "Stress\n&\nAnxiety",
                                 str_detect(name, "MdR")    ~ "Memory",
                                 str_detect(name, "ERS")    ~ "Emotional Reactivity",
@@ -119,7 +119,7 @@ do.call(rbind,
   
   mutate(meas_group = factor(meas_group, levels = c("Impulsivity", "Emotional Reactivity",
                                                     "Attention","Memory", "Stress\n&\nAnxiety", 
-                                                    "Mood", "Mental Health", "Gastrointestinal\nHealth",
+                                                    "Mood", "Mental Health", "GI\nHealth",
                                                     "Sleep", "Physical Activity", "Coffee Withdrawal"))) %>%
   filter(!is.na(meas_group)) %>% 
   
@@ -200,15 +200,28 @@ CAF_DECAF_order <- c(df_long_cog %>%
                        filter(Coffee_Type == "DECAF") %>% .$ID %>% sort %>% unique)
 
   
-plot_cog_NCD <- df_long_cog %>% 
+plot_cog_NCD <- 
+  df_long_cog %>% 
   filter(Coffee_Type =="NCD") %>% 
-  mutate(mdlab = factor("<img \n src='raw/icons/NCD.png' width='50' />", levels = c("<img \n src='raw/icons/NCD.png' width='50' />"))) %>%
+  mutate(mdlab = factor("<img \n src='raw/icons/NCD.png' width='50' />  \nNon-Coffee", levels = c("<img \n src='raw/icons/NCD.png' width='50' />  \nNon-Coffee"))) %>%
   mutate(visit = factor("V2", levels = c("V2"))) %>% 
   mutate(lab = "NCD") %>% 
   
   group_by(Coffee_Type, name) %>% 
   mutate(avg_by_group = round(mean(value, na.rm = T), digits = 2)) %>%
   ungroup() %>% 
+  mutate( facet_name = factor(
+    x = paste0( 
+      str_replace_all(meas_group, "\n", " "), 
+      "\n", 
+      str_replace(str_remove(name, "\\)"),"\n", " "), 
+      ")"), 
+    levels = paste0( 
+      str_replace_all(levels(meas_group)[c(1:2, 4, 5, 5, 5, 6, 8, 9, 10)], "\n", " "), 
+      "\n", 
+      str_replace(levels(name)[c(1:10)], "\\)\n", " "), 
+      ")")  %>% str_replace(., "\\)\\)", ")"))
+  ) %>% 
   # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(CWSQ) Tot", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>%
   # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Energy", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>% 
   # rbind(., c(ID = "APC115-001", visit = "V2", Coffee_Type = "NCD",  name = "(VASF) Fatigue", value = 0, Visit = "Baseline", meas_group = "Coffee Withdrawal", mdlab = "<img \n src='raw/icons/NCD.png' width='50' />", lab = "NCD")) %>% 
@@ -241,32 +254,31 @@ plot_cog_NCD <- df_long_cog %>%
   ) +
   scale_y_discrete(position = "right") +
   scale_x_discrete(expand = expansion(mult = c(0))) +
-  ggh4x::facet_nested(meas_group*name~mdlab, scales = "free", switch = "y",
-                      strip = ggh4x::strip_nested(size = "variable",
-                        text_y = list(element_text(), element_text(angle = 0, hjust = 1)),
-                      #  text_y = list(element_text(), element_blank()),
-                        background_y = list(element_blank(), element_rect()), 
-                        by_layer_y = TRUE
-                      )
-  ) +
+  facet_grid(facet_name~mdlab, scales = "free", switch = "y") +
   
   # geom_image(x = 1, y = 3, image = "/home/thomaz/Downloads/Cryan, John 2015.png", size = 3)+
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme( 
-        strip.text.x = element_markdown(angle = 1),
+        strip.text.x = element_markdown(angle = 0, vjust = 0),
+        strip.text.y.left = element_text(angle = 0),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
        # axis.text.x = element_text(angle = 330, hjust = 0),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(),
        panel.spacing.x = unit(0, "lines")
   )
 
-
-
 plot_cog_CD <- df_long_cog %>% 
-  filter(Coffee_Type != "NCD") %>% 
+  filter(Coffee_Type != "NCD") %>%
   filter(visit %in% c("V2", "V3","V4")) %>% 
   filter(meas_group != "Coffee Withdrawal") %>% 
+  mutate(mdlab = paste0(mdlab, "  \n", Visit) %>% 
+           str_remove(., "Post-\n") %>% 
+           str_replace(., "Baseline", "Coffee") %>% 
+           str_replace(., "reintroduction$", "Reintroduction") %>% 
+           str_replace(., "washout$", "Washout") 
+  ) %>% 
+  mutate(mdlab = factor(mdlab, levels = unique(mdlab))) %>% 
   mutate(caffeine = case_when(
     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
               "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
@@ -326,7 +338,7 @@ plot_cog_CD <- df_long_cog %>%
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme(#strip.text.y = element_blank(), 
-    strip.text.x = element_markdown(angle = 1), #,
+    strip.text.x = element_markdown(vjust = 0), #,
     # strip.text.x = element_blank(), strip.background.x = element_blank()
     strip.text.y = element_text(angle =0),
     axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
@@ -340,6 +352,13 @@ plot_cog_CD <- df_long_cog %>%
 plot_cog_craving <- df_long_cog %>% 
   filter(Coffee_Type != "NCD") %>% 
   filter(name %in% c("(CWSQ)\nTot", "(VASF)\nFatigue", "(VASF)\nEnergy", "(QCC)\nTot")) %>% 
+  mutate(mdlab = paste0(mdlab, "  \n", Visit) %>% 
+           str_remove(., "Post-\n") %>% 
+           str_replace(., "Baseline", "Coffee") %>% 
+           str_replace(., "reintroduction$", "Reintroduction") %>% 
+           str_replace(., "washout$", "Washout")) %>% 
+  mutate(mdlab = factor(mdlab, levels = unique(mdlab))) %>% 
+
   mutate(caffeine = case_when(
     ID %in% c("APC115-003", "APC115-005", "APC115-014", "APC115-017", "APC115-037", 
               "APC115-038", "APC115-039", "APC115-043", "APC115-054", "APC115-069", 
@@ -400,7 +419,7 @@ plot_cog_craving <- df_long_cog %>%
   theme_test() +
   theme(
     strip.text.y.left = element_text(angle =0), 
-    strip.text.x = element_markdown(angle = 1), #,
+    strip.text.x = element_markdown(angle = 0, vjust = 0), #,
     # strip.text.x = element_blank(), strip.background.x = element_blank()
     #strip.text.y = element_text(angle =0),
     axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
