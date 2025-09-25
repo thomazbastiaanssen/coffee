@@ -21,11 +21,15 @@ ggsave("figures/plot_cog.svg", plot = plot_cog)
 ```
 
 ``` r
-plot_cog_craving & 
-  theme(strip.text = element_text(size = 12), strip.text.y.left = element_text(hjust = 1))
+(plot_cog_craving <- plot_cog_craving & 
+  theme(strip.text = element_text(size = 12), strip.text.y.left = element_text(hjust = 1))) 
 ```
 
 ![](README_files/figure-gfm/plot_cog_craving-1.svg)<!-- -->
+
+``` r
+ggsave("figures/plot_cog_craving.svg", plot = plot_cog_craving)
+```
 
 ``` r
 design_1 <- c("AAAAAAAAAAAABBCCCCCC
@@ -34,15 +38,21 @@ design_1 <- c("AAAAAAAAAAAABBCCCCCC
                DDDDDDDDDDDDBBCCCCCC
                DDDDDDDDDDDDBBCCCCCC
                DDDDDDDDDDDDBBCCCCCC")
-(plot_spacer() + plot_cog_NCD + plot_cog_CD + plot_cog_craving) + plot_layout(design = design_1, guides = 'collect') & 
+
+( fig_1_full <- (plot_spacer() + plot_cog_NCD + plot_cog_CD + plot_cog_craving) + plot_layout(design = design_1, guides = 'collect') & 
   theme(legend.position = 'left', 
         strip.text = element_text(size = 12), 
         strip.text.y.left = element_text(hjust = 1), 
         strip.text.x = element_markdown(size = 11)
         )
+)
 ```
 
 ![](README_files/figure-gfm/fig_1_full-1.svg)<!-- -->
+
+``` r
+ggsave("figures/fig_1_full.svg", plot = fig_1_full)
+```
 
 ``` r
 design_1long <- c("
