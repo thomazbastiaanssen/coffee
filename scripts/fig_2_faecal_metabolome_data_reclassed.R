@@ -126,16 +126,17 @@ fecmet_df_long %>%
   mutate(Visit       = factor(Visit,       levels = c("Baseline","Post-\nwashout", "Post-\nreintroduction")),
          Coffee_Type = factor(Coffee_Type, levels = c("NCD", "Coffee", "No Coffee", "DECAF", "CAF"))) %>% 
   
-  mutate(mdlab = case_when(Coffee_Type == "NCD" ~ "<img \n src='raw/icons/NCD.png' width='50' />",
-                           Coffee_Type == "Coffee" ~ "<img \n src='raw/icons/CD.png' width='50' />",
-                           Coffee_Type == "No Coffee" ~ "<img \n src='raw/icons/WASHOUT.png' width='50' />",
-                           Coffee_Type == "DECAF" ~ "<img \n src='raw/icons/REINTRO.png' width='50' />", 
-                           Coffee_Type == "CAF"   ~ "<img \n src='raw/icons/REINTRO.png' width='50' />"), 
-         mdlab = factor(mdlab, levels = c("<img \n src='raw/icons/NCD.png' width='50' />", 
-                                          "<img \n src='raw/icons/CD.png' width='50' />", 
-                                          "<img \n src='raw/icons/WASHOUT.png' width='50' />", 
-                                          "<img \n src='raw/icons/REINTRO.png' width='50' />"))
+  mutate(mdlab = case_when(Coffee_Type == "NCD" ~ "<img \n src='raw/icons/NCD.png' width='50' />  \nNon-Coffee",
+                           Coffee_Type == "Coffee" ~ "<img \n src='raw/icons/CD.png' width='50' />  \nCoffee",
+                           Coffee_Type == "No Coffee" ~ "<img \n src='raw/icons/WASHOUT.png' width='50' />  \nWashout",
+                           Coffee_Type == "DECAF" ~ "<img \n src='raw/icons/REINTRO.png' width='50' />  \nReintroduction", 
+                           Coffee_Type == "CAF"   ~ "<img \n src='raw/icons/REINTRO.png' width='50' />  \nReintroduction"), 
+         mdlab = factor(mdlab, levels = c("<img \n src='raw/icons/NCD.png' width='50' />  \nNon-Coffee", 
+                                          "<img \n src='raw/icons/CD.png' width='50' />  \nCoffee", 
+                                          "<img \n src='raw/icons/WASHOUT.png' width='50' />  \nWashout", 
+                                          "<img \n src='raw/icons/REINTRO.png' width='50' />  \nReintroduction"))
   )  %>% 
+  
   
   group_by(name, visit, Coffee_Type) %>% 
   mutate(avg_by_caf_timepoint = mean(value)) %>%
@@ -232,7 +233,7 @@ plot_fecmet_reclass_NCD <- fecmet_df_long %>%
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme(strip.text.y.left = element_text(angle =0), 
-        strip.text.x = element_markdown(angle = 1),
+        strip.text.x = element_markdown(angle = 0, vjust = 0),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(), 
         # axis.text.x = element_text(angle = 330, hjust = 0),
         axis.text.x = element_blank(), axis.ticks.x = element_blank(), 
@@ -314,7 +315,7 @@ plot_fecmet_reclass_CD <-  fecmet_df_long %>%
   xlab(NULL) + ylab(NULL) + 
   theme_test() +
   theme(#strip.text.y = element_blank(), 
-    strip.text.x = element_markdown(angle = 1), #,
+    strip.text.x = element_markdown(angle = 0, vjust = 0), #,
     # strip.text.x = element_blank(), strip.background.x = element_blank()
     strip.text.y = element_text(angle =0),
     axis.text.y = element_blank(), axis.ticks.y = element_blank(), 

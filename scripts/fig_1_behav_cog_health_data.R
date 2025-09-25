@@ -232,7 +232,7 @@ plot_cog_NCD <-
   ggplot() +
   aes(y = ID, x = visit, fill = value, label = avg_by_group) + 
   geom_tile() +
-  geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, meas_group) %>% 
+  geom_label(data = . %>% group_by(visit, Coffee_Type, name, mdlab, meas_group, facet_name) %>% 
                summarise(n = length(unique(ID)), 
                          avg_by_group = mean(avg_by_group)) %>% ungroup(), 
              # x = 1,

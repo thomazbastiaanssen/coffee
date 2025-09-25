@@ -6,14 +6,6 @@ library(tidyverse)
 library(ggimage)
 
 
-ncd   = readPNG("raw/icons/NCD.png")
-cd    = readPNG("raw/icons/CD.png")
-wash  = readPNG("raw/icons/WASHOUT.png")
-decaf = readPNG("raw/icons/DECAF.png")
-caff  = readPNG("raw/icons/CAFF.png")
-
-
-
 source("subscripts/load_and_clean_data.R")
 
 # 1=NCD	0=F
